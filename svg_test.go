@@ -6,7 +6,14 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"os"
 	"testing"
+
+	"github.com/mattetti/filebuffer"
+	"github.com/unidoc/unipdf/v3/annotator"
+	"github.com/unidoc/unipdf/v3/creator"
+	"github.com/unidoc/unipdf/v3/model"
+	"github.com/unidoc/unipdf/v3/model/optimize"
 )
 
 const testSvg = `<?xml version="1.0" encoding="utf-8"?>
@@ -425,111 +432,34 @@ func TestDefineLadderFromSvg(t *testing.T) {
 
 }
 
-/*
-
 func TestPrintParsedGeometry(t *testing.T) {
 
 	c := creator.New()
 
 	c.SetPageMargins(0, 0, 0, 0) // we're not printing
 
-	img, err := c.NewImageFromFile("./test/example-chrome.jpg")
+	jpegFilename := "./test/example-chrome.jpg"
+	pageFilename := "./test/example-with-textfields.pdf"
+
+	img, err := c.NewImageFromFile(jpegFilename)
+
 	if err != nil {
 		t.Errorf("Error opening image file: %s", err)
 	}
 
-	// start out as A4 portrait, swap to landscape if need be
-	barWidth := 30 * creator.PPMM
-	A4Width := 210 * creator.PPMM
-	A4Height := 297 * creator.PPMM
-	pageWidth := A4Width + 2*barWidth
-	pageHeight := A4Height
-	imgLeft := 0.0
-
-	isLandscape := img.Height() < img.Width()
-
-	if isLandscape {
-		pageWidth = A4Height + (4 * barWidth)
-		pageHeight = A4Width
-		imgLeft = barWidth
+	ladder, err := DefineLadderFromSVG([]byte(testInkscapeSvg))
+	if err != nil {
+		t.Errorf("Error defining ladder %v", err)
 	}
 
 	// scale and position image
-	img.ScaleToHeight(pageHeight)
-	img.SetPos(imgLeft, 0) //left, top
+	img.ScaleToHeight(ladder.Dim.H)
+	img.SetPos(ladder.Anchor.X, ladder.Anchor.Y) //TODO check this has correct sense for non-zero offsets
 
 	// create new page with image
-	c.SetPageSize(creator.PageSize{pageWidth, pageHeight})
+	c.SetPageSize(creator.PageSize{ladder.Dim.W, ladder.Dim.H})
 	c.NewPage()
 	c.Draw(img)
-
-	// these are tweaked - see vspace hack
-	// TODO make this make sense
-
-	opt := &markOpt{
-		left:             isLandscape,
-		right:            true,
-		barwidth:         barWidth,
-		pageWidth:        pageWidth,
-		pageHeight:       pageHeight,
-		marksEvery:       26.25 * creator.PPMM,
-		markHeight:       18 * creator.PPMM,
-		markWidth:        20 * creator.PPMM,
-		markMargin:       5 * creator.PPMM,
-		markBottomMargin: 0 * creator.PPMM,
-	}
-
-	// coloured box for the marks
-
-	boxX := pageWidth - barWidth
-	boxY := 0.0
-
-	rect := c.NewRectangle(boxX, boxY, barWidth, pageHeight)
-	rect.SetBorderColor(creator.ColorGreen)
-	rect.SetFillColor(creator.ColorRGBFromHex("#CCFFCB"))
-	c.Draw(rect)
-
-	if isLandscape {
-		boxX = 0.0
-		rect = c.NewRectangle(boxX, boxY, barWidth, pageHeight)
-		rect.SetBorderColor(creator.ColorGreen)
-		rect.SetFillColor(creator.ColorRGBFromHex("#CCFFCB"))
-		c.Draw(rect)
-
-	}
-
-	xright := opt.pageWidth - opt.barwidth + opt.markMargin
-	xleft := opt.barwidth - opt.markWidth - opt.markMargin
-
-	numMarks := math.Floor(opt.pageHeight / opt.marksEvery)
-
-	yTop := 0.5 * (pageHeight + opt.marksEvery*(numMarks-1) - opt.markHeight)
-
-	for idx := 0; idx < int(numMarks); idx = idx + 1 {
-		yPos := yTop - (float64(idx) * opt.marksEvery)
-		if opt.left {
-			rect = c.NewRectangle(xleft, yPos, opt.markWidth, opt.markHeight)
-			rect.SetBorderColor(creator.ColorGreen)
-			rect.SetFillColor(creator.ColorRGBFromHex("#FFFFFF"))
-			c.Draw(rect)
-		}
-		if opt.right {
-
-			rect = c.NewRectangle(xright, yPos, opt.markWidth, opt.markHeight)
-			rect.SetBorderColor(creator.ColorGreen)
-			rect.SetFillColor(creator.ColorRGBFromHex("#FFFFFF"))
-			c.Draw(rect)
-		}
-
-	}
-
-	///
-
-	markOptions, err := AddImagePageMod(jpegFilename, c) //isLandscape
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		os.Exit(1)
-	}
 
 	// write to memory
 	var buf bytes.Buffer
@@ -546,13 +476,13 @@ func TestPrintParsedGeometry(t *testing.T) {
 	fbuf.Write(buf.Bytes())
 
 	// read in from memory
-	pdfReader, err := pdf.NewPdfReader(fbuf)
+	pdfReader, err := model.NewPdfReader(fbuf)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 
-	pdfWriter := pdf.NewPdfWriter()
+	pdfWriter := model.NewPdfWriter()
 
 	page, err := pdfReader.GetPage(1)
 	if err != nil {
@@ -560,7 +490,21 @@ func TestPrintParsedGeometry(t *testing.T) {
 		os.Exit(1)
 	}
 
-	err = pdfWriter.SetForms(createMod(page, *markOptions, formID))
+	form := model.NewPdfAcroForm()
+
+	for _, tf := range ladder.TextFields {
+
+		tfopt := annotator.TextFieldOptions{Value: tf.Prefill} //TODO - MaxLen?!
+		name := fmt.Sprintf("Page-00-%s", tf.ID)
+		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
+		if err != nil {
+			panic(err)
+		}
+		*form.Fields = append(*form.Fields, textf.PdfField)
+		page.AddAnnotation(textf.Annotations[0].PdfAnnotation)
+	}
+
+	err = pdfWriter.SetForms(form)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
@@ -591,4 +535,3 @@ func TestPrintParsedGeometry(t *testing.T) {
 
 	pdfWriter.Write(of)
 }
-*/

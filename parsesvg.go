@@ -274,3 +274,9 @@ func convertToPDFYScale(ladder *Ladder) error {
 	return nil
 
 }
+
+func formRect(tf TextField) []float64 {
+
+	return []float64{tf.Rect.Corner.X, tf.Rect.Corner.Y - tf.Rect.Dim.H, tf.Rect.Corner.X + tf.Rect.Dim.W, tf.Rect.Corner.Y}
+
+}
