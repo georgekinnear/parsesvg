@@ -367,8 +367,6 @@ func TestParseInkscapeSVG(t *testing.T) {
 }
 */
 
-
-
 func TestParseSvg(t *testing.T) {
 
 	var svg Csvg__svg
@@ -408,16 +406,14 @@ func TestParseSvg(t *testing.T) {
 	}
 }
 
-
-type Ladder struct {
+/*type Ladder struct {
 	Anchor     geo.Point //X,Y
 	Dim        geo.Dim   //W,H
 	ID         string
 	TextFields []TextField
 }
 
-const expectedLadder = &Ladder{Anchor:geo.Point{0,247}, Dim:{141.73220, 141.73220},  [{{{6.810286 18.934586}, {7.8166327 8.0839024}}, "badfile", } {{{38.650368, 13.149623}, {6.3086619, 6.3086619}}, "markok" } {{{22.629934, 38.408676}, {23.535746, 5.3614168}}, "initials","Enter your intials here"}]}
-
+const expectedLadder = &Ladder{Anchor:geo.Point{0,247}, Dim:{141.73220, 141.73220},  [{{{6.810286 18.934586}, {7.8166327 8.0839024}}, "badfile", } {{{38.650368, 13.149623}, {6.3086619, 6.3086619}}, "markok" } {{{22.629934, 38.408676}, {23.535746, 5.3614168}}, "initials","Enter your intials here"}]}*/
 
 func TestDefineLadderFromSvg(t *testing.T) {
 

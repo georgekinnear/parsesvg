@@ -2,6 +2,8 @@ package parsesvg
 
 import (
 	"encoding/xml"
+	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -62,19 +64,50 @@ func getTranslate(transform string) (float64, float64) {
 
 }
 
-/*
-	w, err := strconv.ParseFloat(svg.Width, 64)
+func scanUnitStringToPP(str string) (float64, error) {
+
+	str = strings.TrimSpace(str)
+	length := len(str)
+	units := str[length-2 : length]
+	value, err := strconv.ParseFloat(str[0:length-2], 64)
 	if err != nil {
-		return nil, err
-	}
-	h, err := strconv.ParseFloat(svg.Width, 64)
-	if err != nil {
-		return nil, err
+		return 0, errors.New(fmt.Sprintf("Couldn't parse  %s when split into value %s with units %s", str, str[0:length-2], units))
 	}
 
-	ladder.Dim = geo.Dim{W: strconv.ParseFloat(svg.Width, 64),
-		H: strconv.ParseFloat(svg.Height, 64)}
-*/
+	switch units {
+	case "mm":
+		return value * geo.PPMM, nil
+	case "px":
+		return value * geo.PPPX, nil
+	case "pt":
+		return value, nil //TODO check pt doesn't somehow default to not present
+	case "in":
+		return value * geo.PPIN, nil
+	}
+
+	return 0, errors.New(fmt.Sprintf("didn't understand the units %s", units))
+
+}
+
+func getLadderDim(svg *Csvg__svg) (geo.Dim, error) {
+	dim := geo.Dim{}
+
+	if svg == nil {
+		return dim, errors.New("nil pointer to svg")
+	}
+
+	w, err := scanUnitStringToPP(svg.Width)
+	if err != nil {
+		return dim, err
+	}
+	h, err := scanUnitStringToPP(svg.Height)
+	if err != nil {
+		return dim, err
+	}
+
+	return geo.Dim{W: w, H: h}, nil
+
+}
 
 func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
@@ -88,6 +121,13 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	}
 
 	ladder.Anchor = geo.Point{X: 0, Y: 0}
+
+	ladderDim, err := getLadderDim(&svg)
+	if err != nil {
+		return nil, err
+	}
+
+	ladder.Dim = ladderDim
 
 	var dx, dy float64
 
@@ -157,7 +197,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
 	}
 
-	err = ApplyDocumentUnits(&ladder)
+	err = ApplyDocumentUnits(ladder)
 	if err != nil {
 		return nil, err
 	}
@@ -169,5 +209,9 @@ func ApplyDocumentUnits(ladder *Ladder) error {
 
 	// iterate through the structure applying the conversion from
 	// document units to points
-	return error.Error("Not implemented!")
+
+	//note we do NOT apply the modification to ladder.DIM because this has its own
+	//units in it and has already been handled.
+
+	return nil //errors.New("Not implemented!")
 }
