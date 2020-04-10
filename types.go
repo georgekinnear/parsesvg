@@ -102,14 +102,14 @@ type Cg__svg struct {
 	Attrid                     string        `xml:"id,attr"  json:",omitempty"`
 	AttrInkscapeSpacelabel     string        `xml:"http://www.inkscape.org/namespaces/inkscape label,attr"  json:",omitempty"`
 	Attrstyle                  string        `xml:"style,attr"  json:",omitempty"`
-	Cpath__svg                 *Cpath__svg   `xml:"http://www.w3.org/2000/svg path,omitempty" json:"path,omitempty"`
+	Cpath__svg                 []*Cpath__svg `xml:"http://www.w3.org/2000/svg path,omitempty" json:"path,omitempty"`
 	Crect__svg                 []*Crect__svg `xml:"http://www.w3.org/2000/svg rect,omitempty" json:"rect,omitempty"`
 }
 
 type Cpath__svg struct {
 	XMLName                xml.Name     `xml:"path,omitempty" json:"path,omitempty"`
-	AttrSodipodiSpacecx    string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd cx,attr"  json:",omitempty"`
-	AttrSodipodiSpacecy    string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd cy,attr"  json:",omitempty"`
+	Cx                     string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd cx,attr"  json:",omitempty"`
+	Cy                     string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd cy,attr"  json:",omitempty"`
 	Attrd                  string       `xml:"d,attr"  json:",omitempty"`
 	AttrSodipodiSpaceend   string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd end,attr"  json:",omitempty"`
 	Attrid                 string       `xml:"id,attr"  json:",omitempty"`
@@ -120,7 +120,7 @@ type Cpath__svg struct {
 	Attrstyle              string       `xml:"style,attr"  json:",omitempty"`
 	Attrtransform          string       `xml:"transform,attr"  json:",omitempty"`
 	AttrSodipodiSpacetype  string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd type,attr"  json:",omitempty"`
-	Ctitle__svg            *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
+	Ctitle                 *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
 }
 
 type Crect__svg struct {
