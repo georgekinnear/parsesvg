@@ -16,9 +16,9 @@
    id="svg47244"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="example.svg"
-   inkscape:export-filename="/home/tim/go/src/github.com/timdrysdale/parsesvg/img/example-chrome.png"
-   inkscape:export-xdpi="100.076"
-   inkscape:export-ydpi="100.076">
+   inkscape:export-filename="/home/tim/go/src/github.com/timdrysdale/parsesvg/test/example-chrome.png"
+   inkscape:export-xdpi="300.10065"
+   inkscape:export-ydpi="300.10065">
   <title
      id="title51367">example</title>
   <defs
@@ -255,7 +255,7 @@
      inkscape:groupmode="layer"
      id="layer9"
      inkscape:label="anchors"
-     style="display:inline">
+     style="display:none">
     <path
        transform="translate(0,-247)"
        style="opacity:1;fill:#00c041;fill-opacity:0.55399062;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
@@ -277,7 +277,7 @@
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="textfields"
-     style="display:inline">
+     style="display:none">
     <rect
        style="display:inline;opacity:1;fill:#e2e4ff;fill-opacity:0.75117373;stroke:none;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect47789"

@@ -377,10 +377,7 @@ func TestParseSvg(t *testing.T) {
 		fmt.Printf(err.Error())
 	}
 
-	//svg := ParseSvg([]byte(testInkscapeSvg))
-
 	jsonData, _ := json.Marshal(svg)
-	//fmt.Println(string(jsonData))
 
 	var prettyJSON bytes.Buffer
 	error := json.Indent(&prettyJSON, jsonData, "", "\t")
@@ -388,21 +385,16 @@ func TestParseSvg(t *testing.T) {
 		log.Println("JSON parse error: ", error)
 	}
 
-	//fmt.Println(string(prettyJSON.Bytes()))
+	fmt.Printf("Page size: %s, %s\n", svg.Width, svg.Height)
 
 	for _, g := range svg.Cg__svg {
 		fmt.Println(g.AttrInkscapeSpacelabel)
 		fmt.Println(g.Transform)
 		for _, r := range g.Crect__svg {
-
 			title := r.Title
-			//fmt.Printf("%T\n", title)
-			//fmt.Println(reflect.TypeOf(title).String())
-			//fmt.Printf("title is nil pointer %v\n", title == nil)
 			if title != nil {
 				fmt.Printf("-- %s (%s,%s,%s,%s) Transform: %s\n", title.String, r.Rx, r.Ry, r.Width, r.Height, r.Transform)
 			}
-
 		}
 
 		for _, r := range g.Cpath__svg {
@@ -410,8 +402,174 @@ func TestParseSvg(t *testing.T) {
 			if title != nil {
 				fmt.Printf("-- %s (%s,%s) Transform: %s\n", title.String, r.Cx, r.Cy, r.Transform)
 			}
+		}
+	}
+}
 
+/*
+
+func TestPrintParsedGeometry(t *testing.T) {
+
+	c := creator.New()
+
+	c.SetPageMargins(0, 0, 0, 0) // we're not printing
+
+	img, err := c.NewImageFromFile("./test/example-chrome.jpg")
+	if err != nil {
+		t.Errorf("Error opening image file: %s", err)
+	}
+
+	// start out as A4 portrait, swap to landscape if need be
+	barWidth := 30 * creator.PPMM
+	A4Width := 210 * creator.PPMM
+	A4Height := 297 * creator.PPMM
+	pageWidth := A4Width + 2*barWidth
+	pageHeight := A4Height
+	imgLeft := 0.0
+
+	isLandscape := img.Height() < img.Width()
+
+	if isLandscape {
+		pageWidth = A4Height + (4 * barWidth)
+		pageHeight = A4Width
+		imgLeft = barWidth
+	}
+
+	// scale and position image
+	img.ScaleToHeight(pageHeight)
+	img.SetPos(imgLeft, 0) //left, top
+
+	// create new page with image
+	c.SetPageSize(creator.PageSize{pageWidth, pageHeight})
+	c.NewPage()
+	c.Draw(img)
+
+	// these are tweaked - see vspace hack
+	// TODO make this make sense
+
+	opt := &markOpt{
+		left:             isLandscape,
+		right:            true,
+		barwidth:         barWidth,
+		pageWidth:        pageWidth,
+		pageHeight:       pageHeight,
+		marksEvery:       26.25 * creator.PPMM,
+		markHeight:       18 * creator.PPMM,
+		markWidth:        20 * creator.PPMM,
+		markMargin:       5 * creator.PPMM,
+		markBottomMargin: 0 * creator.PPMM,
+	}
+
+	// coloured box for the marks
+
+	boxX := pageWidth - barWidth
+	boxY := 0.0
+
+	rect := c.NewRectangle(boxX, boxY, barWidth, pageHeight)
+	rect.SetBorderColor(creator.ColorGreen)
+	rect.SetFillColor(creator.ColorRGBFromHex("#CCFFCB"))
+	c.Draw(rect)
+
+	if isLandscape {
+		boxX = 0.0
+		rect = c.NewRectangle(boxX, boxY, barWidth, pageHeight)
+		rect.SetBorderColor(creator.ColorGreen)
+		rect.SetFillColor(creator.ColorRGBFromHex("#CCFFCB"))
+		c.Draw(rect)
+
+	}
+
+	xright := opt.pageWidth - opt.barwidth + opt.markMargin
+	xleft := opt.barwidth - opt.markWidth - opt.markMargin
+
+	numMarks := math.Floor(opt.pageHeight / opt.marksEvery)
+
+	yTop := 0.5 * (pageHeight + opt.marksEvery*(numMarks-1) - opt.markHeight)
+
+	for idx := 0; idx < int(numMarks); idx = idx + 1 {
+		yPos := yTop - (float64(idx) * opt.marksEvery)
+		if opt.left {
+			rect = c.NewRectangle(xleft, yPos, opt.markWidth, opt.markHeight)
+			rect.SetBorderColor(creator.ColorGreen)
+			rect.SetFillColor(creator.ColorRGBFromHex("#FFFFFF"))
+			c.Draw(rect)
+		}
+		if opt.right {
+
+			rect = c.NewRectangle(xright, yPos, opt.markWidth, opt.markHeight)
+			rect.SetBorderColor(creator.ColorGreen)
+			rect.SetFillColor(creator.ColorRGBFromHex("#FFFFFF"))
+			c.Draw(rect)
 		}
 
 	}
+
+	///
+
+	markOptions, err := AddImagePageMod(jpegFilename, c) //isLandscape
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	// write to memory
+	var buf bytes.Buffer
+
+	err = c.Write(&buf)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	// convert buffer to readseeker
+	var bufslice []byte
+	fbuf := filebuffer.New(bufslice)
+	fbuf.Write(buf.Bytes())
+
+	// read in from memory
+	pdfReader, err := pdf.NewPdfReader(fbuf)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	pdfWriter := pdf.NewPdfWriter()
+
+	page, err := pdfReader.GetPage(1)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	err = pdfWriter.SetForms(createMod(page, *markOptions, formID))
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	err = pdfWriter.AddPage(page)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	of, err := os.Create(pageFilename)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+	defer of.Close()
+
+	pdfWriter.SetOptimizer(optimize.New(optimize.Options{
+		CombineDuplicateDirectObjects:   true,
+		CombineIdenticalIndirectObjects: true,
+		CombineDuplicateStreams:         true,
+		CompressStreams:                 true,
+		UseObjectStreams:                true,
+		ImageQuality:                    80,
+		ImageUpperPPI:                   100,
+	}))
+
+	pdfWriter.Write(of)
 }
+*/

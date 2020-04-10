@@ -10,7 +10,7 @@ type Csvg__svg struct {
 	AttrInkscapeSpaceexport_dash_filename string                `xml:"http://www.inkscape.org/namespaces/inkscape export-filename,attr"  json:",omitempty"`
 	AttrInkscapeSpaceexport_dash_xdpi     string                `xml:"http://www.inkscape.org/namespaces/inkscape export-xdpi,attr"  json:",omitempty"`
 	AttrInkscapeSpaceexport_dash_ydpi     string                `xml:"http://www.inkscape.org/namespaces/inkscape export-ydpi,attr"  json:",omitempty"`
-	Attrheight                            string                `xml:"height,attr"  json:",omitempty"`
+	Height                                string                `xml:"height,attr"  json:",omitempty"`
 	Attrid                                string                `xml:"id,attr"  json:",omitempty"`
 	AttrXmlnsinkscape                     string                `xml:"xmlns inkscape,attr"  json:",omitempty"`
 	AttrXmlnsrdf                          string                `xml:"xmlns rdf,attr"  json:",omitempty"`
@@ -18,7 +18,7 @@ type Csvg__svg struct {
 	AttrXmlnssvg                          string                `xml:"xmlns svg,attr"  json:",omitempty"`
 	Attrversion                           string                `xml:"version,attr"  json:",omitempty"`
 	AttrviewBox                           string                `xml:"viewBox,attr"  json:",omitempty"`
-	Attrwidth                             string                `xml:"width,attr"  json:",omitempty"`
+	Width                                 string                `xml:"width,attr"  json:",omitempty"`
 	Attrxmlns                             string                `xml:"xmlns,attr"  json:",omitempty"`
 	Cdefs__svg                            *Cdefs__svg           `xml:"http://www.w3.org/2000/svg defs,omitempty" json:"defs,omitempty"`
 	Cg__svg                               []*Cg__svg            `xml:"http://www.w3.org/2000/svg g,omitempty" json:"g,omitempty"`
