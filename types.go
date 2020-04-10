@@ -124,15 +124,15 @@ type Cpath__svg struct {
 }
 
 type Crect__svg struct {
-	XMLName     xml.Name     `xml:"rect,omitempty" json:"rect,omitempty"`
-	Attrheight  string       `xml:"height,attr"  json:",omitempty"`
-	Attrid      string       `xml:"id,attr"  json:",omitempty"`
-	Attrstyle   string       `xml:"style,attr"  json:",omitempty"`
-	Attrwidth   string       `xml:"width,attr"  json:",omitempty"`
-	Attrx       string       `xml:"x,attr"  json:",omitempty"`
-	Attry       string       `xml:"y,attr"  json:",omitempty"`
-	Cdesc__svg  *Cdesc__svg  `xml:"http://www.w3.org/2000/svg desc,omitempty" json:"desc,omitempty"`
-	Ctitle__svg *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
+	XMLName    xml.Name     `xml:"rect,omitempty" json:"rect,omitempty"`
+	Attrheight string       `xml:"height,attr"  json:",omitempty"`
+	Attrid     string       `xml:"id,attr"  json:",omitempty"`
+	Attrstyle  string       `xml:"style,attr"  json:",omitempty"`
+	Attrwidth  string       `xml:"width,attr"  json:",omitempty"`
+	Attrx      string       `xml:"x,attr"  json:",omitempty"`
+	Attry      string       `xml:"y,attr"  json:",omitempty"`
+	Cdesc__svg *Cdesc__svg  `xml:"http://www.w3.org/2000/svg desc,omitempty" json:"desc,omitempty"`
+	Ctitle     *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
 }
 
 type Cdesc__svg struct {
