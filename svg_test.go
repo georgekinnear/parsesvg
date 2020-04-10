@@ -1,11 +1,10 @@
 package parsesvg
 
 import (
-	"strings"
+	"encoding/json"
+	"encoding/xml"
+	"fmt"
 	"testing"
-
-	"github.com/cheekybits/is"
-	"github.com/rustyoz/svg"
 )
 
 const testSvg = `<?xml version="1.0" encoding="utf-8"?>
@@ -333,7 +332,7 @@ const testInkscapeSvg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
   </g>
 </svg>`
 
-func TestParseFromOriginalSVGLib(t *testing.T) {
+/*func TestParseFromOriginalSVGLib(t *testing.T) {
 	is := is.New(t)
 
 	drawing, err := svg.ParseSvg(testSvg, "test", 0)
@@ -355,4 +354,29 @@ func TestParseInkscapeSVG(t *testing.T) {
 	drawing, err = svg.ParseSvgFromReader(strings.NewReader(testInkscapeSvg), "test", 0)
 	is.NoErr(err)
 	is.NotNil(drawing)
+
+	fmt.Printf("Name: %v\n", drawing.Name)
+	fmt.Printf("Transform: %v\n", drawing.Transform)
+	for _, g := range drawing.Groups {
+		fmt.Printf("Group: %v\n", g.ID)
+
+	}
+
+}
+*/
+
+func TestParseSvg(t *testing.T) {
+
+	var svg Csvg__svg
+
+	err := xml.Unmarshal([]byte(testInkscapeSvg), &svg)
+
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+
+	//svg := ParseSvg([]byte(testInkscapeSvg))
+
+	jsonData, _ := json.Marshal(svg)
+	fmt.Println(string(jsonData))
 }

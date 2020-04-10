@@ -30,9 +30,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.85165544"
-     inkscape:cx="345.18631"
-     inkscape:cy="211.35308"
+     inkscape:zoom="3.4066218"
+     inkscape:cx="95.965802"
+     inkscape:cy="86.008961"
      inkscape:document-units="mm"
      inkscape:current-layer="layer8"
      showgrid="false"
@@ -61,7 +61,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline"
-     sodipodi:insensitive="true"
      transform="translate(0,-247)">
     <g
        id="g20789"
@@ -256,8 +255,7 @@
      inkscape:groupmode="layer"
      id="layer9"
      inkscape:label="anchors"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        transform="translate(0,-247)"
        style="opacity:1;fill:#00c041;fill-opacity:0.55399062;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
@@ -279,8 +277,7 @@
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="textfields"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="display:inline;opacity:1;fill:#e2e4ff;fill-opacity:0.75117373;stroke:none;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect47789"

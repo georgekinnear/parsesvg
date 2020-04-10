@@ -1,10 +1,12 @@
 package parsesvg
 
-type Parser struct {
-	svg string
-}
+import "encoding/xml"
 
-func New() *Parser {
+func ParseSvg(input []byte) *Csvg__svg {
 
-	return &Parser{}
+	var svg Csvg__svg
+
+	xml.Unmarshal(input, &svg)
+
+	return &svg
 }
