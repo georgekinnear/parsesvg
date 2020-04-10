@@ -136,10 +136,12 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		// get transform applied to layer, if any
 		if g.AttrInkscapeSpacelabel == geo.AnchorsLayer {
 			dx, dy = getTranslate(g.Transform)
+
 		}
 		for _, r := range g.Cpath__svg {
 			if r.Title != nil {
-				if r.Title.String == geo.AnchorReference {
+				if true { //r.Title.String == geo.AnchorReference {
+					fmt.Printf("%s %s %v\n", r.Title.String, geo.AnchorReference, r.Title.String == geo.AnchorReference)
 					x, err := strconv.ParseFloat(r.Cx, 64)
 					if err != nil {
 						return nil, err
@@ -149,8 +151,10 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 						return nil, err
 					}
 
-					newX := x + dx
-					newY := y + dy
+					ddx, ddy := getTranslate(r.Transform)
+
+					newX := x + dx + ddx
+					newY := y + dy + ddy
 					ladder.Anchor = geo.Point{X: newX, Y: newY}
 				}
 			}
@@ -201,7 +205,10 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	err = convertToPDFYScale(ladder)
+	if err != nil {
+		return nil, err
+	}
 	return ladder, nil
 }
 
@@ -229,7 +236,10 @@ func ApplyDocumentUnits(svg *Csvg__svg, ladder *Ladder) error {
 	}
 
 	for idx, tf := range ladder.TextFields {
-		scaleTextFieldUnits(&tf, sf)
+		err := scaleTextFieldUnits(&tf, sf)
+		if err != nil {
+			return err
+		}
 		ladder.TextFields[idx] = tf
 	}
 
@@ -247,4 +257,20 @@ func scaleTextFieldUnits(tf *TextField, sf float64) error {
 	tf.Rect.Dim.H = sf * tf.Rect.Dim.H
 
 	return nil
+}
+
+func convertToPDFYScale(ladder *Ladder) error {
+	if ladder == nil {
+		return errors.New("nil pointer to ladder")
+	}
+
+	Ytop := ladder.Dim.H - ladder.Anchor.Y //TODO triple check this sign!
+
+	for idx, tf := range ladder.TextFields {
+
+		tf.Rect.Corner.Y = Ytop - tf.Rect.Corner.Y
+		ladder.TextFields[idx] = tf
+	}
+	return nil
+
 }
