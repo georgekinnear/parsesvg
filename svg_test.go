@@ -392,25 +392,23 @@ func TestParseSvg(t *testing.T) {
 
 	for _, g := range svg.Cg__svg {
 		fmt.Println(g.AttrInkscapeSpacelabel)
-
+		fmt.Println(g.Transform)
 		for _, r := range g.Crect__svg {
-			title := r.Ctitle
+
+			title := r.Title
 			//fmt.Printf("%T\n", title)
 			//fmt.Println(reflect.TypeOf(title).String())
 			//fmt.Printf("title is nil pointer %v\n", title == nil)
 			if title != nil {
-				fmt.Printf("-- %s\n", title.String)
+				fmt.Printf("-- %s (%s,%s,%s,%s) Transform: %s\n", title.String, r.Rx, r.Ry, r.Width, r.Height, r.Transform)
 			}
 
 		}
 
 		for _, r := range g.Cpath__svg {
-			title := r.Ctitle
-			//fmt.Printf("%T\n", title)
-			//fmt.Println(reflect.TypeOf(title).String())
-			//fmt.Printf("title is nil pointer %v\n", title == nil)
+			title := r.Title
 			if title != nil {
-				fmt.Printf("-- %s\n", title.String)
+				fmt.Printf("-- %s (%s,%s) Transform: %s\n", title.String, r.Cx, r.Cy, r.Transform)
 			}
 
 		}

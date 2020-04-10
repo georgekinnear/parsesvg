@@ -104,6 +104,7 @@ type Cg__svg struct {
 	Attrstyle                  string        `xml:"style,attr"  json:",omitempty"`
 	Cpath__svg                 []*Cpath__svg `xml:"http://www.w3.org/2000/svg path,omitempty" json:"path,omitempty"`
 	Crect__svg                 []*Crect__svg `xml:"http://www.w3.org/2000/svg rect,omitempty" json:"rect,omitempty"`
+	Transform                  string        `xml:"transform,attr"  json:",omitempty"`
 }
 
 type Cpath__svg struct {
@@ -112,27 +113,28 @@ type Cpath__svg struct {
 	Cy                     string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd cy,attr"  json:",omitempty"`
 	Attrd                  string       `xml:"d,attr"  json:",omitempty"`
 	AttrSodipodiSpaceend   string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd end,attr"  json:",omitempty"`
-	Attrid                 string       `xml:"id,attr"  json:",omitempty"`
+	ID                     string       `xml:"id,attr"  json:",omitempty"`
 	AttrSodipodiSpaceopen  string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd open,attr"  json:",omitempty"`
 	AttrSodipodiSpacerx    string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd rx,attr"  json:",omitempty"`
 	AttrSodipodiSpacery    string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd ry,attr"  json:",omitempty"`
 	AttrSodipodiSpacestart string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd start,attr"  json:",omitempty"`
 	Attrstyle              string       `xml:"style,attr"  json:",omitempty"`
-	Attrtransform          string       `xml:"transform,attr"  json:",omitempty"`
+	Transform              string       `xml:"transform,attr"  json:",omitempty"`
 	AttrSodipodiSpacetype  string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd type,attr"  json:",omitempty"`
-	Ctitle                 *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
+	Title                  *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
 }
 
 type Crect__svg struct {
-	XMLName    xml.Name     `xml:"rect,omitempty" json:"rect,omitempty"`
-	Attrheight string       `xml:"height,attr"  json:",omitempty"`
-	Attrid     string       `xml:"id,attr"  json:",omitempty"`
-	Attrstyle  string       `xml:"style,attr"  json:",omitempty"`
-	Attrwidth  string       `xml:"width,attr"  json:",omitempty"`
-	Attrx      string       `xml:"x,attr"  json:",omitempty"`
-	Attry      string       `xml:"y,attr"  json:",omitempty"`
-	Cdesc__svg *Cdesc__svg  `xml:"http://www.w3.org/2000/svg desc,omitempty" json:"desc,omitempty"`
-	Ctitle     *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
+	XMLName   xml.Name     `xml:"rect,omitempty" json:"rect,omitempty"`
+	Height    string       `xml:"height,attr"  json:",omitempty"`
+	Id        string       `xml:"id,attr"  json:",omitempty"`
+	Attrstyle string       `xml:"style,attr"  json:",omitempty"`
+	Width     string       `xml:"width,attr"  json:",omitempty"`
+	Rx        string       `xml:"x,attr"  json:",omitempty"`
+	Ry        string       `xml:"y,attr"  json:",omitempty"`
+	Desc      *Cdesc__svg  `xml:"http://www.w3.org/2000/svg desc,omitempty" json:"desc,omitempty"`
+	Title     *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
+	Transform string       `xml:"transform,attr"  json:",omitempty"`
 }
 
 type Cdesc__svg struct {
