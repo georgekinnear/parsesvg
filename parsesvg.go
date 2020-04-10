@@ -197,7 +197,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
 	}
 
-	err = ApplyDocumentUnits(ladder)
+	err = ApplyDocumentUnits(&svg, ladder)
 	if err != nil {
 		return nil, err
 	}
@@ -205,7 +205,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	return ladder, nil
 }
 
-func ApplyDocumentUnits(ladder *Ladder) error {
+func ApplyDocumentUnits(svg *Csvg__svg, ladder *Ladder) error {
 
 	// iterate through the structure applying the conversion from
 	// document units to points
@@ -213,5 +213,38 @@ func ApplyDocumentUnits(ladder *Ladder) error {
 	//note we do NOT apply the modification to ladder.DIM because this has its own
 	//units in it and has already been handled.
 
-	return nil //errors.New("Not implemented!")
+	units := svg.Cnamedview__sodipodi.AttrInkscapeSpacedocument_dash_units
+
+	sf := float64(1)
+
+	switch units {
+	case "mm":
+		sf = geo.PPMM
+	case "px":
+		sf = geo.PPPX
+	case "pt":
+		sf = 1
+	case "in":
+		sf = geo.PPIN
+	}
+
+	for idx, tf := range ladder.TextFields {
+		scaleTextFieldUnits(&tf, sf)
+		ladder.TextFields[idx] = tf
+	}
+
+	return nil
+}
+
+func scaleTextFieldUnits(tf *TextField, sf float64) error {
+	if tf == nil {
+		return errors.New("nil pointer to TextField")
+	}
+
+	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
+	tf.Rect.Corner.Y = sf * tf.Rect.Corner.Y
+	tf.Rect.Dim.W = sf * tf.Rect.Dim.W
+	tf.Rect.Dim.H = sf * tf.Rect.Dim.H
+
+	return nil
 }
