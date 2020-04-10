@@ -1,9 +1,11 @@
 package parsesvg
 
 import (
+	"bytes"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -378,5 +380,17 @@ func TestParseSvg(t *testing.T) {
 	//svg := ParseSvg([]byte(testInkscapeSvg))
 
 	jsonData, _ := json.Marshal(svg)
-	fmt.Println(string(jsonData))
+	//fmt.Println(string(jsonData))
+
+	var prettyJSON bytes.Buffer
+	error := json.Indent(&prettyJSON, jsonData, "", "\t")
+	if error != nil {
+		log.Println("JSON parse error: ", error)
+	}
+
+	//fmt.Println(string(prettyJSON.Bytes()))
+
+	for _, g := range svg.Cg__svg {
+		fmt.Println(g.AttrInkscapeSpacelabel)
+	}
 }
