@@ -256,9 +256,10 @@ This example is part of the tests (exported here with textfields layer turned on
 
 We've got one sidebar working. Great! What next? The exams are going to make visits to moderators, and checkers too. They have their own sidebars. We've got this far using the GUI - let's continue to use it to organise where the individual sidebars and headers go. Here we make a separate ```layout.svg``` which contains the layers
 
-- pages
+- textfields
 - anchors
-[- chrome]
+- [chrome] (optional but useful) 
+- pages
 
 The chrome is optional, but you'll want to include it for helping get your anchors in the right place. Delete the white backgrounds in your chrome, so you can see the pages. These will be used to set the paper size
 
@@ -266,33 +267,46 @@ For example:
 
 ![]alt text][layout-example]
 
-This example represents a three stage process where all the incoming scans have been scaled to A4-portrait. Handling landscape is straightforward, by setting a flag that triggers the use of an alternate layout set tuned to landscape - that flagging process is not part of ```timdrysdale/parsesvg``` - search the ```pdf.gradex``` ecosystem for more details.
+This example represents a three stage process where all the incoming scans have been scaled to A4-portrait. Handling landscape is straightforward, by setting a flag that triggers the use of an alternate layout set tuned to landscape - that flagging process is not part of ```timdrysdale/parsesvg``` - search the ```pdf.gradex``` ecosystem for more details. In this case we are assuming 100% of papers are moderated, and that therefore we will always include the moderation sidebar. For many, standard moderation means only a subset of papers are moderated, and it would be helpful to give a visual indication whether a paper was selected for moderation or not, and not include the moderation sidebar in its 'active' form if a paper is not to be moderated. We leave aside for now issues of auto-grouping files to send to those who will work on them, as those matters rest outside this library (but we need to support bifurcating workflows with the most straightforward specification of the desired behaviour that we can arrange).
 
 ### Dynamic sidebar selection
 
-Each stage in the process knows to expect a certain size image - if you set the incoming image for that stage to have non-zero height and width. We can get some dynamic behaviour by allowing EITHER zero height or zero width specifications for that image, so that the sidebar or header is just added to relative to the edge of the image, whatever size it is.
+If our moderation process did not take place on a paper, we'd rather slot in a different moderation bar, that clearly indicates this. For example, we could have an active, coloured, version, and a thinner, grey, inactive version, of which we choose one:
 
-#### Why do we do it this way?
+![alt text][compare-active-inactive]
 
-There is an inter-relationship between workflow logic and page layout, that would be architecturally-suspicious if it made too much of a dent in the way that the layouts are represented. So we do not include any logic or grouping of alternative options together. The Inkscape GUI isn't the right tool to ask to handle the logic for us. So our job here, is to simply provide all the options and let the selection take place elsewhere.
+Our static layout isn't going to be able to take advantage of the space saving in the inactive case. So we introduce the concept of static and dynamic pages, and allow the engine to work out what to do in each case. We don't make decisions in the parse on what to trigger - we just need to collect enough information from the user and the svg to support those decisions in terms of layout. That avoids the parser having to interact with the page layout engine - it just throws a complete set of specifications over the wall to the engine, and lets it handle the dynamic elements.
 
-So what if the page size changes before you get to the Nth stage, because steps were omitted or had different size sidebars depending on whether they were active or inactive, etc?
-The key datums are the edges of the incoming page. These should be uniform in either height or width, e.g. having optional headers AND optional sidebars at each stage is a doable thing, but it makes my brain sore trying to think why you'd want to put yourself through that (if you need progress bar iconography, which implies variable width headers to cope with different stages, then just bake it into your sidebars by making them all a standard height).
+For a dynamic element, it is likely that we have opinion about the size of one of the dimensions. So we can represent the dynamic page as  narrowest possible rectangle. Long in the known direction, narrow in the dynamic direction. It seems you can't have a zero width rect in Inkscape, so we have set a single-digit threshold (TODO - report threshold chosen here). This has the added benefit of making a dynamic layout file look different to the static layout. As before we place the new sidebar next to the right hand edge of the page - except now it is zero-width, so the check sidebar is on the far left of the screen, even though we know it ends up on the right hand side of the screen. If there is only dynamic element in the layout, then this is relatively easy to understand. If there are multiple dynamic elements, then the chrome will get quite busy in that area, and it may be worth considering having two or more layout docs during editing, then hold your breath and paste them together into one superlayout that you load into the tool (remember don't duplicate the ```ref-anchor``` or any other meaningful element). Make any edits in one of the two docs, rather than trying to edit the combined doc. I've not tried this - just making a note for later in case things get busy with any of our mark flows.
 
-The easiest thing to do is just say, if the incoming image width (for example) is not specified, and is zero width, then we just accept whatever the image is (scale it to height for safety, of course) and then we add our sidebars relative to that. There's nothing to stop you overlaying the incoming image if you want - it's just that the use cases for that are a bit more advanced (annotating specific parts of a student answer, for example, and that requires knowledge of where they are putting stuff - which only works if they use printed paper. That's a future use case we'll see more of when the immediate $PANDEMIC is over)
+![dynamic-layout]
 
-so ... for cases where you _know_ for sure where your page edge is, because all steps before were mandatory, and you wnat
+Note that we have two anchors for the red mark sidebars - the ```ladder``` for subtotals and the ```flow``` for totals have been split to demonstrate multiple elements being added to the same page.
 
+### Paper size
 
-we need to know two things
+We still need to finish off specifying the paper size - the parser is not a layout engine, and the layout engine might become hard to test if it works out a page size from the included elements and automagically figures out aesthetically pleasing padding etc. So we require the user to specify this by adding a ```page-static-<yourpagename>``` adjacent to the near-zero-width ```page-dynamic-[width/height]-<yourpagename>```. So you can have either
 
-We don't want to worry about unexpected results in estimating the new page size for dynamic pages when multiple layout elements may be contributing to it, so we need you to work it out in advance and tell us in the layour document with a ```page-extension-<yourpage>```. If you think your graphical design will work ok, there is nothing to stop this being an extension in two-dimensions but there is no in-built support for reasoning about the size of the incoming pages' unknown axis and modifying a graphic to suit that. If you make the graphic overlong, and place it anyway, it will be cropped, which gives you enough scope for borders that have translational symmetry. If you are adding vital elements, then it is your responsbility to have worked out a flow that will yield a minimum extent in the direction you are anticipating is dynamic - and that is the size of the most recent antecedent page's fixed size on that dimensions. We _could_ check for it, but it's just another false positive error to ignore if you do want a full length border and expect some cropping. (TODO consider adding flag support this use case, when the elements have dynamic information content that must be guaranteed to fit on the page - and bear in mind that a simple test run will show this issue immediately to a human).
+- ```page-dynamic-width-<yourpagename>```, or
+-```page-dynamic-height-<yourpagename>```,
 
-if you are using a dynamic page, how big is the extra horizontal and vertical space that you are adding to the incoming image. Note that the incoming image will be scaled to suit the one axis you do define, because there s  
+but not both, and the key-word ```page-dynamic-height-width-<*>``` is NOt implemented.
 
+In this scheme,the previous two pages are labelled as `page-static=<somepage>` and `page-static=<someotherpage>` because they are static. 
+
+### Previous-image size
+
+We also need to let the page layout engine know about how large to make the image of the previous stage of the process, using the "previous-image-<yourpagename>" ID. For the case of the first two processing stages (red, green), the image is a fixed size. We auto-scale to make the red image, then the green image is the right size as a knock on effect (if we draw it around the red page correctly).
+For the dynamic pages, the input image is the thing that varies in size, so this takes a near-zero wide rectangle in the dynamic direction (judt duplicate and rename the dynamic page rect, and move to the ```images``` layers)
+
+## Spreads
+
+A ```spread``` is the subsection of the overall layout that we pass to the layout engine for the construction of the page. Making the spread object is a separate job to the parser ... but we put in a partial implementation to test the idea.
 
 
 [anchor]: ./img/inkscape-anchor-alignment.png "circle on corner of page and snap settings bar"
+[compare-active-inactive]: ./img/compare-active-inactive-sidebar.png "green coloured active moderate bar and grey thin inactive moderate sidebar"
+[dynamic-layout]: ./img/dynamic-layout-60pc.png "screen showing three side bars and the layers dialong"
 [element-name]: ./img/element-name.png "name of the layout element entered into metadata"
 [element-filename]: ./img/element-filename.png "name of the layout element used for saving image of the chrome"
 [example]: ./img/example.png "example of three textfields with pretty surrounds in red"

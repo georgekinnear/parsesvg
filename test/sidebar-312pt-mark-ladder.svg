@@ -459,8 +459,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1070407"
-     inkscape:cx="37.35911"
-     inkscape:cy="1094.1915"
+     inkscape:cx="-471.20394"
+     inkscape:cy="752.74062"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -666,7 +666,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="anchors"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <path
        transform="translate(-209.97531)"
@@ -686,7 +686,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="textfields"
-     style="display:inline">
+     style="display:none">
     <rect
        style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect1080-tab00"
