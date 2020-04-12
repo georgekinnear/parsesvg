@@ -136,8 +136,8 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 		}
 	}
 	// look for previousImageDims
-	layout.PreviousImageStatic = make(map[string]geo.Dim)
-	layout.PreviousImageDynamic = make(map[string]geo.DynamicDim)
+	layout.PreviousImageDimStatic = make(map[string]geo.Dim)
+	layout.PreviousImageDimDynamic = make(map[string]geo.DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.ImagesLayer {
 			for _, r := range g.Crect__svg {
@@ -170,11 +170,11 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 					if name != "" {
 						if isDynamic {
-							layout.PreviousImageDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
+							layout.PreviousImageDimDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
 								WidthIsDynamic:  w < dynamicDimThreshold,
 								HeightIsDynamic: h < dynamicDimThreshold}
 						} else {
-							layout.PreviousImageStatic[name] = geo.Dim{W: w, H: h}
+							layout.PreviousImageDimStatic[name] = geo.Dim{W: w, H: h}
 						}
 					}
 
@@ -238,16 +238,16 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 		layout.PageDimDynamic[k] = v
 
 	}
-	for k, v := range layout.PreviousImageStatic {
+	for k, v := range layout.PreviousImageDimStatic {
 		v.W = sf * v.W
 		v.H = sf * v.H
-		layout.PreviousImageStatic[k] = v
+		layout.PreviousImageDimStatic[k] = v
 
 	}
-	for k, v := range layout.PreviousImageDynamic {
+	for k, v := range layout.PreviousImageDimDynamic {
 		v.Dim.W = sf * v.Dim.W
 		v.Dim.H = sf * v.Dim.H
-		layout.PreviousImageDynamic[k] = v
+		layout.PreviousImageDimDynamic[k] = v
 
 	}
 

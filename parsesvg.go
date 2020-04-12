@@ -141,7 +141,6 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		for _, r := range g.Cpath__svg {
 			if r.Title != nil {
 				if true { //r.Title.String == geo.AnchorReference {
-					fmt.Printf("%s %s %v\n", r.Title.String, geo.AnchorReference, r.Title.String == geo.AnchorReference)
 					x, err := strconv.ParseFloat(r.Cx, 64)
 					if err != nil {
 						return nil, err
@@ -295,7 +294,6 @@ func formRect(tf TextField) []float64 {
 func getTabSequence(r *Crect__svg) int64 {
 	var TabSequence = regexp.MustCompile(`(?i:(tab|tab-))([0-9]+)`)
 	var SequenceNumber = regexp.MustCompile(`([0-9]+)`)
-	//fmt.Printf("Id %s Tab order %s\n", r.Id, SequenceNumber.FindString(TabSequence.FindString(r.Id)))
 	//TODO - combine regexp into one
 	var n int64
 	n, err := strconv.ParseInt(SequenceNumber.FindString(TabSequence.FindString(r.Id)), 10, 64)
@@ -303,4 +301,10 @@ func getTabSequence(r *Crect__svg) int64 {
 		return int64(0)
 	}
 	return n
+}
+
+func TranslatePosition(a, b geo.Point) geo.Point {
+
+	return geo.Point{X: a.X + b.X, Y: a.Y + b.Y}
+
 }
