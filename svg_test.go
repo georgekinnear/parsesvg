@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"reflect"
 	"testing"
@@ -397,7 +398,7 @@ func TestDefineLadderFromSvg(t *testing.T) {
 	}
 }
 
-func TestPrintParsedGeometry(t *testing.T) {
+func TestPrintParsedExample(t *testing.T) {
 
 	c := creator.New()
 
@@ -405,6 +406,28 @@ func TestPrintParsedGeometry(t *testing.T) {
 
 	jpegFilename := "./test/example-chrome.jpg"
 	pageFilename := "./test/example-with-textfields.pdf"
+	img, err := c.NewImageFromFile(jpegFilename)
+
+	if err != nil {
+		t.Errorf("Error opening image file: %s", err)
+	}
+	writeParsedGeometry([]byte(testInkscapeSvg), img, pageFilename, c, t)
+}
+
+func TestPrintParsedLargeExample(t *testing.T) {
+
+	c := creator.New()
+
+	c.SetPageMargins(0, 0, 0, 0) // we're not printing
+
+	svgFilename := "./test/ladders-a4-portrait-mark.svg"
+	jpegFilename := "./test/ladders-a4-portrait-mark.jpg"
+	pageFilename := "./test/ladders-a4-portrait-mark.pdf"
+
+	svgBytes, err := ioutil.ReadFile(svgFilename)
+	if err != nil {
+		t.Error(err)
+	}
 
 	img, err := c.NewImageFromFile(jpegFilename)
 
@@ -412,7 +435,12 @@ func TestPrintParsedGeometry(t *testing.T) {
 		t.Errorf("Error opening image file: %s", err)
 	}
 
-	ladder, err := DefineLadderFromSVG([]byte(testInkscapeSvg))
+	writeParsedGeometry(svgBytes, img, pageFilename, c, t)
+}
+
+func writeParsedGeometry(svg []byte, img *creator.Image, pageFilename string, c *creator.Creator, t *testing.T) {
+
+	ladder, err := DefineLadderFromSVG(svg)
 	if err != nil {
 		t.Errorf("Error defining ladder %v", err)
 	}
