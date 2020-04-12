@@ -1,6 +1,7 @@
 package parsesvg
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -197,7 +198,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 	}
 
 	// look for pageDims
-	layout.PageDims = make(map[string]geo.Dim)
+	layout.PageDimStatic = make(map[string]geo.Dim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.PagesLayer {
 			fmt.Printf("pages group\n")
@@ -216,7 +217,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 				if r.Title != nil { //avoid seg fault, obvs
 
-					layout.PageDims[r.Title.String] = geo.Dim{W: w, H: h}
+					layout.PageDimStatic[r.Title.String] = geo.Dim{W: w, H: h}
 					fmt.Printf("PageDims: %v", r.Title.String)
 
 				} else {
@@ -424,10 +425,10 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 		v.Y = Ytop - (sf * v.Y)
 		layout.Anchors[k] = v
 	}
-	for k, v := range layout.PageDims {
+	for k, v := range layout.PageDimStatic {
 		v.W = sf * v.W
 		v.H = sf * v.H
-		layout.PageDims[k] = v
+		layout.PageDimStatic[k] = v
 
 	}
 
@@ -480,4 +481,15 @@ func getTabSequence(r *Crect__svg) int64 {
 		return int64(0)
 	}
 	return n
+}
+
+func PrettyPrintLayout(layout *Layout) error {
+
+	json, err := json.MarshalIndent(layout, "", "\t")
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(json))
+	return nil
 }

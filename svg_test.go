@@ -399,7 +399,8 @@ func TestDefineLadderFromSvg(t *testing.T) {
 }
 
 func TestDefineLayoutFromSvg(t *testing.T) {
-	svgFilename := "./test/a4-layout.svg"
+	//svgFilename := "./test/a4-layout.svg"
+	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check.svg"
 	svgBytes, err := ioutil.ReadFile(svgFilename)
 
 	if err != nil {
@@ -411,7 +412,11 @@ func TestDefineLayoutFromSvg(t *testing.T) {
 		t.Errorf("Error defining layout %v", err)
 	}
 
-	fmt.Printf("%v", layout)
+	err = PrettyPrintLayout(layout)
+	if err != nil {
+		t.Errorf("Error pretty printing layout %v\n", err)
+	}
+
 }
 
 func TestPrintParsedExample(t *testing.T) {
@@ -452,6 +457,97 @@ func TestPrintParsedLargeExample(t *testing.T) {
 	}
 
 	writeParsedGeometry(svgBytes, img, pageFilename, c, t)
+}
+
+func writeParsedLayout(svg []byte, img *creator.Image, pageFilename string, c *creator.Creator, t *testing.T) {
+
+	ladder, err := DefineLadderFromSVG(svg)
+	if err != nil {
+		t.Errorf("Error defining ladder %v", err)
+	}
+
+	// scale and position image
+	img.ScaleToHeight(ladder.Dim.H)
+	img.SetPos(ladder.Anchor.X, ladder.Anchor.Y) //TODO check this has correct sense for non-zero offsets
+
+	// create new page with image
+	c.SetPageSize(creator.PageSize{ladder.Dim.W, ladder.Dim.H})
+	c.NewPage()
+	c.Draw(img)
+
+	// write to memory
+	var buf bytes.Buffer
+
+	err = c.Write(&buf)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	// convert buffer to readseeker
+	var bufslice []byte
+	fbuf := filebuffer.New(bufslice)
+	fbuf.Write(buf.Bytes())
+
+	// read in from memory
+	pdfReader, err := model.NewPdfReader(fbuf)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	pdfWriter := model.NewPdfWriter()
+
+	page, err := pdfReader.GetPage(1)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	form := model.NewPdfAcroForm()
+
+	for _, tf := range ladder.TextFields {
+
+		tfopt := annotator.TextFieldOptions{Value: tf.Prefill} //TODO - MaxLen?!
+		name := fmt.Sprintf("Page-00-%s", tf.ID)
+		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
+		if err != nil {
+			panic(err)
+		}
+		*form.Fields = append(*form.Fields, textf.PdfField)
+		page.AddAnnotation(textf.Annotations[0].PdfAnnotation)
+	}
+
+	err = pdfWriter.SetForms(form)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	err = pdfWriter.AddPage(page)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	of, err := os.Create(pageFilename)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+	defer of.Close()
+
+	pdfWriter.SetOptimizer(optimize.New(optimize.Options{
+		CombineDuplicateDirectObjects:   true,
+		CombineIdenticalIndirectObjects: true,
+		CombineDuplicateStreams:         true,
+		CompressStreams:                 true,
+		UseObjectStreams:                true,
+		ImageQuality:                    80,
+		ImageUpperPPI:                   100,
+	}))
+
+	pdfWriter.Write(of)
 }
 
 func writeParsedGeometry(svg []byte, img *creator.Image, pageFilename string, c *creator.Creator, t *testing.T) {

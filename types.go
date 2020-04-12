@@ -17,10 +17,15 @@ type Ladder struct {
 }
 
 type Layout struct {
-	Anchor    geo.Point //X,Y
-	Dim       geo.Dim   //W,H
-	ID        string
-	Anchors   map[string]geo.Point
-	PageDims  map[string]geo.Dim
-	Filenames map[string]string
+	Anchor               geo.Point            `json:"anchor"`
+	Dim                  geo.Dim              `json:"dim"`
+	ID                   string               `json:"id"`
+	Anchors              map[string]geo.Point `json:"anchors"`
+	PageDimStatic        map[string]geo.Dim   `json:"pageDimStatic"`
+	PageDimDynamic       map[string]geo.Dim   `json:"pageDimDynamic"`
+	Filenames            map[string]string    `json:"filenames"`
+	PreviousImageStatic  map[string]string    `json:"imageDimStatic"`
+	PreviousImageDynamic map[string]string    `json:"imageDimDynamic"`
 }
+
+//TODO - structs for page and image dims

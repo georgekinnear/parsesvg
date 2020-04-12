@@ -10,13 +10,13 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="355mm"
+   width="318mm"
    height="312mm"
-   viewBox="0 0 355 312"
+   viewBox="0 0 318 312"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="a4-layout-dynamic-with-resolve.svg"
+   sodipodi:docname="layout-312pt-static-mark-dynamic-moderate-static-check.svg"
    inkscape:export-filename="/home/tim/go/src/github.com/timdrysdale/parsesvg/img/layout-example.png"
    inkscape:export-xdpi="55.703602"
    inkscape:export-ydpi="55.703602">
@@ -2796,7 +2796,7 @@
      inkscape:cx="374.97828"
      inkscape:cy="535.42842"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer6"
      showgrid="false"
      inkscape:window-width="1850"
      inkscape:window-height="1136"
@@ -2824,8 +2824,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="pages"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        ry="0.61754012"
        rx="1.6777333"
@@ -2892,8 +2891,7 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="images"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#f70000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect2257"
@@ -2938,8 +2936,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="chrome"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="opacity:1;fill:none;fill-opacity:1;stroke:#ed1a1f;stroke-width:0.75000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect16398"
@@ -5151,8 +5148,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="anchors"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        sodipodi:open="true"
        d="M 0.2435183,-9.0103105 A 9.0134773,9.0134773 0 0 1 9.0119644,0.16501724 9.0134773,9.0134773 0 0 1 -0.0867504,9.0129365 9.0134773,9.0134773 0 0 1 -9.0134735,-0.008477 9.0134773,9.0134773 0 0 1 -0.07004375,-9.0133285"
