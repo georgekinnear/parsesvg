@@ -93,7 +93,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 	// look for pageDims
 	layout.PageDimStatic = make(map[string]geo.Dim)
-	layout.PageDimDynamic = make(map[string]DynamicDim)
+	layout.PageDimDynamic = make(map[string]geo.DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.PagesLayer {
 			fmt.Printf("pages group\n")
@@ -131,7 +131,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 					if name != "" {
 						if isDynamic {
-							layout.PageDimDynamic[name] = DynamicDim{Dim: geo.Dim{W: w, H: h},
+							layout.PageDimDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
 								WidthIsDynamic:  w < dynamicDimThreshold,
 								HeightIsDynamic: h < dynamicDimThreshold}
 						} else {
@@ -147,7 +147,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 	}
 	// look for previousImageDims
 	layout.PreviousImageStatic = make(map[string]geo.Dim)
-	layout.PreviousImageDynamic = make(map[string]DynamicDim)
+	layout.PreviousImageDynamic = make(map[string]geo.DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.ImagesLayer {
 			fmt.Printf("pages group\n")
@@ -185,7 +185,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 					if name != "" {
 						if isDynamic {
-							layout.PreviousImageDynamic[name] = DynamicDim{Dim: geo.Dim{W: w, H: h},
+							layout.PreviousImageDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
 								WidthIsDynamic:  w < dynamicDimThreshold,
 								HeightIsDynamic: h < dynamicDimThreshold}
 						} else {
