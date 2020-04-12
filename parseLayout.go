@@ -93,7 +93,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 	// look for pageDims
 	layout.PageDimStatic = make(map[string]geo.Dim)
-	layout.PageDimDynamic = make(map[string]geo.Dim)
+	layout.PageDimDynamic = make(map[string]DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.PagesLayer {
 			fmt.Printf("pages group\n")
@@ -131,7 +131,9 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 					if name != "" {
 						if isDynamic {
-							layout.PageDimDynamic[name] = geo.Dim{W: w, H: h}
+							layout.PageDimDynamic[name] = DynamicDim{Dim: geo.Dim{W: w, H: h},
+								WidthIsDynamic:  w < dynamicDimThreshold,
+								HeightIsDynamic: h < dynamicDimThreshold}
 						} else {
 							layout.PageDimStatic[name] = geo.Dim{W: w, H: h}
 						}
@@ -142,7 +144,60 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 				}
 			}
 		}
+	}
+	// look for previousImageDims
+	layout.PreviousImageStatic = make(map[string]geo.Dim)
+	layout.PreviousImageDynamic = make(map[string]DynamicDim)
+	for _, g := range svg.Cg__svg {
+		if g.AttrInkscapeSpacelabel == geo.ImagesLayer {
+			fmt.Printf("pages group\n")
+			for _, r := range g.Crect__svg {
+				fmt.Printf("pages %s %s\n", r.Width, r.Height)
+				w, err := strconv.ParseFloat(r.Width, 64)
+				if err != nil {
+					fmt.Printf("PreviousImages %v", r)
+					return nil, err
+				}
+				h, err := strconv.ParseFloat(r.Height, 64)
+				if err != nil {
+					fmt.Printf("PreviousImages %v\n", r)
+					return nil, err
+				}
 
+				if r.Title != nil { //avoid seg fault, obvs
+
+					fullname := r.Title.String
+					name := ""
+					isDynamic := false
+					fmt.Printf("PreviousImages: %v\n", r.Title.String)
+
+					switch {
+					case strings.HasPrefix(fullname, "image-previous-dynamic-"):
+						name = strings.TrimPrefix(fullname, "image-previous-dynamic-")
+						isDynamic = true
+					case strings.HasPrefix(fullname, "image-previous-static-"):
+						name = strings.TrimPrefix(fullname, "image-previous-static-")
+					default:
+						// we're just trying to strip off prefixes,
+						// not prevent underadorned names from working
+						name = strings.TrimPrefix(fullname, "image-previous-")
+					}
+
+					if name != "" {
+						if isDynamic {
+							layout.PreviousImageDynamic[name] = DynamicDim{Dim: geo.Dim{W: w, H: h},
+								WidthIsDynamic:  w < dynamicDimThreshold,
+								HeightIsDynamic: h < dynamicDimThreshold}
+						} else {
+							layout.PreviousImageStatic[name] = geo.Dim{W: w, H: h}
+						}
+					}
+
+				} else {
+					log.Errorf("Page at with size (%f,%f) has no title, so ignoring\n", w, h)
+				}
+			}
+		}
 	}
 
 	err = ApplyDocumentUnitsScaleLayout(&svg, layout)
@@ -190,6 +245,24 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 		v.W = sf * v.W
 		v.H = sf * v.H
 		layout.PageDimStatic[k] = v
+
+	}
+	for k, v := range layout.PageDimDynamic {
+		v.Dim.W = sf * v.Dim.W
+		v.Dim.H = sf * v.Dim.H
+		layout.PageDimDynamic[k] = v
+
+	}
+	for k, v := range layout.PreviousImageStatic {
+		v.W = sf * v.W
+		v.H = sf * v.H
+		layout.PreviousImageStatic[k] = v
+
+	}
+	for k, v := range layout.PreviousImageDynamic {
+		v.Dim.W = sf * v.Dim.W
+		v.Dim.H = sf * v.Dim.H
+		layout.PreviousImageDynamic[k] = v
 
 	}
 
