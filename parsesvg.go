@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -177,6 +178,9 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				if r.Title != nil { //avoid seg fault, obvs
 					tf.ID = r.Title.String
 				}
+
+				tf.TabSequence = getTabSequence(r)
+
 				if r.Desc != nil {
 					tf.Prefill = r.Desc.String
 				}
@@ -287,4 +291,17 @@ func formRect(tf TextField) []float64 {
 
 	return []float64{tf.Rect.Corner.X, tf.Rect.Corner.Y - tf.Rect.Dim.H, tf.Rect.Corner.X + tf.Rect.Dim.W, tf.Rect.Corner.Y}
 
+}
+
+func getTabSequence(r *Crect__svg) int64 {
+	var TabSequence = regexp.MustCompile(`(?i:(tab|tab-))([0-9]+)`)
+	var SequenceNumber = regexp.MustCompile(`([0-9]+)`)
+	//fmt.Printf("Id %s Tab order %s\n", r.Id, SequenceNumber.FindString(TabSequence.FindString(r.Id)))
+	//TODO - combine regexp into one
+	var n int64
+	n, err := strconv.ParseInt(SequenceNumber.FindString(TabSequence.FindString(r.Id)), 10, 64)
+	if err != nil {
+		return int64(0)
+	}
+	return n
 }
