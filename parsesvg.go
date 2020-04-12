@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -212,6 +213,11 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		}
 
 	}
+	// sort textfields based on tab order
+
+	sort.Slice(ladder.TextFields, func(i, j int) bool {
+		return ladder.TextFields[i].TabSequence < ladder.TextFields[j].TabSequence
+	})
 
 	err = ApplyDocumentUnits(&svg, ladder)
 	if err != nil {
