@@ -15,3 +15,11 @@ type Ladder struct {
 	ID         string
 	TextFields []TextField
 }
+
+type Layout struct {
+	Anchor   geo.Point //X,Y
+	Dim      geo.Dim   //W,H
+	ID       string
+	Anchors  map[string]geo.Point
+	PageDims map[string]geo.Dim
+}
