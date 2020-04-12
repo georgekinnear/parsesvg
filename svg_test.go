@@ -398,27 +398,6 @@ func TestDefineLadderFromSvg(t *testing.T) {
 	}
 }
 
-func TestDefineLayoutFromSvg(t *testing.T) {
-	//svgFilename := "./test/a4-layout.svg"
-	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check.svg"
-	svgBytes, err := ioutil.ReadFile(svgFilename)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	layout, err := DefineLayoutFromSVG(svgBytes)
-	if err != nil {
-		t.Errorf("Error defining layout %v", err)
-	}
-
-	err = PrettyPrintLayout(layout)
-	if err != nil {
-		t.Errorf("Error pretty printing layout %v\n", err)
-	}
-
-}
-
 func TestPrintParsedExample(t *testing.T) {
 
 	c := creator.New()

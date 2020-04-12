@@ -279,3 +279,14 @@ func PrettyPrintLayout(layout *Layout) error {
 	fmt.Println(string(json))
 	return nil
 }
+
+func PrintLayout(layout *Layout) error {
+
+	json, err := json.Marshal(layout)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(json))
+	return nil
+}
