@@ -53,15 +53,12 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 			layout.Filenames = make(map[string]string)
 
 			for _, r := range g.Cpath__svg {
-				fmt.Printf("anchors %s %s\n", r.Cx, r.Cy)
 				x, err := strconv.ParseFloat(r.Cx, 64)
 				if err != nil {
-					fmt.Printf("Anchors %v", r)
 					return nil, err
 				}
 				y, err := strconv.ParseFloat(r.Cy, 64)
 				if err != nil {
-					fmt.Printf("Anchors %v", r)
 					return nil, err
 				}
 
@@ -72,8 +69,6 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 				if r.Title != nil {
 					if r.Title.String == geo.AnchorReference {
-
-						fmt.Printf("%s %s %v\n", r.Title.String, geo.AnchorReference, r.Title.String == geo.AnchorReference)
 
 						layout.Anchor = geo.Point{X: newX, Y: newY}
 					} else {
@@ -96,17 +91,13 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 	layout.PageDimDynamic = make(map[string]geo.DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.PagesLayer {
-			fmt.Printf("pages group\n")
 			for _, r := range g.Crect__svg {
-				fmt.Printf("pages %s %s\n", r.Width, r.Height)
 				w, err := strconv.ParseFloat(r.Width, 64)
 				if err != nil {
-					fmt.Printf("PageDims %v", r)
 					return nil, err
 				}
 				h, err := strconv.ParseFloat(r.Height, 64)
 				if err != nil {
-					fmt.Printf("PageDims %v", r)
 					return nil, err
 				}
 
@@ -115,7 +106,6 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					fullname := r.Title.String
 					name := ""
 					isDynamic := false
-					fmt.Printf("PageDims: %v", r.Title.String)
 
 					switch {
 					case strings.HasPrefix(fullname, "page-dynamic-"):
@@ -150,17 +140,13 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 	layout.PreviousImageDynamic = make(map[string]geo.DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.ImagesLayer {
-			fmt.Printf("pages group\n")
 			for _, r := range g.Crect__svg {
-				fmt.Printf("pages %s %s\n", r.Width, r.Height)
 				w, err := strconv.ParseFloat(r.Width, 64)
 				if err != nil {
-					fmt.Printf("PreviousImages %v", r)
 					return nil, err
 				}
 				h, err := strconv.ParseFloat(r.Height, 64)
 				if err != nil {
-					fmt.Printf("PreviousImages %v\n", r)
 					return nil, err
 				}
 
@@ -169,7 +155,6 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					fullname := r.Title.String
 					name := ""
 					isDynamic := false
-					fmt.Printf("PreviousImages: %v\n", r.Title.String)
 
 					switch {
 					case strings.HasPrefix(fullname, "image-previous-dynamic-"):
