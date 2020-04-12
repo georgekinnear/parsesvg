@@ -1,7 +1,9 @@
 package parsesvg
 
 import (
+	"encoding/json"
 	"io/ioutil"
+	"reflect"
 	"testing"
 )
 
@@ -15,19 +17,43 @@ func TestDefineLayoutFromSvg(t *testing.T) {
 		t.Error(err)
 	}
 
-	layout, err := DefineLayoutFromSVG(svgBytes)
+	got, err := DefineLayoutFromSVG(svgBytes)
 	if err != nil {
 		t.Errorf("Error defining layout %v", err)
 	}
 
-	err = PrettyPrintLayout(layout)
-	if err != nil {
-		t.Errorf("Error pretty printing layout %v\n", err)
+	want := Layout{}
+
+	_ = json.Unmarshal([]byte(expectedLayoutJSON), &want)
+
+	if !reflect.DeepEqual(want.Anchor, got.Anchor) {
+		t.Errorf("Anchor is different\n%v\n%v", want.Anchor, got.Anchor)
+	}
+	if !reflect.DeepEqual(want.Dim, got.Dim) {
+		t.Errorf("Dim is different\n%v\n%v", want.Dim, got.Dim)
+	}
+	if !reflect.DeepEqual(want.ID, got.ID) {
+		t.Errorf("ID is different\n%v\n%v", want.ID, got.ID)
+	}
+	if !reflect.DeepEqual(want.Anchors, got.Anchors) {
+		t.Errorf("Anchors are different\n%v\n%v", want.Anchors, got.Anchors)
 	}
 
-	err = PrintLayout(layout)
-	if err != nil {
-		t.Errorf("Error pretty printing layout %v\n", err)
+	if !reflect.DeepEqual(want.PageDimStatic, got.PageDimStatic) {
+		t.Errorf("PageDimStatic are different\n%v\n%v", want.PageDimStatic, got.PageDimStatic)
+	}
+	if !reflect.DeepEqual(want.PageDimDynamic, got.PageDimDynamic) {
+		t.Errorf("PageDimDynamic are different\n%v\n%v", want.PageDimDynamic, got.PageDimDynamic)
+	}
+
+	if !reflect.DeepEqual(want.PreviousImageStatic, got.PreviousImageStatic) {
+		t.Errorf("PreviousImageStatic are different\n%v\n%v", want.PreviousImageStatic, got.PreviousImageStatic)
+	}
+	if !reflect.DeepEqual(want.PreviousImageDynamic, got.PreviousImageDynamic) {
+		t.Errorf("PreviousImageDynamic are different\n%v\n%v", want.PreviousImageDynamic, got.PreviousImageDynamic)
+	}
+	if !reflect.DeepEqual(want.Filenames, got.Filenames) {
+		t.Errorf("Filenames are different\n%v\n%v", want.Filenames, got.Filenames)
 	}
 
 }
