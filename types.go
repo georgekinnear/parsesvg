@@ -17,9 +17,10 @@ type Ladder struct {
 }
 
 type Layout struct {
-	Anchor   geo.Point //X,Y
-	Dim      geo.Dim   //W,H
-	ID       string
-	Anchors  map[string]geo.Point
-	PageDims map[string]geo.Dim
+	Anchor    geo.Point //X,Y
+	Dim       geo.Dim   //W,H
+	ID        string
+	Anchors   map[string]geo.Point
+	PageDims  map[string]geo.Dim
+	Filenames map[string]string
 }

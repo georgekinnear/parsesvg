@@ -147,13 +147,15 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 	var dx, dy float64
 
-	// look for reference anchor position
+	// look for reference & header/ladder anchor positions
+	// these also contain the base filename in the description
 	for _, g := range svg.Cg__svg {
 		// get transform applied to layer, if any
 		if g.AttrInkscapeSpacelabel == geo.AnchorsLayer {
 			dx, dy = getTranslate(g.Transform)
 
 			layout.Anchors = make(map[string]geo.Point)
+			layout.Filenames = make(map[string]string)
 
 			for _, r := range g.Cpath__svg {
 				fmt.Printf("anchors %s %s\n", r.Cx, r.Cy)
@@ -180,9 +182,13 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 						layout.Anchor = geo.Point{X: newX, Y: newY}
 					} else {
-						layout.Anchors[r.Title.String] = geo.Point{X: newX, Y: newY}
-					}
 
+						layout.Anchors[r.Title.String] = geo.Point{X: newX, Y: newY}
+
+						if r.Desc != nil {
+							layout.Filenames[r.Title.String] = r.Desc.String
+						}
+					}
 				} else {
 					log.Errorf("Anchor at (%f,%f) has no title, so ignoring\n", newX, newY)
 				}

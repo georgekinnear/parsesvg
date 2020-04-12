@@ -121,6 +121,7 @@ type Cpath__svg struct {
 	Attrstyle              string       `xml:"style,attr"  json:",omitempty"`
 	Transform              string       `xml:"transform,attr"  json:",omitempty"`
 	AttrSodipodiSpacetype  string       `xml:"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd type,attr"  json:",omitempty"`
+	Desc                   *Cdesc__svg  `xml:"http://www.w3.org/2000/svg desc,omitempty" json:"desc,omitempty"`
 	Title                  *Ctitle__svg `xml:"http://www.w3.org/2000/svg title,omitempty" json:"title,omitempty"`
 }
 
