@@ -120,6 +120,14 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		return nil, err
 	}
 
+	if svg.Cmetadata__svg.CRDF__rdf != nil {
+		if svg.Cmetadata__svg.CRDF__rdf.CWork__cc != nil {
+			if svg.Cmetadata__svg.CRDF__rdf.CWork__cc.Ctitle__dc != nil {
+				ladder.ID = svg.Cmetadata__svg.CRDF__rdf.CWork__cc.Ctitle__dc.String
+			}
+		}
+	}
+
 	ladder.Anchor = geo.Point{X: 0, Y: 0}
 
 	ladderDim, err := getLadderDim(&svg)

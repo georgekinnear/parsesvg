@@ -5,27 +5,17 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"log"
 	"os"
+	"reflect"
 	"testing"
 
 	"github.com/mattetti/filebuffer"
+	"github.com/timdrysdale/geo"
 	"github.com/unidoc/unipdf/v3/annotator"
 	"github.com/unidoc/unipdf/v3/creator"
 	"github.com/unidoc/unipdf/v3/model"
 	"github.com/unidoc/unipdf/v3/model/optimize"
 )
-
-const testSvg = `<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="595.201px" height="841.922px" viewBox="0 0 595.201 841.922" enable-background="new 0 0 595.201 841.922"
-	 xml:space="preserve">
-<rect x="207" y="53" fill="#009FE3" width="181.667" height="85.333"/>
-<text transform="matrix(1 0 0 1 232.3306 107.5952)" fill="#FFFFFF" font-family="'ArialMT'" font-size="31.9752">PODIUM</text>
-<g><text transform="matrix(1 0 0 1 232.3306 107.5952)" fill="#FFFFFF" font-family="'ArialMT'" font-size="31.9752">PODIUM</text></g>
-</svg>`
 
 const testInkscapeSvg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
@@ -341,39 +331,6 @@ const testInkscapeSvg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
   </g>
 </svg>`
 
-/*func TestParseFromOriginalSVGLib(t *testing.T) {
-	is := is.New(t)
-
-	drawing, err := svg.ParseSvg(testSvg, "test", 0)
-	is.NoErr(err)
-	is.NotNil(drawing)
-
-	drawing, err = svg.ParseSvgFromReader(strings.NewReader(testSvg), "test", 0)
-	is.NoErr(err)
-	is.NotNil(drawing)
-}
-
-func TestParseInkscapeSVG(t *testing.T) {
-	is := is.New(t)
-
-	drawing, err := svg.ParseSvg(testInkscapeSvg, "test", 0)
-	is.NoErr(err)
-	is.NotNil(drawing)
-
-	drawing, err = svg.ParseSvgFromReader(strings.NewReader(testInkscapeSvg), "test", 0)
-	is.NoErr(err)
-	is.NotNil(drawing)
-
-	fmt.Printf("Name: %v\n", drawing.Name)
-	fmt.Printf("Transform: %v\n", drawing.Transform)
-	for _, g := range drawing.Groups {
-		fmt.Printf("Group: %v\n", g.ID)
-
-	}
-
-}
-*/
-
 func TestParseSvg(t *testing.T) {
 
 	var svg Csvg__svg
@@ -381,7 +338,7 @@ func TestParseSvg(t *testing.T) {
 	err := xml.Unmarshal([]byte(testInkscapeSvg), &svg)
 
 	if err != nil {
-		fmt.Printf(err.Error())
+		t.Errorf(err.Error())
 	}
 
 	jsonData, _ := json.Marshal(svg)
@@ -389,38 +346,44 @@ func TestParseSvg(t *testing.T) {
 	var prettyJSON bytes.Buffer
 	error := json.Indent(&prettyJSON, jsonData, "", "\t")
 	if error != nil {
-		log.Println("JSON parse error: ", error)
-	}
-
-	fmt.Printf("Page size: %s, %s\n", svg.Width, svg.Height)
-
-	for _, g := range svg.Cg__svg {
-		fmt.Println(g.AttrInkscapeSpacelabel)
-		fmt.Println(g.Transform)
-		for _, r := range g.Crect__svg {
-			title := r.Title
-			if title != nil {
-				fmt.Printf("-- %s (%s,%s,%s,%s) Transform: %s\n", title.String, r.Rx, r.Ry, r.Width, r.Height, r.Transform)
-			}
-		}
-
-		for _, r := range g.Cpath__svg {
-			title := r.Title
-			if title != nil {
-				fmt.Printf("-- %s (%s,%s) Transform: %s\n", title.String, r.Cx, r.Cy, r.Transform)
-			}
-		}
+		t.Errorf("JSON parse error: %v", error)
 	}
 }
 
-/*type Ladder struct {
-	Anchor     geo.Point //X,Y
-	Dim        geo.Dim   //W,H
-	ID         string
-	TextFields []TextField
+var expectedLadder = &Ladder{
+	Anchor: geo.Point{X: 0, Y: 0},
+	Dim:    geo.Dim{W: 141.73228346456693, H: 141.73228346456693},
+	ID:     "example",
+	TextFields: []TextField{
+		TextField{
+			Rect: geo.Rect{
+				Corner: geo.Point{X: 19.304747716535434, Y: 88.05944125984252},
+				Dim:    geo.Dim{W: 22.157384031496065, H: 22.91499892913386},
+			},
+			ID: "badfile",
+		},
+		TextField{
+			Rect: geo.Rect{
+				Corner: geo.Point{X: 109.56009826771654, Y: 104.45776157480316},
+				Dim:    geo.Dim{W: 17.88282113385827, H: 17.88282113385827},
+			},
+			ID: "markok",
+		},
+		TextField{
+			Rect: geo.Rect{
+				Corner: geo.Point{X: 64.14784440944882, Y: 32.85729637795275},
+				Dim:    geo.Dim{W: 66.71550047244095, H: 15.197716913385827},
+			},
+			ID:      "initials",
+			Prefill: "Enter your intials here",
+		},
+	},
 }
 
-const expectedLadder = &Ladder{Anchor:geo.Point{0,247}, Dim:{141.73220, 141.73220},  [{{{6.810286 18.934586}, {7.8166327 8.0839024}}, "badfile", } {{{38.650368, 13.149623}, {6.3086619, 6.3086619}}, "markok" } {{{22.629934, 38.408676}, {23.535746, 5.3614168}}, "initials","Enter your intials here"}]}*/
+/* Output from 	fmt.Printf("%v", ladder):
+&{{0 0} {141.73228346456693 141.73228346456693}  [{{{19.304747716535434 88.05944125984252} {22.157384031496065 22.91499892913386}} badfile } {{{109.56009826771654 104.45776157480316} {17.88282113385827 17.88282113385827}} markok } {{{64.14784440944882 32.85729637795275} {66.71550047244095 15.197716913385827}} initials Enter your intials here}]}
+Used to constructed expected result after close visual insection of the output.
+*/
 
 func TestDefineLadderFromSvg(t *testing.T) {
 
@@ -428,8 +391,10 @@ func TestDefineLadderFromSvg(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error defining ladder %v", err)
 	}
-	fmt.Printf("%v", ladder)
 
+	if !reflect.DeepEqual(ladder, expectedLadder) {
+		t.Errorf("Ladder does not match expected")
+	}
 }
 
 func TestPrintParsedGeometry(t *testing.T) {
