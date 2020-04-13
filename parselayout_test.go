@@ -363,13 +363,15 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 	}
 
-	offset := DiffPosition(layout.Anchor, layout.Anchors["image-mark"])
-	fmt.Printf("Previous: %v %v\n", layout.Anchor, offset)
+	offset := DiffPosition(layout.Anchors["image-mark"], layout.Anchor)
+	fmt.Printf("image-mark: %v %v\n", layout.Anchor, offset)
 	image := ImageInsert{
-		Filename:   "./test/script.jpg",
-		Corner:     offset,                                 //geo.Point{X: 0, Y: 61.5},               //offset,
-		Dim:        layout.ImageDimStatic["previous-mark"], //
-		ScaleImage: true,                                   // (TODO- previous-image gets scaled)
+		Filename:              "./test/script.jpg",
+		Corner:                offset,                                 //geo.Point{X: 0, Y: 61.5},               //offset,
+		Dim:                   layout.ImageDimStatic["previous-mark"], //
+		ScaleImage:            true,
+		ScaleByHeightNotWidth: false,
+		// (TODO- previous-image gets scaled)
 	}
 	spread.Images = append(spread.Images, image)
 
