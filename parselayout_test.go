@@ -445,6 +445,26 @@ func TestRenderSpreadCheck(t *testing.T) {
 
 }
 
+func TestRenderSpreadCheckAfterInactive(t *testing.T) {
+
+	svgLayoutPath := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
+
+	pdfOutputPath := "./test/render-check-after-inactive-spread.pdf"
+
+	previousImagePath := "./test/moderate-inactive-spread-gs.jpg"
+
+	spreadName := "check"
+
+	pageNumber := int(16)
+
+	err := renderSpread(svgLayoutPath, spreadName, previousImagePath, pageNumber, pdfOutputPath)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+}
+
 func renderSpread(svgLayoutPath string, spreadName string, previousImagePath string, pageNumber int, pdfOutputPath string) error {
 
 	svgBytes, err := ioutil.ReadFile(svgLayoutPath)
