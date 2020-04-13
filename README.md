@@ -112,7 +112,24 @@ inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
 #### Anchors
 
 - Give the reference anchor the title ```ref-anchor```. Behaviour is undefined if you add more than one reference anchor.
-- Give any position anchors the title ```pos-anchor-<element_name>```, where <element_name> is meaningful to you. The ```svg``` for the element will be found in the file mentioned in the document metadata title, so the name of the pos-anchor does not have to match, i.e. you don't have to name your element's svg pos-anchor-whatever, you can just call it ```whatever.svg``` and put ```whatever``` in the document metadata as the document title. 
+- Give any position anchors the title ```pos-anchor-<element_name>```, where <element_name> is meaningful to you. The ```svg``` for the element will be found in the file mentioned in the document metadata title, so the name of the pos-anchor does not have to match, i.e. you don't have to name your element's svg pos-anchor-whatever, you can just call it ```whatever.svg``` and put ```whatever``` in the document metadata as the document title.
+
+Note that the previous images have a specific format that must be respected ....
+
+The anchor must be name ```img-previous-<your-spread-name>```, while the box on the image layer must be called ```image-previous-<your-spread-name>```
+
+```golang
+	// Obtain the special "previous-image" which is flattened/rendered to image version of this page at the last step
+	anchorName:= fmt.Sprintf("img-previous-%s",spread.Name)
+	dimName := 	fmt.Sprintf("previous-%s",spread.Name)
+	offset := DiffPosition(layout.Anchors[anchorName], layout.Anchor) 
+
+	previousImage := ImageInsert{
+		Filename:              previousImagePath,
+		Corner:                offset,                            
+		Dim:                   layout.ImageDims[dimName], 
+	}
+```
 
 #### Textfields
 
