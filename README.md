@@ -1,5 +1,5 @@
 # parsesvg
-parse svg to obtain markbox location and size information for **gradex**™
+parse svg to obtain markbox location and size information for **gradex**™ (the AGPL open source exam marking tool)
 
 ![alt text][status]
 
