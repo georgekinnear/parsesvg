@@ -1,17 +1,24 @@
 package parsesvg
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
 
+	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
+	"github.com/unidoc/unipdf/v3/annotator"
+	"github.com/unidoc/unipdf/v3/creator"
+	"github.com/unidoc/unipdf/v3/model"
+	"github.com/unidoc/unipdf/v3/model/optimize"
 )
 
-const expectedLayoutJSON = `{"anchor":{"x":3.568352756897515e-15,"y":884.4107897677605},"dim":{"w":901.4173228346458,"h":884.4094488188978},"id":"a4-portrait-layout","anchors":{"image-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDimStatic":{"check":{"w":111.55415811023623,"h":883.3464566929134},"mark":{"w":763.2376157480315,"h":883.3464566929134},"moderate-active":{"w":899.7675590551182,"h":883.3464566929134},"moderate-inactive":{"w":786.7112314960631,"h":883.3464566929134}},"pageDimDynamic":{"moderate":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}},"filenames":{"mark-header":"ladders-a4-portrait-header","svg-check-flow":"./test/sidebar-312pt-check-flow","svg-mark-flow":"./test/sidebar-312pt-mark-flow","svg-mark-ladder":"./test/sidebar-312pt-mark-ladder","svg-moderate-active":"./test/sidebar-312pt-moderate-flow-alt-active","svg-moderate-inactive":"./test/sidebar-312pt-moderate-inactive"},"ImageDimStatic":{"mark-header":{"w":592.4409448818898,"h":39.68503937007874},"previous-mark":{"w":595.2755905511812,"h":839.0551181102363},"previous-moderate":{"w":763.2376157480315,"h":881.5748031496064}},"ImageDimDynamic":{"previous-check":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}}}`
+const expectedLayoutJSON = `{"anchor":{"x":3.568352756897515e-15,"y":884.4107897677605},"dim":{"w":901.4173228346458,"h":884.4094488188978},"id":"a4-portrait-layout","anchors":{"image-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDimStatic":{"check":{"w":111.55415811023623,"h":883.3464566929134},"mark":{"w":763.2376157480315,"h":883.3464566929134},"moderate-active":{"w":899.7675590551182,"h":883.3464566929134},"moderate-inactive":{"w":786.7112314960631,"h":883.3464566929134}},"pageDimDynamic":{"moderate":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}},"filenames":{"mark-header":"./test/ladders-a4-portrait-header","svg-check-flow":"./test/sidebar-312pt-check-flow","svg-mark-flow":"./test/sidebar-312pt-mark-flow","svg-mark-ladder":"./test/sidebar-312pt-mark-ladder","svg-moderate-active":"./test/sidebar-312pt-moderate-flow-alt-active","svg-moderate-inactive":"./test/sidebar-312pt-moderate-inactive"},"ImageDimStatic":{"mark-header":{"w":592.4409448818898,"h":39.68503937007874},"previous-mark":{"w":595.2755905511812,"h":839.0551181102363},"previous-moderate":{"w":763.2376157480315,"h":881.5748031496064}},"ImageDimDynamic":{"previous-check":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}}}`
 
 func TestDefineLayoutFromSvg(t *testing.T) {
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
@@ -354,11 +361,9 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 	}
 
-	PrettyPrintStruct(layout.Anchors)
-	PrettyPrintStruct(spread.TextFields)
+	//PrettyPrintStruct(layout.Anchors)
+	//PrettyPrintStruct(spread.TextFields)
 
-	// add the previous image...
-	// do some fu with teh static/dynamic dims
 	/*
 			"previousImageDimStatic": {
 				"mark": {
@@ -374,60 +379,104 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 		}
 		spread.Images = append(spread.Images, image) //add chrome to list of images to include
 	*/
-	/*
-		// scale and position image
-		img.ScaleToHeight(ladder.Dim.H)
-		img.SetPos(ladder.Anchor.X, ladder.Anchor.Y) //TODO check this has correct sense for non-zero offsets
+
+	// draw images
+	c := creator.New()
+	c.SetPageMargins(0, 0, 0, 0) // we're not printing
+	c.SetPageSize(creator.PageSize{spread.PageDim.W, spread.PageDim.H})
+	c.NewPage()
+	for _, v := range spread.Images {
+
+		img, err := c.NewImageFromFile(v.Filename)
+
+		if err != nil {
+			t.Errorf("Error opening image file: %s", err)
+		}
+
+		if v.ScaleByHeightNotWidth { //check this is what we want to happen e.g. scale by width etc?
+			img.ScaleToHeight(v.Dim.H)
+		} else {
+			img.ScaleToWidth(v.Dim.W)
+		}
+
+		img.SetPos(v.Corner.X, v.Corner.Y) //TODO check this has correct sense for non-zero offsets
 
 		// create new page with image
-		c.SetPageSize(creator.PageSize{ladder.Dim.W, ladder.Dim.H})
-		c.NewPage()
+
 		c.Draw(img)
-	*/
-
-}
-
-/*
-type Spread struct {
-	Name            string
-	PageDim         geo.Dim
-	PageDimDelta    geo.Dim
-	WidthIsDynamic  bool
-	HeightIsDynamic bool
-	Images          []ImageInsert
-	Ladders         []Ladder
-	TextFields      []TextField
-}
-
-type ImageInsert struct {
-	Filename              string
-	Corner                geo.Point
-	Dim                   geo.Dim
-ScaleImage bool
-	ScaleByHeightNotWidth bool
-}*/
-/*
-
-	c := creator.New()
-
-	c.SetPageMargins(0, 0, 0, 0) // we're not printing
-
-	svgFilename := "./test/ladders-a4-portrait-mark.svg"
-	jpegFilename := "./test/ladders-a4-portrait-mark.jpg"
-	pageFilename := "./test/ladders-a4-portrait-mark.pdf"
-
-	svgBytes, err := ioutil.ReadFile(svgFilename)
-	if err != nil {
-		t.Error(err)
 	}
 
-	img, err := c.NewImageFromFile(jpegFilename)
+	// write to memory
+	var buf bytes.Buffer
 
+	err = c.Write(&buf)
 	if err != nil {
-		t.Errorf("Error opening image file: %s", err)
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
 	}
 
-writeParsedGeometry(svgBytes, img, pageFilename, c, t)
+	// convert buffer to readseeker
+	var bufslice []byte
+	fbuf := filebuffer.New(bufslice)
+	fbuf.Write(buf.Bytes())
 
+	// read in from memory
+	pdfReader, err := model.NewPdfReader(fbuf)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
 
-*/
+	pdfWriter := model.NewPdfWriter()
+
+	page, err := pdfReader.GetPage(1)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	form := model.NewPdfAcroForm()
+
+	for _, tf := range spread.TextFields {
+
+		tfopt := annotator.TextFieldOptions{Value: tf.Prefill} //TODO - MaxLen?!
+		name := fmt.Sprintf("Page-00-%s", tf.ID)
+		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
+		if err != nil {
+			panic(err)
+		}
+		*form.Fields = append(*form.Fields, textf.PdfField)
+		page.AddAnnotation(textf.Annotations[0].PdfAnnotation)
+	}
+
+	err = pdfWriter.SetForms(form)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	err = pdfWriter.AddPage(page)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	of, err := os.Create("./test/mark-spread.pdf")
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+	defer of.Close()
+
+	pdfWriter.SetOptimizer(optimize.New(optimize.Options{
+		CombineDuplicateDirectObjects:   true,
+		CombineIdenticalIndirectObjects: true,
+		CombineDuplicateStreams:         true,
+		CompressStreams:                 true,
+		UseObjectStreams:                true,
+		ImageQuality:                    80,
+		ImageUpperPPI:                   100,
+	}))
+
+	pdfWriter.Write(of)
+}
