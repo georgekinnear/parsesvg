@@ -337,12 +337,12 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 		offset := geo.Point{}
 
-		if thisOffset, ok := layout.Anchors[imgname]; !ok {
+		if thisAnchor, ok := layout.Anchors[imgname]; !ok {
 			//default to layout anchor if not in the list
 			offset = layout.Anchor
 		} else {
 
-			offset = thisOffset
+			offset = DiffPosition(layout.Anchor, thisAnchor)
 		}
 
 		imgfilename := imgname //in case not specified, e.g. previous image
@@ -386,7 +386,7 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 	c.SetPageSize(creator.PageSize{spread.PageDim.W, spread.PageDim.H})
 	c.NewPage()
 	for _, v := range spread.Images {
-
+		fmt.Printf("Printing image %s to pdf\n", v.Filename)
 		img, err := c.NewImageFromFile(v.Filename)
 
 		if err != nil {
@@ -395,12 +395,14 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 		if v.ScaleByHeightNotWidth { //check this is what we want to happen e.g. scale by width etc?
 			img.ScaleToHeight(v.Dim.H)
+			fmt.Printf("Scaling to height %v\n", v.Dim.H)
 		} else {
+			fmt.Printf("Scaling to width %v\n", v.Dim.W)
 			img.ScaleToWidth(v.Dim.W)
 		}
 
 		img.SetPos(v.Corner.X, v.Corner.Y) //TODO check this has correct sense for non-zero offsets
-
+		fmt.Printf("Setting position to (%f, %f)\n------------------\n", v.Corner.X, v.Corner.Y)
 		// create new page with image
 
 		c.Draw(img)
