@@ -3738,11 +3738,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.782796"
-     inkscape:cx="574.42711"
-     inkscape:cy="707.35126"
+     inkscape:zoom="4.4281629"
+     inkscape:cx="4.185319"
+     inkscape:cy="1129.0631"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:window-width="1850"
      inkscape:window-height="1136"
@@ -5274,8 +5274,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="anchors"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        style="display:inline;opacity:0.53800001;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="path2214"
@@ -5438,6 +5437,21 @@
          id="desc20381">./test/sidebar-312pt-mark-flow</desc>
       <title
          id="title20383">svg-mark-flow</title>
+    </path>
+    <path
+       style="display:inline;opacity:0.53800001;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       id="path7551"
+       sodipodi:type="arc"
+       sodipodi:cx="-8.8817842e-16"
+       sodipodi:cy="-0.00027761908"
+       sodipodi:rx="10.217368"
+       sodipodi:ry="10.217368"
+       sodipodi:start="4.7394094"
+       sodipodi:end="4.7046179"
+       d="M 0.27604398,-10.213916 A 10.217368,10.217368 0 0 1 10.215653,0.18692009 10.217368,10.217368 0 0 1 -0.09833727,10.216617 10.217368,10.217368 0 0 1 -10.217364,-0.00974702 10.217368,10.217368 0 0 1 -0.07939919,-10.217337"
+       sodipodi:open="true">
+      <title
+         id="title7549">img-previous-check</title>
     </path>
   </g>
   <g

@@ -641,7 +641,11 @@ func renderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		// TODO consider logging a warning here for GUI etc
 		img.SetWidth(v.Dim.Width)
 		img.SetHeight(v.Dim.Height)
-		img.SetPos(v.Corner.X, v.Corner.Y) //TODO check this has correct sense for non-zero offsets
+		if spread.Dim.DynamicWidth {
+			img.SetPos(v.Corner.X+spread.ExtraWidth, v.Corner.Y)
+		} else {
+			img.SetPos(v.Corner.X, v.Corner.Y) //TODO check this has correct sense for non-zero offsets
+		}
 		c.Draw(img)
 	}
 
@@ -689,6 +693,9 @@ func renderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		// For multi-student entries (although, OTH, there will be per-page ID data etc embedded too
 		// which may be more useful in this regard, rather than overloading the textfield id)
 		name := fmt.Sprintf("page-%03d-%s", pageNumber, tf.ID)
+		if spread.Dim.DynamicWidth {
+			tf.Rect.Corner.X = tf.Rect.Corner.X + spread.ExtraWidth
+		}
 		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
 		if err != nil {
 			panic(err)
