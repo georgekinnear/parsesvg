@@ -133,7 +133,7 @@ The anchor must be name ```img-previous-<your-spread-name>```, while the box on 
 
 #### Textfields
 
-Textfields don't necessarily take prefilling (but they can), whereas constrained-choice selections must be pre-populated. Let's do that in ```inkscape``` for an easy life. You can label and describe SVG elements in ```inkscape``` by ```Ctrl-Shift-O``` (remember to hit the 'Set' button - I kept forgetting first time out, so do check when you go back to an object that the data has persisted.) We'll use these to pass extra information into the parser, e.g. ```choiceBox``` options, or format strings that might help with hydrating the ```id``` to include page numbers etc. This bit is going to move rapidly ... so consider any implied API to be experimental and subject to change from minute to minute.
+Textfields don't necessarily need to be prefilled (but they can), whereas constrained-choice selections must be pre-populated. Let's do that in ```inkscape``` for an easy life. You can label and describe SVG elements in ```inkscape``` by ```Ctrl-Shift-O``` (remember to hit the 'Set' button - I kept forgetting first time out, so do check when you go back to an object that the data has persisted.) We'll use these to pass extra information into the parser, e.g. ```choiceBox``` options, or format strings that might help with hydrating the ```id``` to include page numbers etc. This bit is going to move rapidly ... so consider any implied API to be experimental and subject to change from minute to minute.
 
 ```
   <g
@@ -155,6 +155,10 @@ Textfields don't necessarily take prefilling (but they can), whereas constrained
     </rect>
   </g>
  ```
+
+Textfield trouble shooting - if your chrome is present on the page, then the anchor is good - because they use the same anchor. Check that
+-- they are on the correct layer
+-- they are NOT grouped 
 
 ### Tab order of acroforms elements
 
