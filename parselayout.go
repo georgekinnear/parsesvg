@@ -226,10 +226,14 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 
 	Ytop := layout.Dim.H - layout.Anchor.Y //TODO triple check this sign!
 
+	layout.Anchor.X = sf * layout.Anchor.X
+	layout.Anchor.Y = Ytop - (sf * layout.Anchor.Y)
+
 	for k, v := range layout.Anchors {
 		v.X = sf * v.X
 		v.Y = Ytop - (sf * v.Y)
 		layout.Anchors[k] = v
+
 	}
 	for k, v := range layout.PageDimStatic {
 		v.W = sf * v.W
@@ -273,6 +277,17 @@ func PrettyPrintLayout(layout *Layout) error {
 func PrintLayout(layout *Layout) error {
 
 	json, err := json.Marshal(layout)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(json))
+	return nil
+}
+
+func PrettyPrintStruct(layout interface{}) error {
+
+	json, err := json.MarshalIndent(layout, "", "\t")
 	if err != nil {
 		return err
 	}

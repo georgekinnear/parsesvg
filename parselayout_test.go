@@ -11,7 +11,7 @@ import (
 	"github.com/timdrysdale/geo"
 )
 
-const expectedLayoutJSON = `{"anchor":{"x":1.2588355559055121e-15,"y":-0.0003496930299212599},"dim":{"w":901.4173228346458,"h":884.4094488188978},"id":"a4-portrait-layout","anchors":{"image-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDimStatic":{"check":{"w":111.55415811023623,"h":883.3464566929134},"mark":{"w":763.2376157480315,"h":883.3464566929134},"moderate-active":{"w":899.7675590551182,"h":883.3464566929134},"moderate-inactive":{"w":786.7112314960631,"h":883.3464566929134}},"pageDimDynamic":{"moderate":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}},"filenames":{"mark-header":"ladders-a4-portrait-header","svg-check-flow":"./test/sidebar-312pt-check-flow","svg-mark-flow":"./test/sidebar-312pt-mark-flow","svg-mark-ladder":"./test/sidebar-312pt-mark-ladder","svg-moderate-active":"./test/sidebar-312pt-moderate-flow-alt-active","svg-moderate-inactive":"./test/sidebar-312pt-moderate-inactive"},"ImageDimStatic":{"mark-header":{"w":592.4409448818898,"h":39.68503937007874},"previous-mark":{"w":595.2755905511812,"h":839.0551181102363},"previous-moderate":{"w":763.2376157480315,"h":881.5748031496064}},"ImageDimDynamic":{"previous-check":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}}}`
+const expectedLayoutJSON = `{"anchor":{"x":3.568352756897515e-15,"y":884.4107897677605},"dim":{"w":901.4173228346458,"h":884.4094488188978},"id":"a4-portrait-layout","anchors":{"image-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDimStatic":{"check":{"w":111.55415811023623,"h":883.3464566929134},"mark":{"w":763.2376157480315,"h":883.3464566929134},"moderate-active":{"w":899.7675590551182,"h":883.3464566929134},"moderate-inactive":{"w":786.7112314960631,"h":883.3464566929134}},"pageDimDynamic":{"moderate":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}},"filenames":{"mark-header":"ladders-a4-portrait-header","svg-check-flow":"./test/sidebar-312pt-check-flow","svg-mark-flow":"./test/sidebar-312pt-mark-flow","svg-mark-ladder":"./test/sidebar-312pt-mark-ladder","svg-moderate-active":"./test/sidebar-312pt-moderate-flow-alt-active","svg-moderate-inactive":"./test/sidebar-312pt-moderate-inactive"},"ImageDimStatic":{"mark-header":{"w":592.4409448818898,"h":39.68503937007874},"previous-mark":{"w":595.2755905511812,"h":839.0551181102363},"previous-moderate":{"w":763.2376157480315,"h":881.5748031496064}},"ImageDimDynamic":{"previous-check":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}}}`
 
 func TestDefineLayoutFromSvg(t *testing.T) {
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
@@ -265,12 +265,15 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 		offset := geo.Point{}
 
-		if thisOffset, ok := layout.Anchors[svgname]; !ok {
+		if thisAnchor, ok := layout.Anchors[svgname]; !ok {
 			//default to layout anchor if not in the list
-			offset = layout.Anchor
+			offset = geo.Point{X: 0, Y: 0}
+			fmt.Printf("didn't find anchor for %s\n", svgname)
 		} else {
 
-			offset = thisOffset
+			fmt.Printf("%s@%v ref@%v\n", svgname, thisAnchor, layout.Anchor)
+			offset = DiffPosition(layout.Anchor, thisAnchor)
+			//fmt.Printf("Offset %s %v\n", svgname, offset)
 		}
 
 		svgfilename := fmt.Sprintf("%s.svg", layout.Filenames[svgname])
@@ -307,6 +310,7 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 			//shift the text field and add it to the list
 			//let engine take care of mangling name to suit page
+
 			tf.Rect.Corner = TranslatePosition(tf.Rect.Corner, offset)
 			spread.TextFields = append(spread.TextFields, tf)
 		}
@@ -349,6 +353,9 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 		spread.Images = append(spread.Images, image) //add chrome to list of images to include
 
 	}
+
+	PrettyPrintStruct(layout.Anchors)
+	PrettyPrintStruct(spread.TextFields)
 
 	// add the previous image...
 	// do some fu with teh static/dynamic dims

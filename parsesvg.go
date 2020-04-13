@@ -303,8 +303,13 @@ func getTabSequence(r *Crect__svg) int64 {
 	return n
 }
 
-func TranslatePosition(a, b geo.Point) geo.Point {
+func TranslatePosition(pos, vec geo.Point) geo.Point {
 
-	return geo.Point{X: a.X + b.X, Y: a.Y + b.Y}
+	return geo.Point{X: pos.X + vec.X, Y: pos.Y + vec.Y}
+
+}
+func DiffPosition(from, to geo.Point) geo.Point {
+
+	return geo.Point{X: to.X - from.X, Y: to.Y - from.Y}
 
 }
