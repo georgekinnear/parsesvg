@@ -3739,10 +3739,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.782796"
-     inkscape:cx="814.59185"
+     inkscape:cx="574.42711"
      inkscape:cy="707.35126"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer6"
      showgrid="false"
      inkscape:window-width="1850"
      inkscape:window-height="1136"
@@ -3817,27 +3817,15 @@
        rx="0.2080072"
        ry="0.61754012">
       <title
-         id="title3921">page-static-check</title>
-    </rect>
-    <rect
-       transform="scale(-1,1)"
-       ry="0.64664972"
-       rx="0.0033856619"
-       y="0.62500608"
-       x="-0.49990082"
-       height="311"
-       width="0.49990001"
-       id="rect20389"
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#00e3f2;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:0.38039216">
-      <title
-         id="title20387">page-dynamic-width-moderate</title>
+         id="title3921">page-dynamic-check</title>
     </rect>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="images"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <rect
        style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#f70000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect2257"
@@ -3895,7 +3883,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="chrome"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <rect
        style="opacity:1;fill:none;fill-opacity:1;stroke:#ed1a1f;stroke-width:0.75000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect16398"
@@ -5285,9 +5274,10 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="anchors"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
-       style="display:inline;opacity:0.538;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       style="display:inline;opacity:0.53800001;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="path2214"
        sodipodi:type="arc"
        sodipodi:cx="-8.8817842e-16"
@@ -5312,7 +5302,7 @@
        sodipodi:cx="-8.8817842e-16"
        sodipodi:type="arc"
        id="path2126"
-       style="display:inline;opacity:0.538;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1">
+       style="display:inline;opacity:0.53800001;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1">
       <title
          id="title2124">img-previous-moderate-active</title>
     </path>
@@ -5454,7 +5444,8 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="textfields"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <rect
        style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect1080-tab00"

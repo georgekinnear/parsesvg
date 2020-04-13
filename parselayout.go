@@ -119,6 +119,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					}
 
 					if name != "" { //reject anonymous pages
+						fmt.Printf("%s is dynamic? %v\n", name, isDynamic)
 						layout.PageDims[name] = geo.Dim{Width: w, Height: h, DynamicWidth: isDynamic}
 					}
 

@@ -30,13 +30,12 @@ type Layout struct {
 
 //TODO move this to types.go; add json tags
 type Spread struct {
-	Name            string
-	Dim             geo.Dim
-	ExtraWidth      float64
-	HasDynamicWidth bool
-	Images          []ImageInsert
-	Ladders         []Ladder
-	TextFields      []TextField
+	Name       string
+	Dim        geo.Dim
+	ExtraWidth float64
+	Images     []ImageInsert
+	Ladders    []Ladder
+	TextFields []TextField
 }
 
 type ImageInsert struct {
@@ -51,7 +50,7 @@ type ImageInsert struct {
 // the
 
 func (s *Spread) GetWidth() float64 {
-	if s.HasDynamicWidth {
+	if s.Dim.DynamicWidth {
 		return s.Dim.Width + s.ExtraWidth
 	} else {
 		return s.Dim.Width

@@ -271,7 +271,7 @@ func testPrintSpreadsFromLayout(t *testing.T) {
 	}
 
 	//see timdrysdale/pagescale if confused
-	if spread.HasDynamicWidth {
+	if spread.Dim.DynamicWidth {
 		img.ScaleToHeight(spread.Dim.Height)
 		spread.Dim.Width = img.Width()
 	} else {
@@ -385,7 +385,7 @@ func testPrintSpreadsFromLayout(t *testing.T) {
 }
 
 // gs -dNOPAUSE -sDEVICE=jpeg -sOutputFile=mark-spread-gs.jpg -dJPEGQ=95 -r300 -q mark-spread.pdf -c quit
-func TestRenderSpreadStatic(t *testing.T) {
+func TestRenderSpreadMark(t *testing.T) {
 
 	svgLayoutPath := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
 
@@ -405,7 +405,7 @@ func TestRenderSpreadStatic(t *testing.T) {
 
 }
 
-func TestRenderSpreadDynamic(t *testing.T) {
+func TestRenderSpreadModerate(t *testing.T) {
 
 	svgLayoutPath := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
 
@@ -414,6 +414,26 @@ func TestRenderSpreadDynamic(t *testing.T) {
 	previousImagePath := "./test/mark-spread-gs.jpg"
 
 	spreadName := "moderate-active"
+
+	pageNumber := int(16)
+
+	err := renderSpread(svgLayoutPath, spreadName, previousImagePath, pageNumber, pdfOutputPath)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+}
+
+func TestRenderSpreadCheck(t *testing.T) {
+
+	svgLayoutPath := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
+
+	pdfOutputPath := "./test/render-check-spread.pdf"
+
+	previousImagePath := "./test/moderate-active-gs.jpg"
+
+	spreadName := "check"
 
 	pageNumber := int(16)
 
@@ -585,7 +605,7 @@ func renderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 	}
 
 	// Now we do the scaling to fit the page - see timdrysdale/pagescale for a demo
-	if spread.HasDynamicWidth {
+	if spread.Dim.DynamicWidth {
 		img.ScaleToHeight(spread.Dim.Height)
 		spread.ExtraWidth = img.Width() //we'll increase the page size by the image size
 	} else {
@@ -599,7 +619,7 @@ func renderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		}
 
 	}
-
+	fmt.Printf("Spread is Dynamic? %v Width is static %f extra %f image %f getter %f\n", spread.Dim.DynamicWidth, spread.Dim.Width, spread.ExtraWidth, img.Width(), spread.GetWidth())
 	img.SetPos(previousImage.Corner.X, previousImage.Corner.Y)
 	fmt.Printf("setpos previous image: %f, %f\n", previousImage.Corner.X, previousImage.Corner.Y)
 	// we use GetWidth() so value includes fixed width plus extra width
