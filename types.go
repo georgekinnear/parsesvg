@@ -1,33 +1,61 @@
 package parsesvg
 
-import "github.com/timdrysdale/geo"
+import (
+	"github.com/timdrysdale/geo"
+)
 
 type TextField struct {
-	Rect        geo.Rect //Corner.X/Y, Dim.W/H
+	Rect        geo.Rect
 	ID          string
 	Prefill     string
 	TabSequence int64
 }
 
 type Ladder struct {
-	Anchor     geo.Point //X,Y
-	Dim        geo.Dim   //W,H
+	Anchor     geo.Point
+	Dim        geo.Dim
 	ID         string
 	TextFields []TextField
 }
 
 type Layout struct {
-	Anchor          geo.Point                 `json:"anchor"`
-	Dim             geo.Dim                   `json:"dim"`
-	ID              string                    `json:"id"`
-	Anchors         map[string]geo.Point      `json:"anchors"`
-	PageDimStatic   map[string]geo.Dim        `json:"pageDimStatic"`
-	PageDimDynamic  map[string]geo.DynamicDim `json:"pageDimDynamic"`
-	Filenames       map[string]string         `json:"filenames"`
-	ImageDimStatic  map[string]geo.Dim        `json:"ImageDimStatic"`
-	ImageDimDynamic map[string]geo.DynamicDim `json:"ImageDimDynamic"`
+	Anchor    geo.Point            `json:"anchor"`
+	Dim       geo.Dim              `json:"dim"`
+	ID        string               `json:"id"`
+	Anchors   map[string]geo.Point `json:"anchors"`
+	PageDims  map[string]geo.Dim   `json:"pageDims"`
+	Filenames map[string]string    `json:"filenames"`
+	ImageDims map[string]geo.Dim   `json:"ImageDims"`
 }
 
-const dynamicDimThreshold = float64(5.0)
+//TODO move this to types.go; add json tags
+type Spread struct {
+	Name            string
+	Dim             geo.Dim
+	ExtraWidth      float64
+	HasDynamicWidth bool
+	Images          []ImageInsert
+	Ladders         []Ladder
+	TextFields      []TextField
+}
 
-//TODO - structs for page and image dims
+type ImageInsert struct {
+	Filename              string
+	Corner                geo.Point
+	Dim                   geo.Dim
+	ScaleImage            bool
+	ScaleByHeightNotWidth bool
+}
+
+// how to understand dynamic width
+// the fixed additional width is known at design time
+// the unknown part is loaded into spread.Dim.Width when known
+// the
+
+func (s *Spread) GetWidth() float64 {
+	if s.HasDynamicWidth {
+		return s.Dim.Width + s.ExtraWidth
+	} else {
+		return s.Dim.Width
+	}
+}

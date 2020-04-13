@@ -353,27 +353,27 @@ func TestParseSvg(t *testing.T) {
 
 var expectedLadder = &Ladder{
 	Anchor: geo.Point{X: 0, Y: 0},
-	Dim:    geo.Dim{W: 141.73228346456693, H: 141.73228346456693},
+	Dim:    geo.Dim{Width: 141.73228346456693, Height: 141.73228346456693},
 	ID:     "example",
 	TextFields: []TextField{
 		TextField{
 			Rect: geo.Rect{
 				Corner: geo.Point{X: 19.304747716535434, Y: 88.05944125984252},
-				Dim:    geo.Dim{W: 22.157384031496065, H: 22.91499892913386},
+				Dim:    geo.Dim{Width: 22.157384031496065, Height: 22.91499892913386},
 			},
 			ID: "badfile",
 		},
 		TextField{
 			Rect: geo.Rect{
 				Corner: geo.Point{X: 109.56009826771654, Y: 104.45776157480316},
-				Dim:    geo.Dim{W: 17.88282113385827, H: 17.88282113385827},
+				Dim:    geo.Dim{Width: 17.88282113385827, Height: 17.88282113385827},
 			},
 			ID: "markok",
 		},
 		TextField{
 			Rect: geo.Rect{
 				Corner: geo.Point{X: 64.14784440944882, Y: 32.85729637795275},
-				Dim:    geo.Dim{W: 66.71550047244095, H: 15.197716913385827},
+				Dim:    geo.Dim{Width: 66.71550047244095, Height: 15.197716913385827},
 			},
 			ID:      "initials",
 			Prefill: "Enter your intials here",
@@ -446,11 +446,11 @@ func writeParsedLayout(svg []byte, img *creator.Image, pageFilename string, c *c
 	}
 
 	// scale and position image
-	img.ScaleToHeight(ladder.Dim.H)
+	img.ScaleToHeight(ladder.Dim.Height)
 	img.SetPos(ladder.Anchor.X, ladder.Anchor.Y) //TODO check this has correct sense for non-zero offsets
 
 	// create new page with image
-	c.SetPageSize(creator.PageSize{ladder.Dim.W, ladder.Dim.H})
+	c.SetPageSize(creator.PageSize{ladder.Dim.Width, ladder.Dim.Height})
 	c.NewPage()
 	c.Draw(img)
 
@@ -537,11 +537,11 @@ func writeParsedGeometry(svg []byte, img *creator.Image, pageFilename string, c 
 	}
 
 	// scale and position image
-	img.ScaleToHeight(ladder.Dim.H)
+	img.ScaleToHeight(ladder.Dim.Height)
 	img.SetPos(ladder.Anchor.X, ladder.Anchor.Y) //TODO check this has correct sense for non-zero offsets
 
 	// create new page with image
-	c.SetPageSize(creator.PageSize{ladder.Dim.W, ladder.Dim.H})
+	c.SetPageSize(creator.PageSize{ladder.Dim.Width, ladder.Dim.Height})
 	c.NewPage()
 	c.Draw(img)
 
