@@ -87,8 +87,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 	}
 
 	// look for pageDims
-	layout.PageDimStatic = make(map[string]geo.Dim)
-	layout.PageDimDynamic = make(map[string]geo.DynamicDim)
+	layout.PageDims = make(map[string]geo.Dim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.PagesLayer {
 			for _, r := range g.Crect__svg {
@@ -110,25 +109,17 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					switch {
 					case strings.HasPrefix(fullname, "page-dynamic-"):
 						name = strings.TrimPrefix(fullname, "page-dynamic-")
-						name = strings.TrimPrefix(name, "width-") //we may want this later, so leave in API
-						name = strings.TrimPrefix(name, "height-")
 						isDynamic = true
 					case strings.HasPrefix(fullname, "page-static-"):
 						name = strings.TrimPrefix(fullname, "page-static-")
 					default:
-						// we're just trying to strip off prefixes,
-						// not prevent underadorned names from working
+						// unadorned pages are considered static
+						// because this is the least surprising behaviour
 						name = strings.TrimPrefix(fullname, "page-")
 					}
 
-					if name != "" {
-						if isDynamic {
-							layout.PageDimDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
-								WidthIsDynamic:  w < dynamicDimThreshold,
-								HeightIsDynamic: h < dynamicDimThreshold}
-						} else {
-							layout.PageDimStatic[name] = geo.Dim{W: w, H: h}
-						}
+					if name != "" { //reject anonymous pages
+						layout.PageDims[name] = geo.Dim{Width: w, Height: h, DynamicWidth: isDynamic}
 					}
 
 				} else {
@@ -138,8 +129,7 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 		}
 	}
 	// look for previousImageDims
-	layout.ImageDimStatic = make(map[string]geo.Dim)
-	layout.ImageDimDynamic = make(map[string]geo.DynamicDim)
+	layout.ImageDims = make(map[string]geo.Dim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.ImagesLayer {
 			for _, r := range g.Crect__svg {
@@ -172,15 +162,8 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 						name = strings.TrimPrefix(fullname, "image-")
 					}
 
-					if name != "" {
-						if isDynamic {
-							layout.ImageDimDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
-								WidthIsDynamic:  w < dynamicDimThreshold,
-								HeightIsDynamic: h < dynamicDimThreshold}
-
-						} else {
-							layout.ImageDimStatic[name] = geo.Dim{W: w, H: h}
-						}
+					if name != "" { //reject anonymous images - can't place them
+						layout.ImageDims[name] = geo.Dim{Width: w, Height: h, DynamicWidth: isDynamic}
 					}
 
 				} else {
@@ -224,7 +207,7 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 	layout.Anchor.X = sf * layout.Anchor.X
 	layout.Anchor.Y = sf * layout.Anchor.Y
 
-	Ytop := layout.Dim.H - layout.Anchor.Y //TODO triple check this sign!
+	Ytop := layout.Dim.Height - layout.Anchor.Y //TODO triple check this sign!
 
 	layout.Anchor.X = sf * layout.Anchor.X
 	layout.Anchor.Y = Ytop - (sf * layout.Anchor.Y)
@@ -235,29 +218,17 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 		layout.Anchors[k] = v
 
 	}
-	for k, v := range layout.PageDimStatic {
-		v.W = sf * v.W
-		v.H = sf * v.H
-		layout.PageDimStatic[k] = v
+	for k, v := range layout.PageDims {
+		v.Width = sf * v.Width
+		v.Height = sf * v.Height
+		layout.PageDims[k] = v
 
 	}
-	for k, v := range layout.PageDimDynamic {
-		v.Dim.W = sf * v.Dim.W
-		v.Dim.H = sf * v.Dim.H
-		layout.PageDimDynamic[k] = v
 
-	}
-	for k, v := range layout.ImageDimStatic {
-		v.W = sf * v.W
-		v.H = sf * v.H
-		layout.ImageDimStatic[k] = v
-
-	}
-	for k, v := range layout.ImageDimDynamic {
-		v.Dim.W = sf * v.Dim.W
-		v.Dim.H = sf * v.Dim.H
-		layout.ImageDimDynamic[k] = v
-
+	for k, v := range layout.ImageDims {
+		v.Width = sf * v.Width
+		v.Height = sf * v.Height
+		layout.ImageDims[k] = v
 	}
 
 	return nil

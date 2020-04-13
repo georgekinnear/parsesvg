@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"sort"
 	"strconv"
+
 	"strings"
 
 	"github.com/timdrysdale/geo"
@@ -97,7 +98,7 @@ func getLadderDim(svg *Csvg__svg) (geo.Dim, error) {
 		return dim, err
 	}
 
-	return geo.Dim{W: w, H: h}, nil
+	return geo.Dim{Width: w, Height: h, DynamicWidth: false}, nil
 
 }
 
@@ -183,8 +184,9 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 					return nil, err
 				}
 
-				tf.Rect.Dim.W = w
-				tf.Rect.Dim.H = h
+				tf.Rect.Dim.Width = w
+				tf.Rect.Dim.Height = h
+				tf.Rect.Dim.DynamicWidth = false
 				dx, dy := getTranslate(r.Transform) //check if rotate will cause box to be out of place
 				x, err := strconv.ParseFloat(r.Rx, 64)
 				if err != nil {
@@ -263,8 +265,8 @@ func scaleTextFieldUnits(tf *TextField, sf float64) error {
 
 	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
 	tf.Rect.Corner.Y = sf * tf.Rect.Corner.Y
-	tf.Rect.Dim.W = sf * tf.Rect.Dim.W
-	tf.Rect.Dim.H = sf * tf.Rect.Dim.H
+	tf.Rect.Dim.Width = sf * tf.Rect.Dim.Width
+	tf.Rect.Dim.Height = sf * tf.Rect.Dim.Height
 
 	return nil
 }
@@ -274,7 +276,7 @@ func convertToPDFYScale(ladder *Ladder) error {
 		return errors.New("nil pointer to ladder")
 	}
 
-	Ytop := ladder.Dim.H - ladder.Anchor.Y //TODO triple check this sign!
+	Ytop := ladder.Dim.Height - ladder.Anchor.Y //TODO triple check this sign!
 
 	for idx, tf := range ladder.TextFields {
 
@@ -287,7 +289,7 @@ func convertToPDFYScale(ladder *Ladder) error {
 
 func formRect(tf TextField) []float64 {
 
-	return []float64{tf.Rect.Corner.X, tf.Rect.Corner.Y - tf.Rect.Dim.H, tf.Rect.Corner.X + tf.Rect.Dim.W, tf.Rect.Corner.Y}
+	return []float64{tf.Rect.Corner.X, tf.Rect.Corner.Y - tf.Rect.Dim.Height, tf.Rect.Corner.X + tf.Rect.Dim.Width, tf.Rect.Corner.Y}
 
 }
 
