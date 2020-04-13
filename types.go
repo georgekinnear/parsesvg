@@ -40,11 +40,9 @@ type Spread struct {
 }
 
 type ImageInsert struct {
-	Filename              string
-	Corner                geo.Point
-	Dim                   geo.Dim
-	ScaleImage            bool
-	ScaleByHeightNotWidth bool
+	Filename string
+	Corner   geo.Point
+	Dim      geo.Dim
 }
 
 // how to understand dynamic width
