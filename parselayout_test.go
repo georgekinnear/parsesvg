@@ -79,7 +79,7 @@ func testPrettyPrintLayout(t *testing.T) {
 	PrettyPrintLayout(got)
 
 }
-func TestPrintLayout(t *testing.T) {
+func testPrintLayout(t *testing.T) {
 	// helper for writing the tests on this file - not actually a test
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
 	svgBytes, err := ioutil.ReadFile(svgFilename)
@@ -409,7 +409,7 @@ func TestRenderSpreadDynamic(t *testing.T) {
 
 	svgLayoutPath := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
 
-	pdfOutputPath := "./test/render-spread-demo.pdf"
+	pdfOutputPath := "./test/render-moderate-active-spread.pdf"
 
 	previousImagePath := "./test/mark-spread-gs.jpg"
 
@@ -707,4 +707,21 @@ func renderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 	pdfWriter.Write(of)
 
 	return nil
+}
+
+func TestPrettyPrintLayout(t *testing.T) {
+	// helper for writing the tests on this file - not actually a test
+	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
+	svgBytes, err := ioutil.ReadFile(svgFilename)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	got, err := DefineLayoutFromSVG(svgBytes)
+	if err != nil {
+		t.Errorf("Error defining layout %v", err)
+	}
+	PrettyPrintLayout(got)
+
 }
