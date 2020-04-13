@@ -69,7 +69,7 @@ func TestDefineLayoutFromSvg(t *testing.T) {
 
 }
 
-func testPrettyPrintLayout(t *testing.T) {
+func TestPrettyPrintLayout(t *testing.T) {
 	// helper for writing the tests on this file - not actually a test
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
 	svgBytes, err := ioutil.ReadFile(svgFilename)
@@ -343,6 +343,7 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 		} else {
 
 			offset = DiffPosition(layout.Anchor, thisAnchor)
+			fmt.Printf("Previous: %v %v\n", layout.Anchor, offset)
 		}
 
 		imgfilename := imgname //in case not specified, e.g. previous image
@@ -351,6 +352,7 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 		// append chrome image to the images list
+
 		image := ImageInsert{
 			Filename:   imgfilename,
 			Corner:     offset,
@@ -361,24 +363,15 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 
 	}
 
-	//PrettyPrintStruct(layout.Anchors)
-	//PrettyPrintStruct(spread.TextFields)
-
-	/*
-			"previousImageDimStatic": {
-				"mark": {
-					"w": 595.2755905511812,
-					"h": 839.0551181102363
-				},
-
-		image := ImageInsert{
-			Filename:   "previous-image",
-			Corner:     layout.Anchor,
-			Dim:        layout.ImageDimStatic[imgname], //
-			ScaleImage: true,                           // (TODO- previous-image gets scaled)
-		}
-		spread.Images = append(spread.Images, image) //add chrome to list of images to include
-	*/
+	offset := DiffPosition(layout.Anchor, layout.Anchors["image-mark"])
+	fmt.Printf("Previous: %v %v\n", layout.Anchor, offset)
+	image := ImageInsert{
+		Filename:   "./test/script.jpg",
+		Corner:     offset,                                 //geo.Point{X: 0, Y: 61.5},               //offset,
+		Dim:        layout.ImageDimStatic["previous-mark"], //
+		ScaleImage: true,                                   // (TODO- previous-image gets scaled)
+	}
+	spread.Images = append(spread.Images, image)
 
 	// draw images
 	c := creator.New()
