@@ -17,15 +17,15 @@ type Ladder struct {
 }
 
 type Layout struct {
-	Anchor                  geo.Point                 `json:"anchor"`
-	Dim                     geo.Dim                   `json:"dim"`
-	ID                      string                    `json:"id"`
-	Anchors                 map[string]geo.Point      `json:"anchors"`
-	PageDimStatic           map[string]geo.Dim        `json:"pageDimStatic"`
-	PageDimDynamic          map[string]geo.DynamicDim `json:"pageDimDynamic"`
-	Filenames               map[string]string         `json:"filenames"`
-	PreviousImageDimStatic  map[string]geo.Dim        `json:"previousImageDimStatic"`
-	PreviousImageDimDynamic map[string]geo.DynamicDim `json:"previousImageDimDynamic"`
+	Anchor          geo.Point                 `json:"anchor"`
+	Dim             geo.Dim                   `json:"dim"`
+	ID              string                    `json:"id"`
+	Anchors         map[string]geo.Point      `json:"anchors"`
+	PageDimStatic   map[string]geo.Dim        `json:"pageDimStatic"`
+	PageDimDynamic  map[string]geo.DynamicDim `json:"pageDimDynamic"`
+	Filenames       map[string]string         `json:"filenames"`
+	ImageDimStatic  map[string]geo.Dim        `json:"ImageDimStatic"`
+	ImageDimDynamic map[string]geo.DynamicDim `json:"ImageDimDynamic"`
 }
 
 const dynamicDimThreshold = float64(5.0)

@@ -110,6 +110,8 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					switch {
 					case strings.HasPrefix(fullname, "page-dynamic-"):
 						name = strings.TrimPrefix(fullname, "page-dynamic-")
+						name = strings.TrimPrefix(name, "width-") //we may want this later, so leave in API
+						name = strings.TrimPrefix(name, "height-")
 						isDynamic = true
 					case strings.HasPrefix(fullname, "page-static-"):
 						name = strings.TrimPrefix(fullname, "page-static-")
@@ -136,8 +138,8 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 		}
 	}
 	// look for previousImageDims
-	layout.PreviousImageDimStatic = make(map[string]geo.Dim)
-	layout.PreviousImageDimDynamic = make(map[string]geo.DynamicDim)
+	layout.ImageDimStatic = make(map[string]geo.Dim)
+	layout.ImageDimDynamic = make(map[string]geo.DynamicDim)
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.ImagesLayer {
 			for _, r := range g.Crect__svg {
@@ -157,24 +159,27 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					isDynamic := false
 
 					switch {
-					case strings.HasPrefix(fullname, "image-previous-dynamic-"):
-						name = strings.TrimPrefix(fullname, "image-previous-dynamic-")
+					case strings.HasPrefix(fullname, "image-dynamic-"):
+						name = strings.TrimPrefix(fullname, "image-dynamic-")
+						name = strings.TrimPrefix(name, "width-")  //we may want this later, so leave in API
+						name = strings.TrimPrefix(name, "height-") //getting info from box size for now
 						isDynamic = true
-					case strings.HasPrefix(fullname, "image-previous-static-"):
-						name = strings.TrimPrefix(fullname, "image-previous-static-")
+					case strings.HasPrefix(fullname, "image-static-"):
+						name = strings.TrimPrefix(fullname, "image-static-")
 					default:
 						// we're just trying to strip off prefixes,
 						// not prevent underadorned names from working
-						name = strings.TrimPrefix(fullname, "image-previous-")
+						name = strings.TrimPrefix(fullname, "image-")
 					}
 
 					if name != "" {
 						if isDynamic {
-							layout.PreviousImageDimDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
+							layout.ImageDimDynamic[name] = geo.DynamicDim{Dim: geo.Dim{W: w, H: h},
 								WidthIsDynamic:  w < dynamicDimThreshold,
 								HeightIsDynamic: h < dynamicDimThreshold}
+
 						} else {
-							layout.PreviousImageDimStatic[name] = geo.Dim{W: w, H: h}
+							layout.ImageDimStatic[name] = geo.Dim{W: w, H: h}
 						}
 					}
 
@@ -238,16 +243,16 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 		layout.PageDimDynamic[k] = v
 
 	}
-	for k, v := range layout.PreviousImageDimStatic {
+	for k, v := range layout.ImageDimStatic {
 		v.W = sf * v.W
 		v.H = sf * v.H
-		layout.PreviousImageDimStatic[k] = v
+		layout.ImageDimStatic[k] = v
 
 	}
-	for k, v := range layout.PreviousImageDimDynamic {
+	for k, v := range layout.ImageDimDynamic {
 		v.Dim.W = sf * v.Dim.W
 		v.Dim.H = sf * v.Dim.H
-		layout.PreviousImageDimDynamic[k] = v
+		layout.ImageDimDynamic[k] = v
 
 	}
 

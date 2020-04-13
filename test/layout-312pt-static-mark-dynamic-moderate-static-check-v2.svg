@@ -16,7 +16,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="layout-312pt-static-mark-dynamic-moderate-static-check.svg"
+   sodipodi:docname="layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
    inkscape:export-filename="/home/tim/go/src/github.com/timdrysdale/parsesvg/img/layout-example.png"
    inkscape:export-xdpi="55.703602"
    inkscape:export-ydpi="55.703602">
@@ -2903,7 +2903,7 @@
        rx="1.4222624"
        ry="0.61546087">
       <title
-         id="title19260">image-previous-static-mark</title>
+         id="title19260">image-static-previous-mark</title>
     </rect>
     <rect
        ry="0.64664972"
@@ -2917,7 +2917,7 @@
       <desc
          id="desc33193">this is the size of the page with the marking sidebar</desc>
       <title
-         id="title19265">image-previous-static-moderate</title>
+         id="title19265">image-static-previous-moderate</title>
     </rect>
     <rect
        style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#00e3f2;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:0.38039216"
@@ -2930,14 +2930,27 @@
        ry="0.64664972"
        transform="scale(-1,1)">
       <title
-         id="title19269">image-previous-dynamic-width-check</title>
+         id="title19269">image-dynamic-width-previous-check</title>
+    </rect>
+    <rect
+       ry="0.029109634"
+       rx="1.4154898"
+       y="-14.5"
+       x="0.49999997"
+       height="14"
+       width="209"
+       id="rect3057"
+       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#f70000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       transform="scale(1,-1)">
+      <title
+         id="title3055">image-static-mark-header</title>
     </rect>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="chrome"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <rect
        style="opacity:1;fill:none;fill-opacity:1;stroke:#ed1a1f;stroke-width:0.75000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"

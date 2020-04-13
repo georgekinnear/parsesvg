@@ -11,10 +11,10 @@ import (
 	"github.com/timdrysdale/geo"
 )
 
-const expectedLayoutJSON = `{"anchor":{"x":1.2588355559055121e-15,"y":-0.0003496930299212599},"dim":{"w":901.4173228346458,"h":884.4094488188978},"id":"a4-portrait-layout","anchors":{"image-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDimStatic":{"check":{"w":111.55415811023623,"h":883.3464566929134},"mark":{"w":763.2376157480315,"h":883.3464566929134},"moderate-active":{"w":899.7675590551182,"h":883.3464566929134},"moderate-inactive":{"w":786.7112314960631,"h":883.3464566929134}},"pageDimDynamic":{"width-moderate":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}},"filenames":{"mark-header":"ladders-a4-portrait-header","svg-check-flow":"sidebar-312pt-check-flow","svg-mark-flow":"sidebar-312pt-mark-flow","svg-mark-ladder":"sidebar-312pt-mark-ladder","svg-moderate-active":"sidebar-312pt-moerate-flow-alt-active","svg-moderate-inactive":"sidebar-312pt-moderate-inactive"},"previousImageDimStatic":{"mark":{"w":595.2755905511812,"h":839.0551181102363},"moderate":{"w":763.2376157480315,"h":881.5748031496064}},"previousImageDimDynamic":{"width-check":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}}}`
+const expectedLayoutJSON = `{"anchor":{"x":1.2588355559055121e-15,"y":-0.0003496930299212599},"dim":{"w":901.4173228346458,"h":884.4094488188978},"id":"a4-portrait-layout","anchors":{"image-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDimStatic":{"check":{"w":111.55415811023623,"h":883.3464566929134},"mark":{"w":763.2376157480315,"h":883.3464566929134},"moderate-active":{"w":899.7675590551182,"h":883.3464566929134},"moderate-inactive":{"w":786.7112314960631,"h":883.3464566929134}},"pageDimDynamic":{"moderate":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}},"filenames":{"mark-header":"ladders-a4-portrait-header","svg-check-flow":"./test/sidebar-312pt-check-flow","svg-mark-flow":"./test/sidebar-312pt-mark-flow","svg-mark-ladder":"./test/sidebar-312pt-mark-ladder","svg-moderate-active":"./test/sidebar-312pt-moderate-flow-alt-active","svg-moderate-inactive":"./test/sidebar-312pt-moderate-inactive"},"ImageDimStatic":{"mark-header":{"w":592.4409448818898,"h":39.68503937007874},"previous-mark":{"w":595.2755905511812,"h":839.0551181102363},"previous-moderate":{"w":763.2376157480315,"h":881.5748031496064}},"ImageDimDynamic":{"previous-check":{"dim":{"w":1.417039398425197,"h":881.5748031496064},"widthIsDynamic":true,"heightIsDynamic":false}}}`
 
 func TestDefineLayoutFromSvg(t *testing.T) {
-	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check.svg"
+	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
 	svgBytes, err := ioutil.ReadFile(svgFilename)
 
 	if err != nil {
@@ -50,11 +50,11 @@ func TestDefineLayoutFromSvg(t *testing.T) {
 		t.Errorf("PageDimDynamic are different\n%v\n%v", want.PageDimDynamic, got.PageDimDynamic)
 	}
 
-	if !reflect.DeepEqual(want.PreviousImageDimStatic, got.PreviousImageDimStatic) {
-		t.Errorf("PreviousImageDimStatic are different\n%v\n%v", want.PreviousImageDimStatic, got.PreviousImageDimStatic)
+	if !reflect.DeepEqual(want.ImageDimStatic, got.ImageDimStatic) {
+		t.Errorf("ImageDimStatic are different\n%v\n%v", want.ImageDimStatic, got.ImageDimStatic)
 	}
-	if !reflect.DeepEqual(want.PreviousImageDimDynamic, got.PreviousImageDimDynamic) {
-		t.Errorf("PreviousImageDimDynamic are different\n%v\n%v", want.PreviousImageDimDynamic, got.PreviousImageDimDynamic)
+	if !reflect.DeepEqual(want.ImageDimDynamic, got.ImageDimDynamic) {
+		t.Errorf("ImageDimDynamic are different\n%v\n%v", want.ImageDimDynamic, got.ImageDimDynamic)
 	}
 	if !reflect.DeepEqual(want.Filenames, got.Filenames) {
 		t.Errorf("Filenames are different\n%v\n%v", want.Filenames, got.Filenames)
@@ -64,7 +64,7 @@ func TestDefineLayoutFromSvg(t *testing.T) {
 
 func testPrettyPrintLayout(t *testing.T) {
 	// helper for writing the tests on this file - not actually a test
-	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check.svg"
+	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
 	svgBytes, err := ioutil.ReadFile(svgFilename)
 
 	if err != nil {
@@ -76,6 +76,22 @@ func testPrettyPrintLayout(t *testing.T) {
 		t.Errorf("Error defining layout %v", err)
 	}
 	PrettyPrintLayout(got)
+
+}
+func testPrintLayout(t *testing.T) {
+	// helper for writing the tests on this file - not actually a test
+	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
+	svgBytes, err := ioutil.ReadFile(svgFilename)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	got, err := DefineLayoutFromSVG(svgBytes)
+	if err != nil {
+		t.Errorf("Error defining layout %v", err)
+	}
+	PrintLayout(got)
 
 }
 
@@ -144,13 +160,13 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 	previousImageDynamicDim := geo.DynamicDim{}
 	previousImageIsDynamic := false
 
-	for k, v := range layout.PreviousImageDimDynamic {
+	for k, v := range layout.ImageDimDynamic {
 		if strings.Contains(k, spread.Name) {
 			previousImageDynamicDim = v
 			previousImageIsDynamic = true
 		}
 	}
-	for k, v := range layout.PreviousImageDimStatic {
+	for k, v := range layout.ImageDimStatic {
 		if strings.Contains(k, spread.Name) {
 			previousImageStaticDim = v
 		}
@@ -300,7 +316,57 @@ func TestPrintSpreadsFromLayout(t *testing.T) {
 	//get all images, other than previous image
 	//Since these are the images for the textfield chrome, it's the same story - page layout engine will sort.
 	//note that we haven't got previous image, so just send filename as 'previous-image' and let engine work it out
+	//note that _all_ non-svg images need an image dims box....else their size will depend on their quality (dpi)
 
+	for _, imgname := range imgFilenames {
+
+		if _, ok := layout.ImageDimStatic[imgname]; !ok {
+			t.Errorf("No size for image %s (must be static)\n", imgname)
+		}
+
+		offset := geo.Point{}
+
+		if thisOffset, ok := layout.Anchors[imgname]; !ok {
+			//default to layout anchor if not in the list
+			offset = layout.Anchor
+		} else {
+
+			offset = thisOffset
+		}
+
+		imgfilename := imgname //in case not specified, e.g. previous image
+
+		if filename, ok := layout.Filenames[imgname]; ok {
+			imgfilename = fmt.Sprintf("%s.jpg", filename)
+		}
+		// append chrome image to the images list
+		image := ImageInsert{
+			Filename:   imgfilename,
+			Corner:     offset,
+			Dim:        layout.ImageDimStatic[imgname], //TODO need to get dim from images layer
+			ScaleImage: false,                          // (TODO- previous-image gets scaled)
+		}
+		spread.Images = append(spread.Images, image) //add chrome to list of images to include
+
+	}
+
+	// add the previous image...
+	// do some fu with teh static/dynamic dims
+	/*
+			"previousImageDimStatic": {
+				"mark": {
+					"w": 595.2755905511812,
+					"h": 839.0551181102363
+				},
+
+		image := ImageInsert{
+			Filename:   "previous-image",
+			Corner:     layout.Anchor,
+			Dim:        layout.ImageDimStatic[imgname], //
+			ScaleImage: true,                           // (TODO- previous-image gets scaled)
+		}
+		spread.Images = append(spread.Images, image) //add chrome to list of images to include
+	*/
 	/*
 		// scale and position image
 		img.ScaleToHeight(ladder.Dim.H)
