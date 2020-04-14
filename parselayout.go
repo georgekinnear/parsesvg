@@ -450,7 +450,6 @@ func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		}
 
 	}
-	fmt.Printf("PreviousImage Dims (%f,%f)\n", previousImage.Dim.Width, previousImage.Dim.Height)
 	img.SetPos(previousImage.Corner.X, previousImage.Corner.Y)
 	// we use GetWidth() so value includes fixed width plus extra width
 	c.SetPageSize(creator.PageSize{spread.GetWidth(), spread.Dim.Height})
@@ -522,6 +521,7 @@ func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		// TODO consider allowing a more templated mangling of the ID number
 		// For multi-student entries (although, OTH, there will be per-page ID data etc embedded too
 		// which may be more useful in this regard, rather than overloading the textfield id)
+		name := fmt.Sprintf("page-%03d-%s", pageNumber, tf.ID)
 
 		if spread.Dim.DynamicWidth {
 			tf.Rect.Corner.X = tf.Rect.Corner.X + spread.ExtraWidth
@@ -557,8 +557,8 @@ func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		CombineDuplicateStreams:         true,
 		CompressStreams:                 true,
 		UseObjectStreams:                true,
-		ImageQuality:                    80,
-		ImageUpperPPI:                   100,
+		ImageQuality:                    90,
+		ImageUpperPPI:                   150,
 	}))
 
 	pdfWriter.Write(of)
