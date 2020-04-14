@@ -3738,11 +3738,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.4281629"
-     inkscape:cx="4.185319"
-     inkscape:cy="1129.0631"
+     inkscape:zoom="0.55352036"
+     inkscape:cx="610.07992"
+     inkscape:cy="453.16204"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer4"
      showgrid="false"
      inkscape:window-width="1850"
      inkscape:window-height="1136"
@@ -3770,7 +3770,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="pages"
-     style="display:inline">
+     style="display:none">
     <rect
        ry="0.61828327"
        rx="1.7125229"
@@ -3824,20 +3824,7 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="images"
-     style="display:none"
-     sodipodi:insensitive="true">
-    <rect
-       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#f70000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
-       id="rect2257"
-       width="210"
-       height="296"
-       x="-2.3499719e-16"
-       y="15.999998"
-       rx="1.4222624"
-       ry="0.61546087">
-      <title
-         id="title19260">image-static-previous-mark</title>
-    </rect>
+     style="display:inline">
     <rect
        ry="0.64664972"
        rx="1.8235657"
@@ -3850,7 +3837,33 @@
       <desc
          id="desc33193">this is the size of the page with the marking sidebar</desc>
       <title
-         id="title19265">image-static-previous-moderate</title>
+         id="title19265">image-static-previous-moderate-active</title>
+    </rect>
+    <rect
+       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#03bb17;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:0.72941176"
+       id="rect11652"
+       width="269.25327"
+       height="311"
+       x="-3.0130362e-16"
+       y="1"
+       rx="1.8235657"
+       ry="0.64664972">
+      <desc
+         id="desc11648">this is the size of the page with the marking sidebar</desc>
+      <title
+         id="title11650">image-static-previous-moderate-inactive</title>
+    </rect>
+    <rect
+       style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#f70000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       id="rect2257"
+       width="210"
+       height="296"
+       x="-2.3499719e-16"
+       y="15.999998"
+       rx="1.4222624"
+       ry="0.61546087">
+      <title
+         id="title19260">image-static-previous-mark</title>
     </rect>
     <rect
        style="display:inline;opacity:0.98000004;fill:none;fill-opacity:0.47417842;stroke:#00e3f2;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:0.38039216"
@@ -5274,7 +5287,8 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="anchors"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <path
        style="display:inline;opacity:0.53800001;fill:#261aed;fill-opacity:1;stroke:none;stroke-width:1.29546654;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="path2214"

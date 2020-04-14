@@ -440,17 +440,17 @@ func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		img.ScaleToHeight(spread.Dim.Height)
 		spread.ExtraWidth = img.Width() //we'll increase the page size by the image size
 	} else {
-		imgScaledWidth := img.Width() * spread.Dim.Height / img.Height()
+		imgScaledWidth := img.Width() * previousImage.Dim.Height / img.Height()
 
-		if imgScaledWidth > spread.Dim.Width {
+		if imgScaledWidth > previousImage.Dim.Width {
 			// oops, we're too big, so scale using width instead
-			img.ScaleToWidth(spread.Dim.Width)
+			img.ScaleToWidth(previousImage.Dim.Width)
 		} else {
-			img.ScaleToHeight(spread.Dim.Height)
+			img.ScaleToHeight(previousImage.Dim.Height)
 		}
 
 	}
-
+	fmt.Printf("PreviousImage Dims (%f,%f)\n", previousImage.Dim.Width, previousImage.Dim.Height)
 	img.SetPos(previousImage.Corner.X, previousImage.Corner.Y)
 	// we use GetWidth() so value includes fixed width plus extra width
 	c.SetPageSize(creator.PageSize{spread.GetWidth(), spread.Dim.Height})
@@ -522,7 +522,7 @@ func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		// TODO consider allowing a more templated mangling of the ID number
 		// For multi-student entries (although, OTH, there will be per-page ID data etc embedded too
 		// which may be more useful in this regard, rather than overloading the textfield id)
-		name := fmt.Sprintf("page-%03d-%s", pageNumber, tf.ID)
+
 		if spread.Dim.DynamicWidth {
 			tf.Rect.Corner.X = tf.Rect.Corner.X + spread.ExtraWidth
 		}
