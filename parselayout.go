@@ -128,7 +128,6 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					}
 
 					if name != "" { //reject anonymous pages
-						fmt.Printf("%s is dynamic? %v\n", name, isDynamic)
 						layout.PageDims[name] = geo.Dim{Width: w, Height: h, DynamicWidth: isDynamic}
 					}
 
@@ -451,9 +450,8 @@ func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath str
 		}
 
 	}
-	fmt.Printf("Spread is Dynamic? %v Width is static %f extra %f image %f getter %f\n", spread.Dim.DynamicWidth, spread.Dim.Width, spread.ExtraWidth, img.Width(), spread.GetWidth())
+
 	img.SetPos(previousImage.Corner.X, previousImage.Corner.Y)
-	fmt.Printf("setpos previous image: %f, %f\n", previousImage.Corner.X, previousImage.Corner.Y)
 	// we use GetWidth() so value includes fixed width plus extra width
 	c.SetPageSize(creator.PageSize{spread.GetWidth(), spread.Dim.Height})
 
