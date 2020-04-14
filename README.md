@@ -3,6 +3,8 @@ parse svg to obtain markbox location and size information for **gradex**™ (the
 
 ![alt text][status]
 
+If you are coming here from pdf.gradex.io, don't worry - this is the developer side of things, and it's straight into the deep-end in this particular module. We're working on a user workflow that is a piece of cake, so you need never worry about the details below (unless you want to make your own custom marking flows - and we're here to help as best we can with that.)
+
 ## Why?
 
 It's a lot easier to do geometry entry using a GUI, particularly when you want it to look nice. So why not leverage the fabulous [inkscape](https://inkscape.org/) for a double win? Pretty forms AND output in a format that we can parse to the find the exact coordinates of the acroforms we want to embed. Goodbye editing golang structs by hand in one window, with inkscape's ruler hard at work in another.
