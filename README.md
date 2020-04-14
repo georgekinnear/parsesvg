@@ -1,9 +1,19 @@
 # parsesvg
-parse svg to obtain markbox location and size information for **gradex**™ (the AGPL open source exam marking tool)
+parse svg to produce the acroforms needed by **pdf.gradex**™ (an AGPL open source exam marking tool)
+
+![alt text][logo]
+
 
 ![alt text][status]
 
-If you are coming here from pdf.gradex.io, don't worry - this is the developer side of things, and it's straight into the deep-end in this particular module. We're working on a user workflow that is a piece of cake, so you need never worry about the details below (unless you want to make your own custom marking flows - and we're here to help as best we can with that.)
+If you are coming here from pdf.gradex.io, then welcome to the developer side of things where all the details are. We're working on a user workflow that is a piece of cake, that will automate the fiddly bits. Meanwhile, if you like knowing how things work, feel free to take a look around.
+
+## Context
+
+The work of the support tool is combine script images and marking acroforms, at each stage of the process. The render tool take cares of adding the acroforms to the images. We let another tool put this module to use - our concern in this module is the layout of the pages we're producing (and understanding the SVG design that specifies them). If you want to make your own designs, then this is the module README that you need.... mostly these are notes to myself but we'll back fill in the gaps as we identify them.
+
+![alt text][support-workflow]
+
 
 ## Why parse SVG, I just want to design custom PDF acroforms workflows for my Uni?
 
@@ -324,8 +334,11 @@ For the dynamic pages, the input image is the thing that varies in size, so this
 
 ## Spreads
 
-A ```spread``` is the subsection of the overall layout that we pass to the layout engine for the construction of the page. Making the spread object is a separate job to the parser ... but we put in a partial implementation to test the idea.
+A ```spread``` is the subsection of the overall layout that we pass to the layout engine for the construction of the page. Making the spread object is a separate job to the parser ... but we put in a partial implementation to test the idea, and it worked, so here it stays (for now).
 
+## What next?
+
+There's a [commmand line tool](https://github.com/timdrysdale/gradex-overlay) under development now, and a GUI to follow.
 
 [anchor]: ./img/inkscape-anchor-alignment.png "circle on corner of page and snap settings bar"
 [compare-active-inactive]: ./img/compare-active-inactive-sidebar.png "green coloured active moderate bar and grey thin inactive moderate sidebar"
@@ -339,6 +352,8 @@ A ```spread``` is the subsection of the overall layout that we pass to the layou
 [layout-example]: ./img/layout-example-with-layer-dialogue.png "drawing with a header and three side bars surrounding an original scan of work to be marked"
 [metadata-title]: ./img/metadata-title.png "inkscape metadata tab in document properties, showing title is ladder3-rect"
 [layer-visibility]: ./img/layer-visibility-at-export.png "Layers dialog with the chrome layer set to visible, and all others invisible"
+[logo]: ./img/gradexTMlogo2-50pc.png "gradex logo"
 [sidebar-example]: ./img/sidebar-mark.png "marking sidebar with nearly 30 textfields"
-[status]: https://img.shields.io/badge/alpha-in%20development-orange "Alpha status, in development"
+[status]: https://img.shields.io/badge/build-passing-green "Build passing"
+[support-workflow]: ./img/supportWorkflow.png "three stages in the workflow, from marking to moderaing, to checking"
 [taborder]: ./img/taborder.png "object properties dialogue showing tab-02 appended to ID, setting tab order"
