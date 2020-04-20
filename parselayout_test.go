@@ -12,6 +12,7 @@ import (
 
 	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
+	"github.com/timdrysdale/pdfcomment"
 	"github.com/unidoc/unipdf/v3/annotator"
 	"github.com/unidoc/unipdf/v3/creator"
 	"github.com/unidoc/unipdf/v3/model"
@@ -19,6 +20,12 @@ import (
 )
 
 const expectedLayoutJSON = `{"anchor":{"x":3.568352756897515e-15,"y":884.4107897677605},"dim":{"width":901.4173228346458,"height":884.4094488188978,"dynamicWidth":false},"id":"a4-portrait-layout","anchors":{"img-previous-mark":{"x":0,"y":841.8902863859433},"mark-header":{"x":6.294177637795276e-16,"y":883.3468064709828},"svg-check-flow":{"x":7.086614173228347,"y":883.3468064709828},"svg-mark-flow":{"x":655.9848283464568,"y":883.346975189093},"svg-mark-ladder":{"x":600.4855842519686,"y":883.346975189093},"svg-moderate-active":{"x":762.7586173228348,"y":883.346975189093},"svg-moderate-inactive":{"x":763.2376157480315,"y":883.3468934095655}},"pageDims":{"check":{"width":111.55415811023623,"height":883.3464566929134,"dynamicWidth":false},"mark":{"width":763.2376157480315,"height":883.3464566929134,"dynamicWidth":false},"moderate-active":{"width":899.7675590551182,"height":883.3464566929134,"dynamicWidth":false},"moderate-inactive":{"width":786.7112314960631,"height":883.3464566929134,"dynamicWidth":false},"width-moderate":{"width":1.417039398425197,"height":881.5748031496064,"dynamicWidth":true}},"filenames":{"mark-header":"./test/ladders-a4-portrait-header","svg-check-flow":"./test/sidebar-312pt-check-flow","svg-mark-flow":"./test/sidebar-312pt-mark-flow","svg-mark-ladder":"./test/sidebar-312pt-mark-ladder","svg-moderate-active":"./test/sidebar-312pt-moderate-flow-comment-active","svg-moderate-inactive":"./test/sidebar-312pt-moderate-inactive"},"ImageDims":{"mark-header":{"width":592.4409448818898,"height":39.68503937007874,"dynamicWidth":false},"previous-check":{"width":1.417039398425197,"height":881.5748031496064,"dynamicWidth":true},"previous-mark":{"width":595.2755905511812,"height":839.0551181102363,"dynamicWidth":false},"previous-moderate":{"width":763.2376157480315,"height":881.5748031496064,"dynamicWidth":false}}}`
+
+var c00 = pdfcomment.Comment{Pos: geo.Point{X: 117.819, Y: 681.924}, Text: "This is a comment on page 1 - wrong page!"}
+var c10 = pdfcomment.Comment{Pos: geo.Point{X: 326.501, Y: 593.954}, Text: "this is a comment on page 2", Page: 1}
+var c11 = pdfcomment.Comment{Pos: geo.Point{X: 141.883, Y: 685.869}, Text: "this is a second comment on page 2", Page: 1}
+var c20 = pdfcomment.Comment{Pos: geo.Point{X: 387.252, Y: 696.52}, Text: "this is a comment on page 3 - wrong page!", Page: 2}
+var c21 = pdfcomment.Comment{Pos: geo.Point{X: 184.487, Y: 659.439}, Text: "this is a second comment on page 3 - wrong page!", Page: 2}
 
 func TestDefineLayoutFromSvg(t *testing.T) {
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
@@ -398,6 +405,42 @@ func TestRenderSpreadMark(t *testing.T) {
 
 	err := RenderSpread(svgLayoutPath, spreadName, previousImagePath, pageNumber, pdfOutputPath)
 
+	if err != nil {
+		t.Error(err)
+	}
+
+}
+
+func TestRenderSpreadMarkComment(t *testing.T) {
+
+	var comments = make(map[int][]pdfcomment.Comment)
+
+	comments[0] = []pdfcomment.Comment{c00}
+
+	comments[1] = []pdfcomment.Comment{c10, c11}
+
+	comments[2] = []pdfcomment.Comment{c20, c21}
+
+	svgLayoutPath := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
+
+	pdfOutputPath := "./test/render-mark-spread-commments.pdf"
+
+	previousImagePath := "./test/script.jpg"
+
+	spreadName := "mark"
+
+	pageNumber := int(1)
+
+	contents := SpreadContents{
+		SvgLayoutPath:     svgLayoutPath,
+		SpreadName:        spreadName,
+		PreviousImagePath: previousImagePath,
+		PageNumber:        pageNumber,
+		PdfOutputPath:     pdfOutputPath,
+		Comments:          comments,
+	}
+
+	err := RenderSpreadExtra(contents)
 	if err != nil {
 		t.Error(err)
 	}

@@ -324,7 +324,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 	spreadName := contents.SpreadName
 	previousImagePath := contents.PreviousImagePath
 	//qrCodePath := contents.QrCodePath
-	//comments := contents.Comments
+	comments := contents.Comments
 	pageNumber := contents.PageNumber
 	pdfOutputPath := contents.PdfOutputPath
 	//pageData := contents.PageData
@@ -527,6 +527,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			img.SetPos(v.Corner.X, v.Corner.Y) //TODO check this has correct sense for non-zero offsets
 		}
 		c.Draw(img)
+	}
+
+	// Draw in our flattened comments
+	rowHeight := 12.0
+	numComments := float64(len(comments.GetByPage(pageNumber)))
+	x := 0.3 * rowHeight
+	y := c.Height() - ((0.3 + numComments) * rowHeight)
+	for i, cmt := range comments.GetByPage(pageNumber) {
+
+		pdfcomment.DrawComment(c, cmt, strconv.Itoa(i), x, y)
+		y = y + rowHeight
+
 	}
 
 	// This is the bit where we cross an internal boundary in the underlying library that has
