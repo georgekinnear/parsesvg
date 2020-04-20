@@ -10,10 +10,12 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mattetti/filebuffer"
 	log "github.com/sirupsen/logrus"
 	"github.com/timdrysdale/geo"
+	"github.com/timdrysdale/pdfcomment"
 	"github.com/unidoc/unipdf/v3/annotator"
 	"github.com/unidoc/unipdf/v3/creator"
 	"github.com/unidoc/unipdf/v3/model"
@@ -277,6 +279,55 @@ func PrettyPrintStruct(layout interface{}) error {
 }
 
 func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath string, pageNumber int, pdfOutputPath string) error {
+
+	contents := SpreadContents{
+		SvgLayoutPath:     svgLayoutPath,
+		SpreadName:        spreadName,
+		PreviousImagePath: previousImagePath,
+		PageNumber:        pageNumber,
+		PdfOutputPath:     pdfOutputPath,
+	}
+	return RenderSpreadExtra(contents)
+
+}
+
+type Action struct {
+	Verb   string
+	When   time.Time
+	Who    string
+	Params map[string]string
+}
+
+type MetaData struct {
+	Exam      string
+	Candidate string
+	Diet      string
+	Actions   []Action
+}
+
+type SpreadContents struct {
+	SvgLayoutPath     string
+	SpreadName        string
+	PreviousImagePath string
+	QrCodePath        string
+	Comments          pdfcomment.Comments
+	PageNumber        int
+	PdfOutputPath     string
+	Exam              string
+	Candidate         string
+	PageData          MetaData
+}
+
+func RenderSpreadExtra(contents SpreadContents) error {
+
+	svgLayoutPath := contents.SvgLayoutPath
+	spreadName := contents.SpreadName
+	previousImagePath := contents.PreviousImagePath
+	//qrCodePath := contents.QrCodePath
+	//comments := contents.Comments
+	pageNumber := contents.PageNumber
+	pdfOutputPath := contents.PdfOutputPath
+	//pageData := contents.PageData
 
 	svgBytes, err := ioutil.ReadFile(svgLayoutPath)
 
