@@ -993,16 +993,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.391398"
-     inkscape:cx="159.69764"
-     inkscape:cy="273.92118"
+     inkscape:zoom="1.1070407"
+     inkscape:cx="44.305047"
+     inkscape:cy="411.22417"
      inkscape:document-units="mm"
      inkscape:current-layer="layer7"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1163"
-     inkscape:window-x="1920"
-     inkscape:window-y="0"
+     inkscape:window-width="1850"
+     inkscape:window-height="1136"
+     inkscape:window-x="70"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:snap-global="false"
      showguides="false"
@@ -1025,7 +1025,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="chrome"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
        style="opacity:0.98000004;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:0.38039216"
        id="rect29679"
@@ -1935,7 +1936,7 @@
          ry="0.64644408" />
     </g>
     <rect
-       style="opacity:0.98000004;fill:#ffffff;fill-opacity:0.4741784;stroke:#098906;stroke-width:0.95880634;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       style="opacity:0.98000004;fill:#ffffff;fill-opacity:0.97652582;stroke:#098906;stroke-width:0.95880634;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect10458"
        width="45.78957"
        height="67.468254"
@@ -1948,7 +1949,8 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="textfields"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
        ry="0"
        rx="0"
@@ -2093,7 +2095,7 @@
          id="title1198">page-ok</title>
     </rect>
     <rect
-       inkscape:label="#rect1156"
+       inkscape:label="#rect1156A"
        style="display:inline;opacity:1;fill:#00ffff;fill-opacity:0.55868542;stroke:none;stroke-width:0.46489412;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect21847-tab31"
        width="44.980618"
@@ -2103,10 +2105,10 @@
        rx="0"
        ry="0">
       <title
-         id="title21845">corrected</title>
+         id="title21845">comment-query</title>
     </rect>
     <rect
-       inkscape:label="#rect1156"
+       inkscape:label="#rect1156c"
        style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect25235-tab36"
        width="8.1745319"
@@ -2116,7 +2118,7 @@
        rx="0"
        ry="0">
       <title
-         id="title25233">corrected</title>
+         id="title25233">not-sure</title>
     </rect>
     <rect
        ry="0"
@@ -2127,9 +2129,9 @@
        width="8.1745319"
        id="rect1156-tab32"
        style="display:inline;opacity:1;fill:#00ffff;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
-       inkscape:label="#rect1156">
+       inkscape:label="#rect1156b">
       <title
-         id="title1154">corrected</title>
+         id="title1154">fixed</title>
     </rect>
   </g>
   <g
