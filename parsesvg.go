@@ -171,8 +171,9 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 					if strings.HasPrefix(r.Title.String, "multiline-") {
 						tf.Multiline = true
 						tf.ID = strings.TrimPrefix(r.Title.String, "multiline-")
+					} else {
+						tf.ID = r.Title.String
 					}
-					tf.ID = r.Title.String
 				}
 
 				tf.TabSequence = getTabSequence(r)

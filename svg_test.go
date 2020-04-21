@@ -495,7 +495,7 @@ const textPrefillSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
       <desc
          id="desc850">This is the prefill text for the bottom box, a textfield i.e acroforms, and not a uneditable prefill like the other box</desc>
       <title
-         id="title848">bottombox</title>
+         id="title848">multiline-bottombox</title>
     </rect>
   </g>
 </svg>`
@@ -510,8 +510,9 @@ var expectedTextPrefill = &Ladder{
 				Corner: geo.Point{X: 47.350902047244105, Y: 62.12438078740158},
 				Dim:    geo.Dim{Width: 49.2449357480315, Height: 40.911176692913386},
 			},
-			ID:      "bottombox",
-			Prefill: "This is the prefill text for the bottom box, a textfield i.e acroforms, and not a uneditable prefill like the other box",
+			ID:        "bottombox",
+			Prefill:   "This is the prefill text for the bottom box, a textfield i.e acroforms, and not a uneditable prefill like the other box",
+			Multiline: true,
 		},
 	},
 	TextPrefills: []TextPrefill{
@@ -553,7 +554,7 @@ func TestDefineLadderFromSvg(t *testing.T) {
 	}
 }
 
-func TestTextPrefills(t *testing.T) {
+func TestTextPrefillsMultilineTextFields(t *testing.T) {
 
 	ladder, err := DefineLadderFromSVG([]byte(textPrefillSVG))
 	if err != nil {
