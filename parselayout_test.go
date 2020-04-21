@@ -395,6 +395,47 @@ func TestRenderSpreadMark(t *testing.T) {
 
 }
 
+func TestRenderSpreadMarkPrefill(t *testing.T) {
+
+	svgLayoutPath := "./test/layout-312pt-demo-prefills.svg"
+
+	pdfOutputPath := "./test/render-mark-spread-prefill.pdf"
+
+	previousImagePath := "./test/script.jpg"
+
+	spreadName := "mark"
+
+	pageNumber := int(0)
+
+	svgBytes, err := ioutil.ReadFile(svgLayoutPath)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	layout, err := DefineLayoutFromSVG(svgBytes)
+	if err != nil {
+		t.Errorf("Error defining layout %v", err)
+	}
+
+	PrettyPrintStruct(layout)
+
+	contents := SpreadContents{
+		SvgLayoutPath:     svgLayoutPath,
+		SpreadName:        spreadName,
+		PreviousImagePath: previousImagePath,
+		PageNumber:        pageNumber,
+		PdfOutputPath:     pdfOutputPath,
+	}
+
+	err = RenderSpreadExtra(contents)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+}
+
 func TestRenderSpreadMarkComment(t *testing.T) {
 
 	var comments = make(map[int][]pdfcomment.Comment)

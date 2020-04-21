@@ -305,19 +305,6 @@ type MetaData struct {
 	Actions   []Action
 }
 
-type SpreadContents struct {
-	SvgLayoutPath     string
-	SpreadName        string
-	PreviousImagePath string
-	QrCodePath        string
-	Comments          pdfcomment.Comments
-	PageNumber        int
-	PdfOutputPath     string
-	Exam              string
-	Candidate         string
-	PageData          MetaData
-}
-
 func RenderSpreadExtra(contents SpreadContents) error {
 
 	svgLayoutPath := contents.SvgLayoutPath
@@ -423,6 +410,15 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			tf.Rect.Corner = TranslatePosition(tf.Rect.Corner, offset)
 			spread.TextFields = append(spread.TextFields, tf)
 		}
+		//append TextPrefills to the TextPrefill list
+		for _, tp := range ladder.TextPrefills {
+
+			//shift the text field and add it to the list
+			//let engine take care of mangling name to suit page
+			tp.Rect.Corner = TranslatePosition(tp.Rect.Corner, offset)
+			spread.TextPrefills = append(spread.TextPrefills, tp)
+		}
+
 	}
 
 	// get all the static images that decorate this page, but not the special script "previous-image"
@@ -538,6 +534,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		pdfcomment.DrawComment(c, cmt, strconv.Itoa(i), x, y)
 		y = y + rowHeight
+
+	}
+
+	// copy so we can mod
+	fmt.Println("foo")
+	for _, tp := range spread.TextPrefills {
+		//update prefill contents from info given
+		if val, ok := contents.Prefills[pageNumber][tp.ID]; ok {
+			tp.Text.Text = val
+		}
+		// update our prefill text
+		fmt.Println(tp)
 
 	}
 

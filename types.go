@@ -2,7 +2,25 @@ package parsesvg
 
 import (
 	"github.com/timdrysdale/geo"
+	"github.com/timdrysdale/pdfcomment"
 )
+
+type SpreadContents struct {
+	SvgLayoutPath     string
+	SpreadName        string
+	PreviousImagePath string
+	QrCodePath        string
+	Comments          pdfcomment.Comments
+	PageNumber        int
+	PdfOutputPath     string
+	Exam              string
+	Candidate         string
+	PageData          MetaData
+	Prefills          DocPrefills
+}
+
+type PagePrefills map[string]string
+type DocPrefills map[int]PagePrefills
 
 type TextField struct {
 	Rect        geo.Rect
@@ -57,12 +75,13 @@ type Layout struct {
 
 //TODO move this to types.go; add json tags
 type Spread struct {
-	Name       string
-	Dim        geo.Dim
-	ExtraWidth float64
-	Images     []ImageInsert
-	Ladders    []Ladder
-	TextFields []TextField
+	Name         string
+	Dim          geo.Dim
+	ExtraWidth   float64
+	Images       []ImageInsert
+	Ladders      []Ladder
+	TextFields   []TextField
+	TextPrefills []TextPrefill
 }
 
 type ImageInsert struct {

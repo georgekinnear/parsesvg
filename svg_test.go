@@ -553,7 +553,7 @@ func TestDefineLadderFromSvg(t *testing.T) {
 	}
 }
 
-func TestTextPrefillsMultilineTextFields(t *testing.T) {
+func TestTextPrefills(t *testing.T) {
 
 	ladder, err := DefineLadderFromSVG([]byte(textPrefillSVG))
 	if err != nil {
