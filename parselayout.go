@@ -538,13 +538,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 	}
 
 	// copy so we can mod
-	fmt.Println("foo")
+
 	for _, tp := range spread.TextPrefills {
 		//update prefill contents from info given
 		if val, ok := contents.Prefills[pageNumber][tp.ID]; ok {
 			tp.Text.Text = val
 		}
 		// update our prefill text
+		p := c.NewParagraph("XXXXXXXXXXXXXXXXXX") //tp.Text.Text)
+		p.SetPos(300, 300)                        //tp.Rect.Corner.X, tp.Rect.Corner.Y)
+		fmt.Println(tp.Rect.Corner.X)
+		fmt.Println(tp.Rect.Corner.Y)
+		c.Draw(p)
 		fmt.Println(tp)
 
 	}

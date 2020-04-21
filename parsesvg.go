@@ -273,8 +273,11 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 func UnmarshalTextPrefill(tp *TextPrefill) error {
 
 	var paragraph Paragraph
-
-	err := json.Unmarshal([]byte(tp.Properties), &paragraph)
+	properties := "{\"text\":\"\"}"
+	if len(tp.Properties) > 0 {
+		properties = tp.Properties
+	}
+	err := json.Unmarshal([]byte(properties), &paragraph)
 	if err != nil {
 		return err
 	}
@@ -347,6 +350,12 @@ func convertToPDFYScale(ladder *Ladder) error {
 		tf.Rect.Corner.Y = Ytop - tf.Rect.Corner.Y
 		ladder.TextFields[idx] = tf
 	}
+	for idx, tp := range ladder.TextPrefills {
+
+		tp.Rect.Corner.Y = Ytop - tp.Rect.Corner.Y
+		ladder.TextPrefills[idx] = tp
+	}
+
 	return nil
 
 }
