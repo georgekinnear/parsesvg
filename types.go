@@ -15,6 +15,26 @@ type TextPrefill struct {
 	Rect       geo.Rect
 	ID         string
 	Properties string
+	Text       Paragraph
+}
+
+// we read the properties from a JSON object in the Description field
+// and then apply when writing the text field - these are private fields
+// in the Paragraph struct in unipdf
+type Paragraph struct {
+	Text                string    `json:"text"`
+	TextFont            string    `json:"textFont"`
+	TextSize            float64   `json:"textSize"`
+	LineHeight          float64   `json:"lineHeight"`
+	Alignment           string    `json:"alignment"`
+	EnableWrap          bool      `json:"enableWrap"`
+	WrapWidth           float64   `json:"wrapWidth"`
+	Angle               float64   `json:"angle"`
+	AbsolutePositioning bool      `json:"absolutePositioning"`
+	Margins             []float64 `json:"margins"`
+	XPos                float64   `json:"xpos"`
+	YPos                float64   `json:"ypos"`
+	ColorHex            string    `json:"colorHex"`
 }
 
 type Ladder struct {
@@ -63,3 +83,19 @@ func (s *Spread) GetWidth() float64 {
 		return s.Dim.Width
 	}
 }
+
+//unipdf fonts - see unipdf/model/font/
+//Courier
+//CourierBold
+//CourierOblique
+//CourierBoldOblique
+//Helvetica
+//HelveticaBold
+//HelveticaOblique
+//HelveticaBoldOblique
+//Symbol
+//ZapfDingbats
+//TimesRoman
+//TimesBold
+//TimesItalic
+//TimesBoldItalic

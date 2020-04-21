@@ -1,6 +1,7 @@
 package parsesvg
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -211,6 +212,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	})
 
 	// look for prefill textboxes (not editable in pdf)
+
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.TextPrefillsLayer {
 			for _, r := range g.Crect__svg {
@@ -246,6 +248,11 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
 				tp.Rect.Corner.X = x + dx
 				tp.Rect.Corner.Y = y + dy
+
+				err = UnmarshalTextPrefill(&tp)
+				if err != nil {
+					return nil, err
+				}
 				ladder.TextPrefills = append(ladder.TextPrefills, tp)
 			}
 		}
@@ -261,6 +268,21 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		return nil, err
 	}
 	return ladder, nil
+}
+
+func UnmarshalTextPrefill(tp *TextPrefill) error {
+
+	var paragraph Paragraph
+
+	err := json.Unmarshal([]byte(tp.Properties), &paragraph)
+	if err != nil {
+		return err
+	}
+
+	tp.Text = paragraph
+
+	return nil
+
 }
 
 func ApplyDocumentUnits(svg *Csvg__svg, ladder *Ladder) error {

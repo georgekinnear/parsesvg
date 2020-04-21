@@ -414,7 +414,7 @@ const textPrefillSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="99.896361"
+     inkscape:cx="87.774531"
      inkscape:cy="144.00533"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
@@ -462,7 +462,7 @@ const textPrefillSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="textprefills"
-     style="display:none">
+     style="display:inline">
     <rect
        transform="translate(0,-247)"
        style="display:inline;opacity:0.98999999;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
@@ -473,7 +473,8 @@ const textPrefillSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
        y="254.77141"
        ry="0">
       <desc
-         id="desc824">{&quot;text&quot;:&quot;someContents&quot;,&quot;fontSize&quot;:12}</desc>
+         id="desc824">{&quot;text&quot;:&quot;someContents&quot;,&quot;textFont&quot;:&quot;Helvetica&quot;,&quot;textSize&quot;:10,&quot;lineHeight&quot;:1,&quot;alignment&quot;:&quot;left&quot;,&quot;enableWrap&quot;:true,&quot;wrapWidth&quot;:50,&quot;angle&quot;:0,&quot;absolutePositioning&quot;:false,&quot;margins&quot;:null,&quot;xpos&quot;:50,&quot;ypos&quot;:50,&quot;colorHex&quot;:&quot;#ffee33&quot;}
+</desc>
       <title
          id="title822">topbox</title>
     </rect>
@@ -482,7 +483,7 @@ const textPrefillSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="textfields"
-     style="display:none">
+     style="display:inline">
     <rect
        style="opacity:0.98999999;fill:#00ffff;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="rect846"
@@ -520,7 +521,22 @@ var expectedTextPrefill = &Ladder{
 				Dim:    geo.Dim{Width: 30.067822, Height: 10.022608},
 			},
 			ID:         "topbox",
-			Properties: "{\"text\":\"someContents\",\"fontSize\":12}",
+			Properties: "{\"text\":\"someContents\",\"textFont\":\"Helvetica\",\"textSize\":10,\"lineHeight\":1,\"alignment\":\"left\",\"enableWrap\":true,\"wrapWidth\":50,\"angle\":0,\"absolutePositioning\":false,\"margins\":null,\"xpos\":50,\"ypos\":50,\"colorHex\":\"#ffee33\"}\n",
+			Text: Paragraph{
+				Text:                "someContents",
+				TextFont:            "Helvetica",
+				TextSize:            10,
+				LineHeight:          1,
+				Alignment:           "left",
+				EnableWrap:          true,
+				WrapWidth:           50,
+				Angle:               0,
+				AbsolutePositioning: false,
+				Margins:             nil,
+				XPos:                50,
+				YPos:                50,
+				ColorHex:            "#ffee33",
+			},
 		},
 	},
 }
