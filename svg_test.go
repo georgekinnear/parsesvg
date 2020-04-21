@@ -386,6 +386,145 @@ var expectedLadder = &Ladder{
 Used to constructed expected result after close visual insection of the output.
 */
 
+const textPrefillSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="50mm"
+   height="50mm"
+   viewBox="0 0 50 50"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="textprefill.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="99.896361"
+     inkscape:cy="144.00533"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="false"
+     inkscape:snap-page="true"
+     inkscape:window-width="1850"
+     inkscape:window-height="1136"
+     inkscape:window-x="70"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="anchors"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-247)"
+     style="display:inline">
+    <path
+       style="opacity:0.98999999;fill:#3dff74;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       id="path817"
+       sodipodi:type="arc"
+       sodipodi:cx="0"
+       sodipodi:cy="247"
+       sodipodi:rx="2.7395127"
+       sodipodi:ry="2.7395127"
+       sodipodi:start="1.5935991"
+       sodipodi:end="1.5918851"
+       sodipodi:open="true"
+       d="m -0.06246307,249.7388 a 2.7395127,2.7395127 0 0 1 -2.67636393,-2.80009 2.7395127,2.7395127 0 0 1 2.7989429,-2.67756 2.7395127,2.7395127 0 0 1 2.6787626,2.79779 2.7395127,2.7395127 0 0 1 -2.79664718,2.67996" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="textprefills"
+     style="display:none">
+    <rect
+       transform="translate(0,-247)"
+       style="display:inline;opacity:0.98999999;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       id="rect819"
+       width="30.067822"
+       height="10.022608"
+       x="9.0871639"
+       y="254.77141"
+       ry="0">
+      <desc
+         id="desc824">{&quot;text&quot;:&quot;someContents&quot;,&quot;fontSize&quot;:12}</desc>
+      <title
+         id="title822">topbox</title>
+    </rect>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="textfields"
+     style="display:none">
+    <rect
+       style="opacity:0.98999999;fill:#00ffff;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       id="rect846"
+       width="17.372519"
+       height="14.432554"
+       x="16.704346"
+       y="28.083899"
+       ry="0">
+      <desc
+         id="desc850">This is the prefill text for the bottom box, a textfield i.e acroforms, and not a uneditable prefill like the other box</desc>
+      <title
+         id="title848">bottombox</title>
+    </rect>
+  </g>
+</svg>`
+
+var expectedTextPrefill = &Ladder{
+	Anchor: geo.Point{X: 0, Y: 0},
+	Dim:    geo.Dim{Width: 141.73228346456693, Height: 141.73228346456693},
+	ID:     "",
+	TextFields: []TextField{
+		TextField{
+			Rect: geo.Rect{
+				Corner: geo.Point{X: 47.350902047244105, Y: 62.12438078740158},
+				Dim:    geo.Dim{Width: 49.2449357480315, Height: 40.911176692913386},
+			},
+			ID:      "bottombox",
+			Prefill: "This is the prefill text for the bottom box, a textfield i.e acroforms, and not a uneditable prefill like the other box",
+		},
+	},
+	TextPrefills: []TextPrefill{
+		TextPrefill{
+			Rect: geo.Rect{
+				Corner: geo.Point{X: 9.0871639, Y: 7.771410000000003},
+				Dim:    geo.Dim{Width: 30.067822, Height: 10.022608},
+			},
+			ID:         "topbox",
+			Properties: "{\"text\":\"someContents\",\"fontSize\":12}",
+		},
+	},
+}
+
 func TestDefineLadderFromSvg(t *testing.T) {
 
 	ladder, err := DefineLadderFromSVG([]byte(testInkscapeSvg))
@@ -395,6 +534,19 @@ func TestDefineLadderFromSvg(t *testing.T) {
 
 	if !reflect.DeepEqual(ladder, expectedLadder) {
 		t.Errorf("Ladder does not match expected")
+	}
+}
+
+func TestTextPrefills(t *testing.T) {
+
+	ladder, err := DefineLadderFromSVG([]byte(textPrefillSVG))
+	if err != nil {
+		t.Errorf("Error defining ladder %v", err)
+	}
+
+	if !reflect.DeepEqual(ladder, expectedTextPrefill) {
+		t.Errorf("Ladder does not match expected")
+		PrettyPrintStruct(ladder)
 	}
 }
 

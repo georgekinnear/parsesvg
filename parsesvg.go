@@ -210,6 +210,48 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		return ladder.TextFields[i].TabSequence < ladder.TextFields[j].TabSequence
 	})
 
+	// look for prefill textboxes (not editable in pdf)
+	for _, g := range svg.Cg__svg {
+		if g.AttrInkscapeSpacelabel == geo.TextPrefillsLayer {
+			for _, r := range g.Crect__svg {
+				tp := TextPrefill{}
+				if r.Title != nil { //avoid seg fault, obvs
+					tp.ID = r.Title.String
+				}
+
+				if r.Desc != nil {
+					tp.Properties = r.Desc.String
+				}
+				w, err := strconv.ParseFloat(r.Width, 64)
+				if err != nil {
+					return nil, err
+				}
+				h, err := strconv.ParseFloat(r.Height, 64)
+				if err != nil {
+					return nil, err
+				}
+
+				tp.Rect.Dim.Width = w
+				tp.Rect.Dim.Height = h
+				tp.Rect.Dim.DynamicWidth = false
+				dx, dy := getTranslate(r.Transform) //check if rotate will cause box to be out of place
+				x, err := strconv.ParseFloat(r.Rx, 64)
+				if err != nil {
+					return nil, err
+				}
+				y, err := strconv.ParseFloat(r.Ry, 64)
+				if err != nil {
+					return nil, err
+				}
+
+				tp.Rect.Corner.X = x + dx
+				tp.Rect.Corner.Y = y + dy
+				ladder.TextPrefills = append(ladder.TextPrefills, tp)
+			}
+		}
+
+	}
+
 	err = ApplyDocumentUnits(&svg, ladder)
 	if err != nil {
 		return nil, err

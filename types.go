@@ -11,11 +11,18 @@ type TextField struct {
 	TabSequence int64
 }
 
-type Ladder struct {
-	Anchor     geo.Point
-	Dim        geo.Dim
+type TextPrefill struct {
+	Rect       geo.Rect
 	ID         string
-	TextFields []TextField
+	Properties string
+}
+
+type Ladder struct {
+	Anchor       geo.Point
+	Dim          geo.Dim
+	ID           string
+	TextFields   []TextField
+	TextPrefills []TextPrefill
 }
 
 type Layout struct {

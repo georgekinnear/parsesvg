@@ -69,22 +69,6 @@ func TestDefineLayoutFromSvg(t *testing.T) {
 
 }
 
-func testPrettyPrintLayout(t *testing.T) {
-	// helper for writing the tests on this file - not actually a test
-	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
-	svgBytes, err := ioutil.ReadFile(svgFilename)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	got, err := DefineLayoutFromSVG(svgBytes)
-	if err != nil {
-		t.Errorf("Error defining layout %v", err)
-	}
-	PrettyPrintLayout(got)
-
-}
 func testPrintLayout(t *testing.T) {
 	// helper for writing the tests on this file - not actually a test
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
@@ -507,9 +491,10 @@ func TestRenderSpreadCheckAfterInactive(t *testing.T) {
 
 }
 
-func TestPrettyPrintLayout(t *testing.T) {
+func testPrettyPrintLayout(t *testing.T) {
 	// helper for writing the tests on this file - not actually a test
 	svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-comment-static-check.svg"
+	//svgFilename := "./test/layout-312pt-static-mark-dynamic-moderate-static-check-v2.svg"
 	svgBytes, err := ioutil.ReadFile(svgFilename)
 
 	if err != nil {
