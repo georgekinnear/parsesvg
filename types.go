@@ -9,6 +9,7 @@ type TextField struct {
 	ID          string
 	Prefill     string
 	TabSequence int64
+	Multiline   bool
 }
 
 type TextPrefill struct {
