@@ -18,7 +18,7 @@ import (
 	"github.com/unidoc/unipdf/v3/model/optimize"
 )
 
-func RenderSpreadExtraImagePrefill(contents SpreadContents) error {
+func RenderSpreadExtra(contents SpreadContents) error {
 
 	svgLayoutPath := contents.SvgLayoutPath
 	spreadName := contents.SpreadName

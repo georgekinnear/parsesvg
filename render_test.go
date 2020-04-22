@@ -35,7 +35,7 @@ func TestRenderImagePrefillBackwardsCompatibility(t *testing.T) {
 		Comments:          comments,
 	}
 
-	err := RenderSpreadExtraImagePrefill(contents)
+	err := RenderSpreadExtra(contents)
 	if err != nil {
 		t.Error(err)
 	}
@@ -70,7 +70,7 @@ func TestRenderImagePrefillNoPreviousImage(t *testing.T) {
 		Comments:          comments,
 	}
 
-	err := RenderSpreadExtraImagePrefill(contents)
+	err := RenderSpreadExtra(contents)
 	if err != nil {
 		t.Error(err)
 	}
@@ -95,6 +95,7 @@ func TestRenderImagePrefillReplaceImage(t *testing.T) {
 
 	prefillImagePaths := make(map[string]string)
 
+	// does not use extension - e
 	prefillImagePaths["mark-header"] = "./test/prefill-header"
 
 	spreadName := "mark"
@@ -111,7 +112,7 @@ func TestRenderImagePrefillReplaceImage(t *testing.T) {
 		PrefillImagePaths: prefillImagePaths,
 	}
 
-	err := RenderSpreadExtraImagePrefill(contents)
+	err := RenderSpreadExtra(contents)
 	if err != nil {
 		t.Error(err)
 	}
