@@ -536,7 +536,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		// update our prefill text
 		p := c.NewParagraph(tp.Text.Text)
 		p.SetPos(tp.Rect.Corner.X, tp.Rect.Corner.Y)
-		fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
+		//fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
 		c.Draw(p)
 		//fmt.Println(tp)
 
@@ -590,8 +590,8 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		if spread.Dim.DynamicWidth {
 			tf.Rect.Corner.X = tf.Rect.Corner.X + spread.ExtraWidth
 		}
-		fmt.Printf("Textfie %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
-		fmt.Printf("formRe %v\n", formRect(tf, layout.Dim))
+		//fmt.Printf("Textfie %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
+		//fmt.Printf("formRe %v\n", formRect(tf, layout.Dim))
 		textf, err := annotator.NewTextField(page, name, formRect(tf, layout.Dim), tfopt)
 		if err != nil {
 			panic(err)

@@ -124,7 +124,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		}
 	}
 
-	fmt.Printf("-------(%s)-----------\n", ladder.ID)
+	//fmt.Printf("-------(%s)-----------\n", ladder.ID)
 	ladder.Anchor = geo.Point{X: 0, Y: 0}
 
 	ladderDim, err := getLadderDim(&svg)
@@ -135,14 +135,14 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	ladder.Dim = ladderDim
 
 	var dx, dy float64
-	fmt.Println("Looking for reference anchor")
+	//fmt.Println("Looking for reference anchor")
 	// look for reference anchor position
 	for _, g := range svg.Cg__svg {
 		// get transform applied to layer, if any
-		fmt.Println(g.AttrInkscapeSpacelabel)
+		//fmt.Println(g.AttrInkscapeSpacelabel)
 		if g.AttrInkscapeSpacelabel == geo.AnchorsLayer {
 			dx, dy = getTranslate(g.Transform)
-			fmt.Printf("Anchors layer global translates %f,%f\n", dx, dy)
+			//fmt.Printf("Anchors layer global translates %f,%f\n", dx, dy)
 
 		}
 		for _, r := range g.Cpath__svg {
@@ -158,15 +158,15 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 					}
 
 					ddx, ddy := getTranslate(r.Transform)
-					fmt.Printf("Anchor %s local translates %f,%f\n", r.Title.String, ddx, ddy)
+					//fmt.Printf("Anchor %s local translates %f,%f\n", r.Title.String, ddx, ddy)
 					newX := x + dx + ddx
 					newY := y + dy + ddy
-					fmt.Printf("X: %f, Y:%f\n", x, y)
-					fmt.Printf("tX: %f, tY:%f\n", newX, newY)
+					//fmt.Printf("X: %f, Y:%f\n", x, y)
+					//fmt.Printf("tX: %f, tY:%f\n", newX, newY)
 					ladder.Anchor = geo.Point{X: newX, Y: newY}
 				}
 			} else {
-				fmt.Println("un-named path")
+				//fmt.Println("un-named path")
 			}
 		}
 	}
@@ -198,7 +198,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				tf.Rect.Dim.Height = h
 				tf.Rect.Dim.DynamicWidth = false
 				dx, dy := getTranslate(r.Transform)
-				fmt.Printf("transform in play %f %f\n", dx, dy)
+				//fmt.Printf("transform in play %f %f\n", dx, dy)
 				x, err := strconv.ParseFloat(r.Rx, 64)
 				if err != nil {
 					return nil, err
@@ -210,7 +210,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
 				tf.Rect.Corner.X = x + dx
 				tf.Rect.Corner.Y = y + dy
-				fmt.Printf("textfield corner at %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
+				//fmt.Printf("textfield corner at %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
 				ladder.TextFields = append(ladder.TextFields, tf)
 			}
 		}
