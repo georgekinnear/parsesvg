@@ -42,7 +42,9 @@ func TestRenderSpreadMarkPrefill(t *testing.T) {
 		t.Errorf("Error defining layout %v", err)
 	}
 
-	PrettyPrintStruct(layout)
+	if false {
+		PrettyPrintStruct(layout)
+	}
 
 	contents := SpreadContents{
 		SvgLayoutPath:     svgLayoutPath,

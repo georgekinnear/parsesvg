@@ -325,7 +325,7 @@ const testInkscapeSvg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
        x="22.629934"
        y="38.408676">
       <desc
-         id="desc51388">Enter your intials here</desc>
+         id="desc51388">Enter your initials here</desc>
       <title
          id="title50383">initials</title>
     </rect>
@@ -358,25 +358,25 @@ var expectedLadder = &Ladder{
 	TextFields: []TextField{
 		TextField{
 			Rect: geo.Rect{
-				Corner: geo.Point{X: 19.304747716535434, Y: 88.05944125984252},
+				Corner: geo.Point{X: 19.304747716535434, Y: 53.67284220472441},
 				Dim:    geo.Dim{Width: 22.157384031496065, Height: 22.91499892913386},
 			},
 			ID: "badfile",
 		},
 		TextField{
 			Rect: geo.Rect{
-				Corner: geo.Point{X: 109.56009826771654, Y: 104.45776157480316},
+				Corner: geo.Point{X: 109.56009826771654, Y: 37.27452188976378},
 				Dim:    geo.Dim{Width: 17.88282113385827, Height: 17.88282113385827},
 			},
 			ID: "markok",
 		},
 		TextField{
 			Rect: geo.Rect{
-				Corner: geo.Point{X: 64.14784440944882, Y: 32.85729637795275},
+				Corner: geo.Point{X: 64.14784440944882, Y: 108.87498708661418},
 				Dim:    geo.Dim{Width: 66.71550047244095, Height: 15.197716913385827},
 			},
 			ID:      "initials",
-			Prefill: "Enter your intials here",
+			Prefill: "Enter your initials here",
 		},
 	},
 }
@@ -507,7 +507,7 @@ var expectedTextPrefill = &Ladder{
 	TextFields: []TextField{
 		TextField{
 			Rect: geo.Rect{
-				Corner: geo.Point{X: 47.350902047244105, Y: 62.12438078740158},
+				Corner: geo.Point{X: 47.350902047244105, Y: 79.60790267716536},
 				Dim:    geo.Dim{Width: 49.2449357480315, Height: 40.911176692913386},
 			},
 			ID:      "bottombox",
@@ -517,8 +517,8 @@ var expectedTextPrefill = &Ladder{
 	TextPrefills: []TextPrefill{
 		TextPrefill{
 			Rect: geo.Rect{
-				Corner: geo.Point{X: 9.0871639, Y: 7.771410000000003},
-				Dim:    geo.Dim{Width: 30.067822, Height: 10.022608},
+				Corner: geo.Point{X: 25.758889795275593, Y: 22.029193700787413},
+				Dim:    geo.Dim{Width: 85.23162141732284, Height: 28.410542362204726},
 			},
 			ID:         "topbox",
 			Properties: "{\"text\":\"someContents\",\"textFont\":\"Helvetica\",\"textSize\":10,\"lineHeight\":1,\"alignment\":\"left\",\"enableWrap\":true,\"wrapWidth\":50,\"angle\":0,\"absolutePositioning\":false,\"margins\":null,\"xpos\":50,\"ypos\":50,\"colorHex\":\"#ffee33\"}\n",
@@ -550,7 +550,12 @@ func TestDefineLadderFromSvg(t *testing.T) {
 
 	if !reflect.DeepEqual(ladder, expectedLadder) {
 		t.Errorf("Ladder does not match expected")
+		fmt.Println("----------EXPECTED------------------")
+		PrettyPrintStruct(expectedLadder)
+		fmt.Println("----------GOT------------------")
+		PrettyPrintStruct(ladder)
 	}
+
 }
 
 func TestTextPrefills(t *testing.T) {
@@ -562,6 +567,10 @@ func TestTextPrefills(t *testing.T) {
 
 	if !reflect.DeepEqual(ladder, expectedTextPrefill) {
 		t.Errorf("Ladder does not match expected")
+		t.Errorf("Ladder does not match expected")
+		fmt.Println("----------EXPECTED------------------")
+		PrettyPrintStruct(expectedTextPrefill)
+		fmt.Println("----------GOT------------------")
 		PrettyPrintStruct(ladder)
 	}
 }
