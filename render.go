@@ -23,7 +23,7 @@ func RenderSpreadExtraImagePrefill(contents SpreadContents) error {
 	svgLayoutPath := contents.SvgLayoutPath
 	spreadName := contents.SpreadName
 	previousImagePath := contents.PreviousImagePath
-	//prefillImagePaths := contents.PrefillImagePaths
+	prefillImagePaths := contents.PrefillImagePaths
 	//qrCodePath := contents.QrCodePath
 	comments := contents.Comments
 	pageNumber := contents.PageNumber
@@ -67,6 +67,7 @@ func RenderSpreadExtraImagePrefill(contents SpreadContents) error {
 			if strings.HasPrefix(k, geo.SVGElement) {
 				svgFilenames = append(svgFilenames, k) //we'll get the contents later
 			} else {
+
 				imgFilenames = append(imgFilenames, k)
 			}
 		}
@@ -143,6 +144,11 @@ func RenderSpreadExtraImagePrefill(contents SpreadContents) error {
 		imgfilename := imgname //in case not specified, e.g. previous image
 
 		if filename, ok := layout.Filenames[imgname]; ok {
+			imgfilename = fmt.Sprintf("%s.jpg", filename)
+		}
+
+		// overwrite filename with dynamically supplied one, if supplied
+		if filename, ok := prefillImagePaths[imgname]; ok {
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
