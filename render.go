@@ -148,6 +148,8 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	// get all the static images that decorate this page, but not the special script "previous-image"
 
+	fmt.Println(prefillImagePaths)
+	fmt.Println(imgFilenames)
 	for _, imgname := range imgFilenames {
 
 		if _, ok := layout.ImageDims[imgname]; !ok {
@@ -162,6 +164,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		// overwrite filename with dynamically supplied one, if supplied
 		if filename, ok := prefillImagePaths[imgname]; ok {
+			fmt.Printf("using %s for %s\n", filename, imgname)
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
@@ -281,6 +284,8 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		}
 		// update our prefill text
 		p := c.NewParagraph(tp.Text.Text)
+		//fmt.Printf("Font size: %f", tp.Text.TextSize)
+		p.SetFontSize(tp.Text.TextSize)
 		p.SetPos(tp.Rect.Corner.X, tp.Rect.Corner.Y)
 		//fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
 		c.Draw(p)
