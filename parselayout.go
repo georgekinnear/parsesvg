@@ -366,13 +366,10 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	for _, svgname := range svgFilenames {
 
-		offset := geo.Point{}
+		corner := geo.Point{X: 0, Y: 0} //default to layout anchor if not in the list - keeps layout drawing cleaner
 
 		if thisAnchor, ok := layout.Anchors[svgname]; ok {
-			offset = thisAnchor //DiffPosition(layout.Anchor, thisAnchor)
-		} else {
-			//default to layout anchor if not in the list - keeps layout drawing cleaner
-			offset = geo.Point{X: 0, Y: 0}
+			corner = thisAnchor
 		}
 
 		svgfilename := fmt.Sprintf("%s.svg", layout.Filenames[svgname])
@@ -396,7 +393,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		// append chrome image to the images list
 		image := ImageInsert{
 			Filename: imgfilename,
-			Corner:   offset, //TranslatePosition(ladder.Anchor, offset),
+			Corner:   corner,
 			Dim:      ladder.Dim,
 		}
 
@@ -407,7 +404,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 			//shift the text field and add it to the list
 			//let engine take care of mangling name to suit page
-			tf.Rect.Corner = TranslatePosition(tf.Rect.Corner, offset)
+			tf.Rect.Corner = TranslatePosition(corner, tf.Rect.Corner)
 			spread.TextFields = append(spread.TextFields, tf)
 		}
 		//append TextPrefills to the TextPrefill list
@@ -415,7 +412,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 			//shift the text field and add it to the list
 			//let engine take care of mangling name to suit page
-			tp.Rect.Corner = TranslatePosition(tp.Rect.Corner, offset)
+			tp.Rect.Corner = TranslatePosition(corner, tp.Rect.Corner)
 			spread.TextPrefills = append(spread.TextPrefills, tp)
 		}
 
@@ -435,28 +432,13 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
-		corner := geo.Point{}
+		corner := layout.Anchor
 
 		if thisAnchor, ok := layout.Anchors[imgname]; ok {
-			/*
-				fmt.Println(imgfilename)
-				fmt.Printf("layout.Anchor %v\n", layout.Anchor)
-				fmt.Printf("thisAnchor %v\n", thisAnchor)
-				shift := DiffPosition(layout.Anchor, thisAnchor)
-				fmt.Printf("shift %v\n", shift)
-				topCorner := TranslatePosition(layout.Anchor, shift)
-			*/
-			corner = thisAnchor // TranslatePosition(topCorner, geo.Point{Y: -1 * layout.ImageDims[imgname].Height})
-
-		} else {
-			//default to layout anchor if not in the list
-			corner = layout.Anchor
-			fmt.Printf("Image %s own anchor not found\n", imgname)
-
+			corner = thisAnchor
 		}
 
 		// append chrome image to the images list
-
 		image := ImageInsert{
 			Filename: imgfilename,
 			Corner:   corner,

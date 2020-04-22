@@ -197,7 +197,8 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				tf.Rect.Dim.Width = w
 				tf.Rect.Dim.Height = h
 				tf.Rect.Dim.DynamicWidth = false
-				dx, dy := getTranslate(r.Transform) //check if rotate will cause box to be out of place
+				dx, dy := getTranslate(r.Transform)
+				fmt.Printf("transform in play %f %f\n", dx, dy)
 				x, err := strconv.ParseFloat(r.Rx, 64)
 				if err != nil {
 					return nil, err
@@ -209,6 +210,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
 				tf.Rect.Corner.X = x + dx
 				tf.Rect.Corner.Y = y + dy
+				fmt.Printf("textfield corner at %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
 				ladder.TextFields = append(ladder.TextFields, tf)
 			}
 		}
@@ -331,10 +333,31 @@ func ApplyDocumentUnits(svg *Csvg__svg, ladder *Ladder) error {
 		ladder.TextFields[idx] = tf
 	}
 
+	for idx, tp := range ladder.TextPrefills {
+		err := scaleTextPrefillUnits(&tp, sf)
+		if err != nil {
+			return err
+		}
+		ladder.TextPrefills[idx] = tp
+	}
+
 	return nil
 }
 
 func scaleTextFieldUnits(tf *TextField, sf float64) error {
+	if tf == nil {
+		return errors.New("nil pointer to TextField")
+	}
+
+	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
+	tf.Rect.Corner.Y = sf * tf.Rect.Corner.Y
+	tf.Rect.Dim.Width = sf * tf.Rect.Dim.Width
+	tf.Rect.Dim.Height = sf * tf.Rect.Dim.Height
+
+	return nil
+}
+
+func scaleTextPrefillUnits(tf *TextPrefill, sf float64) error {
 	if tf == nil {
 		return errors.New("nil pointer to TextField")
 	}
