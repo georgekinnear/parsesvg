@@ -10,7 +10,6 @@ type SpreadContents struct {
 	SpreadName        string
 	PreviousImagePath string
 	PrefillImagePaths map[string]string
-	QrCodePath        string
 	Comments          pdfcomment.Comments
 	PageNumber        int
 	PdfOutputPath     string
