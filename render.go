@@ -18,6 +18,19 @@ import (
 	"github.com/unidoc/unipdf/v3/model/optimize"
 )
 
+func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath string, pageNumber int, pdfOutputPath string) error {
+
+	contents := SpreadContents{
+		SvgLayoutPath:     svgLayoutPath,
+		SpreadName:        spreadName,
+		PreviousImagePath: previousImagePath,
+		PageNumber:        pageNumber,
+		PdfOutputPath:     pdfOutputPath,
+	}
+	return RenderSpreadExtra(contents)
+
+}
+
 func RenderSpreadExtra(contents SpreadContents) error {
 
 	svgLayoutPath := contents.SvgLayoutPath
