@@ -146,7 +146,7 @@
        inkscape:stockid="Arrow1Mend">
       <path
          transform="scale(0.4) rotate(180) translate(10,0)"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#ffff00;stroke-width:1pt;stroke-opacity:1;fill:#ffff00;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path12404" />
     </marker>
@@ -206,7 +206,7 @@
       <path
          id="path10836"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#ffff00;stroke-width:1pt;stroke-opacity:1;fill:#ffff00;fill-opacity:1"
          transform="scale(0.4) rotate(180) translate(10,0)" />
     </marker>
     <marker
@@ -267,9 +267,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="-137.14286"
-     inkscape:cy="217.14286"
+     inkscape:zoom="1.4"
+     inkscape:cx="433.0315"
+     inkscape:cy="796.20176"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -433,8 +433,8 @@
        d="M 153.45816,49.047618 V 5.2023781"
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker10508)" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker10838)"
-       d="M 23.43435,46.779761 V 2.934521"
+       style="fill:none;stroke:#ffff00;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker10838)"
+       d="M 36.437692,35.35752 5.2931698,4.4961556"
        id="path10834"
        inkscape:connector-curvature="0" />
     <path
@@ -455,11 +455,11 @@
     <path
        inkscape:connector-curvature="0"
        id="path11606"
-       d="m 20.41054,250.7253 v 43.84524"
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker12406)" />
+       d="M 15.708064,281.70732 2.8958852,297.06969"
+       style="fill:none;stroke:#ffff00;stroke-width:0.91106701;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker12406)" />
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker12162)"
-       d="m 47.624828,249.2134 v 43.84524"
+       d="m 57.78107,248.94613 v 43.84524"
        id="path11608"
        inkscape:connector-curvature="0" />
     <path
@@ -525,5 +525,37 @@
          x="45.357143"
          y="80.041664"
          style="fill:#ffffff;stroke-width:0.26458332">!</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.04193211px;line-height:1.25;font-family:comfortaa;-inkscape-font-specification:comfortaa;letter-spacing:0px;word-spacing:0px;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:0.06627966"
+       x="10.044397"
+       y="268.12589"
+       id="text16466"><tspan
+         sodipodi:role="line"
+         id="tspan16464"
+         x="10.044397"
+         y="268.12589"
+         style="fill:#ffff00;stroke-width:0.06627966">inkscape</tspan><tspan
+         sodipodi:role="line"
+         x="10.044397"
+         y="278.17831"
+         style="fill:#ffff00;stroke-width:0.06627966"
+         id="tspan16470">origin</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.04193211px;line-height:1.25;font-family:comfortaa;-inkscape-font-specification:comfortaa;letter-spacing:0px;word-spacing:0px;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:0.06627966"
+       x="26.961615"
+       y="12.502251"
+       id="text16664"><tspan
+         sodipodi:role="line"
+         id="tspan16660"
+         x="26.961615"
+         y="12.502251"
+         style="fill:#ffff00;stroke-width:0.06627966">PDF MEDIA</tspan><tspan
+         sodipodi:role="line"
+         x="26.961615"
+         y="22.554667"
+         style="fill:#ffff00;stroke-width:0.06627966"
+         id="tspan16662">origin</tspan></text>
   </g>
 </svg>

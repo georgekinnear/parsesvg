@@ -23,6 +23,8 @@ func ParseSvg(input []byte) *Csvg__svg {
 	return &svg
 }
 
+// return the translation applied to the SVG object
+// does not mangle the Y dimension
 func getTranslate(transform string) (float64, float64) {
 
 	if len(transform) <= 0 {
@@ -122,6 +124,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 		}
 	}
 
+	fmt.Printf("-------(%s)-----------\n", ladder.ID)
 	ladder.Anchor = geo.Point{X: 0, Y: 0}
 
 	ladderDim, err := getLadderDim(&svg)
@@ -132,17 +135,19 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	ladder.Dim = ladderDim
 
 	var dx, dy float64
-
+	fmt.Println("Looking for reference anchor")
 	// look for reference anchor position
 	for _, g := range svg.Cg__svg {
 		// get transform applied to layer, if any
+		fmt.Println(g.AttrInkscapeSpacelabel)
 		if g.AttrInkscapeSpacelabel == geo.AnchorsLayer {
 			dx, dy = getTranslate(g.Transform)
+			fmt.Printf("Anchors layer global translates %f,%f\n", dx, dy)
 
 		}
 		for _, r := range g.Cpath__svg {
 			if r.Title != nil {
-				if true { //r.Title.String == geo.AnchorReference {
+				if r.Title.String == geo.AnchorReference { // was force true?
 					x, err := strconv.ParseFloat(r.Cx, 64)
 					if err != nil {
 						return nil, err
@@ -153,11 +158,15 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 					}
 
 					ddx, ddy := getTranslate(r.Transform)
-
+					fmt.Printf("Anchor %s local translates %f,%f\n", r.Title.String, ddx, ddy)
 					newX := x + dx + ddx
 					newY := y + dy + ddy
+					fmt.Printf("X: %f, Y:%f\n", x, y)
+					fmt.Printf("tX: %f, tY:%f\n", newX, newY)
 					ladder.Anchor = geo.Point{X: newX, Y: newY}
 				}
+			} else {
+				fmt.Println("un-named path")
 			}
 		}
 	}
@@ -263,10 +272,10 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = convertToPDFYScale(ladder)
+	/*err = convertToPDFYScale(ladder)
 	if err != nil {
 		return nil, err
-	}
+	}*/
 	return ladder, nil
 }
 
@@ -338,7 +347,8 @@ func scaleTextFieldUnits(tf *TextField, sf float64) error {
 	return nil
 }
 
-func convertToPDFYScale(ladder *Ladder) error {
+/*func convertToPDFYScale(ladder *Ladder) error {
+
 	if ladder == nil {
 		return errors.New("nil pointer to ladder")
 	}
@@ -358,7 +368,7 @@ func convertToPDFYScale(ladder *Ladder) error {
 
 	return nil
 
-}
+}*/
 
 func formRect(tf TextField) []float64 {
 

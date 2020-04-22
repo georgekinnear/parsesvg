@@ -218,14 +218,14 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 	layout.Anchor.X = sf * layout.Anchor.X
 	layout.Anchor.Y = sf * layout.Anchor.Y
 
-	Ytop := layout.Dim.Height - layout.Anchor.Y //TODO triple check this sign!
+	//Ytop := layout.Dim.Height - layout.Anchor.Y //TODO triple check this sign!
 
-	layout.Anchor.X = sf * layout.Anchor.X
-	layout.Anchor.Y = Ytop - (sf * layout.Anchor.Y)
+	//layout.Anchor.X = sf * layout.Anchor.X
+	//layout.Anchor.Y = Ytop - (sf * layout.Anchor.Y)
 
 	for k, v := range layout.Anchors {
 		v.X = sf * v.X
-		v.Y = Ytop - (sf * v.Y)
+		v.Y = sf * v.Y //Ytop - (sf * v.Y)
 		layout.Anchors[k] = v
 
 	}
@@ -368,11 +368,11 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		offset := geo.Point{}
 
-		if thisAnchor, ok := layout.Anchors[svgname]; !ok {
+		if thisAnchor, ok := layout.Anchors[svgname]; ok {
+			offset = thisAnchor //DiffPosition(layout.Anchor, thisAnchor)
+		} else {
 			//default to layout anchor if not in the list - keeps layout drawing cleaner
 			offset = geo.Point{X: 0, Y: 0}
-		} else {
-			offset = DiffPosition(layout.Anchor, thisAnchor)
 		}
 
 		svgfilename := fmt.Sprintf("%s.svg", layout.Filenames[svgname])
@@ -396,7 +396,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		// append chrome image to the images list
 		image := ImageInsert{
 			Filename: imgfilename,
-			Corner:   TranslatePosition(ladder.Anchor, offset),
+			Corner:   offset, //TranslatePosition(ladder.Anchor, offset),
 			Dim:      ladder.Dim,
 		}
 
@@ -429,25 +429,37 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			return errors.New(fmt.Sprintf("No size for image %s (must be provided in layout - check you have a correctly named box on the images layer in Inkscape)\n", imgname))
 		}
 
-		offset := geo.Point{}
-
-		if thisAnchor, ok := layout.Anchors[imgname]; !ok {
-			//default to layout anchor if not in the list
-			offset = layout.Anchor
-		} else {
-			offset = DiffPosition(layout.Anchor, thisAnchor)
-		}
-
 		imgfilename := imgname //in case not specified, e.g. previous image
 
 		if filename, ok := layout.Filenames[imgname]; ok {
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
+
+		corner := geo.Point{}
+
+		if thisAnchor, ok := layout.Anchors[imgname]; ok {
+
+			fmt.Println(imgfilename)
+			fmt.Printf("layout.Anchor %v\n", layout.Anchor)
+			fmt.Printf("thisAnchor %v\n", thisAnchor)
+			shift := DiffPosition(layout.Anchor, thisAnchor)
+			fmt.Printf("shift %v\n", shift)
+			topCorner := TranslatePosition(layout.Anchor, shift)
+
+			corner = TranslatePosition(topCorner, geo.Point{Y: -1 * layout.ImageDims[imgname].Height})
+
+		} else {
+			//default to layout anchor if not in the list
+			corner = layout.Anchor
+			fmt.Printf("Image %s own anchor not found\n", imgname)
+
+		}
+
 		// append chrome image to the images list
 
 		image := ImageInsert{
 			Filename: imgfilename,
-			Corner:   offset,
+			Corner:   corner,
 			Dim:      layout.ImageDims[imgname],
 		}
 
@@ -545,8 +557,8 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			tp.Text.Text = val
 		}
 		// update our prefill text
-		p := c.NewParagraph("XXXXXXXXXXXXXXXXXX") //tp.Text.Text)
-		p.SetPos(300, 300)                        //tp.Rect.Corner.X, tp.Rect.Corner.Y)
+		p := c.NewParagraph("XXXXXXXXXXXX") //tp.Text.Text)
+		p.SetPos(tp.Rect.Corner.X, tp.Rect.Corner.Y)
 		fmt.Println(tp.Rect.Corner.X)
 		fmt.Println(tp.Rect.Corner.Y)
 		c.Draw(p)

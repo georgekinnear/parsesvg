@@ -336,6 +336,17 @@ For the dynamic pages, the input image is the thing that varies in size, so this
 
 A ```spread``` is the subsection of the overall layout that we pass to the layout engine for the construction of the page. Making the spread object is a separate job to the parser ... but we put in a partial implementation to test the idea, and it worked, so here it stays (for now).
 
+
+## A note on coordinates
+
+PDF coordinates are (0,0) in the lower left corner [says this info](https://www.pdfscripting.com/public/PDF-Page-Coordinates.cfm) - same as inkscape
+BUT! The media box coordinates are [with respect to the top left](https://www.leadtools.com/help/sdk/v20/dh/to/pdf-coordinate-system.html)
+
+Thus Y_position_pdf = page_height - Y_position_inkscape
+
+### anchor styling - must be a circular path. No stroke.
+
+
 ## What next?
 
 There's a [commmand line tool](https://github.com/timdrysdale/gradex-overlay) under development now, and a GUI to follow.

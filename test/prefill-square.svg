@@ -19,6 +19,8 @@
    inkscape:export-filename="/home/tim/tg/parsesvg/test/prefill-square.png"
    inkscape:export-xdpi="175"
    inkscape:export-ydpi="175">
+  <title
+     id="title16945">prefill-square</title>
   <defs
      id="defs15130" />
   <sodipodi:namedview
@@ -49,7 +51,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title>prefill-square</dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -141,24 +143,22 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="anchor"
+     inkscape:label="anchors"
      style="display:inline">
     <path
-       style="opacity:0.98999999;fill:#45ff20;fill-opacity:1;stroke:#f70000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
+       style="opacity:0.98999999;fill:#45ff20;fill-opacity:1;stroke:none;stroke-width:0.53661054;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="path15974"
        sodipodi:type="arc"
        sodipodi:cx="-6.6757202e-05"
-       sodipodi:cy="-6.1645507e-05"
-       sodipodi:rx="4.2522321"
-       sodipodi:ry="4.2522321"
+       sodipodi:cy="-6.052051e-05"
+       sodipodi:rx="7.9880419"
+       sodipodi:ry="7.9880419"
        sodipodi:start="1.5935991"
        sodipodi:end="1.5918851"
-       sodipodi:open="true"
-       d="M -0.09702104,4.251065 A 4.2522321,4.2522321 0 0 1 -4.2512345,-0.09519431 4.2522321,4.2522321 0 0 1 0.09324427,-4.2512698 4.2522321,4.2522321 0 0 1 4.251181,0.09142773 4.2522321,4.2522321 0 0 1 -0.08973447,4.2512249">
-      <desc
-         id="desc16007">./test/prefill-square</desc>
+       d="M -0.18220048,7.9859047 A 7.9880419,7.9880419 0 0 1 -7.9861093,-0.17877224 7.9880419,7.9880419 0 0 1 0.17522293,-7.9861789 7.9880419,7.9880419 0 0 1 7.986126,0.1718071 7.9880419,7.9880419 0 0 1 -0.16851227,7.9862051"
+       sodipodi:open="true">
       <title
-         id="title16005">svg-prefill-square</title>
+         id="title16005">ref-anchor</title>
     </path>
   </g>
 </svg>
