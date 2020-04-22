@@ -438,15 +438,15 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		corner := geo.Point{}
 
 		if thisAnchor, ok := layout.Anchors[imgname]; ok {
-
-			fmt.Println(imgfilename)
-			fmt.Printf("layout.Anchor %v\n", layout.Anchor)
-			fmt.Printf("thisAnchor %v\n", thisAnchor)
-			shift := DiffPosition(layout.Anchor, thisAnchor)
-			fmt.Printf("shift %v\n", shift)
-			topCorner := TranslatePosition(layout.Anchor, shift)
-
-			corner = TranslatePosition(topCorner, geo.Point{Y: -1 * layout.ImageDims[imgname].Height})
+			/*
+				fmt.Println(imgfilename)
+				fmt.Printf("layout.Anchor %v\n", layout.Anchor)
+				fmt.Printf("thisAnchor %v\n", thisAnchor)
+				shift := DiffPosition(layout.Anchor, thisAnchor)
+				fmt.Printf("shift %v\n", shift)
+				topCorner := TranslatePosition(layout.Anchor, shift)
+			*/
+			corner = thisAnchor // TranslatePosition(topCorner, geo.Point{Y: -1 * layout.ImageDims[imgname].Height})
 
 		} else {
 			//default to layout anchor if not in the list
@@ -472,11 +472,11 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	previousImageDimName := fmt.Sprintf("previous-%s", spread.Name)
 
-	offset := DiffPosition(layout.Anchors[previousImageAnchorName], layout.Anchor)
+	corner := layout.Anchors[previousImageAnchorName] //DiffPosition(layout.Anchors[previousImageAnchorName], layout.Anchor)
 
 	previousImage := ImageInsert{
 		Filename: previousImagePath,
-		Corner:   offset,
+		Corner:   corner,
 		Dim:      layout.ImageDims[previousImageDimName],
 	}
 
