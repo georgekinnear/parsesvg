@@ -9,6 +9,7 @@ type SpreadContents struct {
 	SvgLayoutPath     string
 	SpreadName        string
 	PreviousImagePath string
+	PrefillImagePaths map[string]string
 	QrCodePath        string
 	Comments          pdfcomment.Comments
 	PageNumber        int
