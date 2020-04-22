@@ -37,11 +37,9 @@ func RenderSpreadExtra(contents SpreadContents) error {
 	spreadName := contents.SpreadName
 	previousImagePath := contents.PreviousImagePath
 	prefillImagePaths := contents.PrefillImagePaths
-	//qrCodePath := contents.QrCodePath
 	comments := contents.Comments
 	pageNumber := contents.PageNumber
 	pdfOutputPath := contents.PdfOutputPath
-	//pageData := contents.PageData
 
 	svgBytes, err := ioutil.ReadFile(svgLayoutPath)
 
@@ -148,8 +146,8 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	// get all the static images that decorate this page, but not the special script "previous-image"
 
-	fmt.Println(prefillImagePaths)
-	fmt.Println(imgFilenames)
+	//fmt.Println(prefillImagePaths)
+	//fmt.Println(imgFilenames)
 	for _, imgname := range imgFilenames {
 
 		if _, ok := layout.ImageDims[imgname]; !ok {
@@ -272,10 +270,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		pdfcomment.DrawComment(c, cmt, strconv.Itoa(i), x, y)
 		y = y + rowHeight
-
 	}
-
-	// copy so we can mod
 
 	for _, tp := range spread.TextPrefills {
 		//update prefill contents from info given
