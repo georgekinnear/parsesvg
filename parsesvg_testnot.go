@@ -657,7 +657,7 @@ func writeParsedLayout(svg []byte, img *creator.Image, pageFilename string, c *c
 
 		tfopt := annotator.TextFieldOptions{Value: tf.Prefill} //TODO - MaxLen?!
 		name := fmt.Sprintf("Page-00-%s", tf.ID)
-		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
+		textf, err := annotator.NewTextField(page, name, formRect(tf, ladder.Dim), tfopt)
 		if err != nil {
 			panic(err)
 		}
@@ -748,7 +748,7 @@ func writeParsedGeometry(svg []byte, img *creator.Image, pageFilename string, c 
 
 		tfopt := annotator.TextFieldOptions{Value: tf.Prefill} //TODO - MaxLen?!
 		name := fmt.Sprintf("Page-00-%s", tf.ID)
-		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
+		textf, err := annotator.NewTextField(page, name, formRect(tf, ladder.Dim), tfopt)
 		if err != nil {
 			panic(err)
 		}

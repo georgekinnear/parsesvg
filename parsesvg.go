@@ -274,10 +274,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	if err != nil {
 		return nil, err
 	}
-	/*err = convertToPDFYScale(ladder)
-	if err != nil {
-		return nil, err
-	}*/
+
 	return ladder, nil
 }
 
@@ -370,32 +367,9 @@ func scaleTextPrefillUnits(tf *TextPrefill, sf float64) error {
 	return nil
 }
 
-/*func convertToPDFYScale(ladder *Ladder) error {
+func formRect(tf TextField, dim geo.Dim) []float64 {
 
-	if ladder == nil {
-		return errors.New("nil pointer to ladder")
-	}
-
-	Ytop := ladder.Dim.Height - ladder.Anchor.Y //TODO triple check this sign!
-
-	for idx, tf := range ladder.TextFields {
-
-		tf.Rect.Corner.Y = Ytop - tf.Rect.Corner.Y
-		ladder.TextFields[idx] = tf
-	}
-	for idx, tp := range ladder.TextPrefills {
-
-		tp.Rect.Corner.Y = Ytop - tp.Rect.Corner.Y
-		ladder.TextPrefills[idx] = tp
-	}
-
-	return nil
-
-}*/
-
-func formRect(tf TextField) []float64 {
-
-	return []float64{tf.Rect.Corner.X, tf.Rect.Corner.Y - tf.Rect.Dim.Height, tf.Rect.Corner.X + tf.Rect.Dim.Width, tf.Rect.Corner.Y}
+	return []float64{tf.Rect.Corner.X, dim.Height - tf.Rect.Corner.Y, (tf.Rect.Corner.X + tf.Rect.Dim.Width), dim.Height - (tf.Rect.Corner.Y + +tf.Rect.Dim.Height)}
 
 }
 

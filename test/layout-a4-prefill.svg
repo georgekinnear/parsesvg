@@ -2698,10 +2698,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1070407"
-     inkscape:cx="601.22134"
-     inkscape:cy="962.71551"
+     inkscape:cx="472.95144"
+     inkscape:cy="403.56715"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:window-width="1850"
      inkscape:window-height="1136"
@@ -2756,6 +2756,11 @@
          id="title20387">page-dynamic-width-moderate</title>
     </rect>
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="hidden"
+     style="display:inline" />
   <g
      inkscape:groupmode="layer"
      id="layer4"
@@ -2971,6 +2976,23 @@
          id="title3900">mark-header</title>
     </path>
     <path
+       d="m 40.05513,60.28148 a 4.2522321,4.2522321 0 0 1 -4.154213,-4.346259 4.2522321,4.2522321 0 0 1 4.344478,-4.156076 4.2522321,4.2522321 0 0 1 4.157937,4.342698 4.2522321,4.2522321 0 0 1 -4.340915,4.159797"
+       sodipodi:open="true"
+       sodipodi:end="1.5918851"
+       sodipodi:start="1.5935991"
+       sodipodi:ry="4.2522321"
+       sodipodi:rx="4.2522321"
+       sodipodi:cy="56.030354"
+       sodipodi:cx="40.152084"
+       sodipodi:type="arc"
+       id="path16043"
+       style="display:inline;opacity:0.98999999;fill:#45ff20;fill-opacity:1;stroke:#f70000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1">
+      <desc
+         id="desc16039">./test/prefill-square-00</desc>
+      <title
+         id="title16041">svg-mark-prefill-square-top-left</title>
+    </path>
+    <path
        style="display:inline;opacity:0.98999999;fill:#45ff20;fill-opacity:1;stroke:#f70000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1"
        id="path15974"
        sodipodi:type="arc"
@@ -3003,23 +3025,6 @@
          id="desc16033">./test/prefill-square</desc>
       <title
          id="title16035">svg-mark-prefill-square-bottom</title>
-    </path>
-    <path
-       d="m 40.05513,60.042478 a 4.2522321,4.2522321 0 0 1 -4.154213,-4.346259 4.2522321,4.2522321 0 0 1 4.344478,-4.156076 4.2522321,4.2522321 0 0 1 4.157937,4.342698 4.2522321,4.2522321 0 0 1 -4.340915,4.159797"
-       sodipodi:open="true"
-       sodipodi:end="1.5918851"
-       sodipodi:start="1.5935991"
-       sodipodi:ry="4.2522321"
-       sodipodi:rx="4.2522321"
-       sodipodi:cy="55.791351"
-       sodipodi:cx="40.152084"
-       sodipodi:type="arc"
-       id="path16043"
-       style="display:inline;opacity:0.98999999;fill:#45ff20;fill-opacity:1;stroke:#f70000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1">
-      <desc
-         id="desc16039">./test/prefill-square</desc>
-      <title
-         id="title16041">svg-mark-prefill-square-top-left</title>
     </path>
     <path
        d="m 209.40305,18.751127 a 4.2522321,4.2522321 0 0 1 -4.15422,-4.34626 4.2522321,4.2522321 0 0 1 4.34448,-4.156075 4.2522321,4.2522321 0 0 1 4.15794,4.342697 4.2522321,4.2522321 0 0 1 -4.34092,4.159798"

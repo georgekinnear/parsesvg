@@ -15,7 +15,7 @@
    version="1.1"
    id="svg15136"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="prefill-square.svg"
+   sodipodi:docname="prefill-square-01.svg"
    inkscape:export-filename="/home/tim/tg/parsesvg/test/prefill-square.png"
    inkscape:export-xdpi="175"
    inkscape:export-ydpi="175">
@@ -31,15 +31,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="-24.285714"
+     inkscape:cx="110"
      inkscape:cy="-20"
      inkscape:document-units="mm"
      inkscape:current-layer="layer3"
      showgrid="false"
-     inkscape:window-width="1850"
-     inkscape:window-height="1136"
-     inkscape:window-x="70"
-     inkscape:window-y="27"
+     inkscape:window-width="1920"
+     inkscape:window-height="1200"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true" />
@@ -121,7 +121,7 @@
        x="5.4806542"
        y="29.578751">
       <title
-         id="title15997">bottom-box</title>
+         id="title15997">bottom-box-01</title>
     </rect>
   </g>
   <g
@@ -139,7 +139,7 @@
       <desc
          id="desc16951">{&quot;text&quot;:&quot;THIS IS A PREFILL TEXT AREA&quot;}</desc>
       <title
-         id="title16003">top-box</title>
+         id="title16003">top-box-01</title>
     </rect>
   </g>
   <g

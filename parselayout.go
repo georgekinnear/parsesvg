@@ -218,14 +218,9 @@ func ApplyDocumentUnitsScaleLayout(svg *Csvg__svg, layout *Layout) error {
 	layout.Anchor.X = sf * layout.Anchor.X
 	layout.Anchor.Y = sf * layout.Anchor.Y
 
-	//Ytop := layout.Dim.Height - layout.Anchor.Y //TODO triple check this sign!
-
-	//layout.Anchor.X = sf * layout.Anchor.X
-	//layout.Anchor.Y = Ytop - (sf * layout.Anchor.Y)
-
 	for k, v := range layout.Anchors {
 		v.X = sf * v.X
-		v.Y = sf * v.Y //Ytop - (sf * v.Y)
+		v.Y = sf * v.Y
 		layout.Anchors[k] = v
 
 	}
@@ -539,12 +534,11 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			tp.Text.Text = val
 		}
 		// update our prefill text
-		p := c.NewParagraph("XXXXXXXXXXXX") //tp.Text.Text)
+		p := c.NewParagraph(tp.Text.Text)
 		p.SetPos(tp.Rect.Corner.X, tp.Rect.Corner.Y)
-		fmt.Println(tp.Rect.Corner.X)
-		fmt.Println(tp.Rect.Corner.Y)
+		fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
 		c.Draw(p)
-		fmt.Println(tp)
+		//fmt.Println(tp)
 
 	}
 
@@ -596,7 +590,9 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		if spread.Dim.DynamicWidth {
 			tf.Rect.Corner.X = tf.Rect.Corner.X + spread.ExtraWidth
 		}
-		textf, err := annotator.NewTextField(page, name, formRect(tf), tfopt)
+		fmt.Printf("Textfie %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
+		fmt.Printf("formRe %v\n", formRect(tf, layout.Dim))
+		textf, err := annotator.NewTextField(page, name, formRect(tf, layout.Dim), tfopt)
 		if err != nil {
 			panic(err)
 		}
