@@ -162,7 +162,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		// overwrite filename with dynamically supplied one, if supplied
 		if filename, ok := prefillImagePaths[imgname]; ok {
-			fmt.Printf("using %s for %s\n", filename, imgname)
+			//fmt.Printf("using %s for %s\n", filename, imgname)
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
