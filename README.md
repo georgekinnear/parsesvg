@@ -351,6 +351,12 @@ Thus Y_position_pdf = page_height - Y_position_inkscape
 
 There's a [commmand line tool](https://github.com/timdrysdale/gradex-overlay) under development now, and a GUI to follow.
 
+### Troubleshooting notes
+
+Missing boxes in Adobe Reader/Pro, but present in other Readers:
+check for a conflict in the box title inkscape - this becomes the form ID. Duplicate fields are not editable in Adobe Reader (this may well be what the spec says - PDF is notorious for having ambiguities / variance in implementation). Worth having a release approval process that includes ALL the editors you are supporting ... (standard, right!)
+
+
 [anchor]: ./img/inkscape-anchor-alignment.png "circle on corner of page and snap settings bar"
 [compare-active-inactive]: ./img/compare-active-inactive-sidebar.png "green coloured active moderate bar and grey thin inactive moderate sidebar"
 [dynamic-layout]: ./img/dynamic-layout-60pc.png "screen showing three side bars and the layers dialong"
