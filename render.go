@@ -12,10 +12,10 @@ import (
 	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
 	"github.com/timdrysdale/pdfcomment"
-	"github.com/unidoc/unipdf/v3/annotator"
-	"github.com/unidoc/unipdf/v3/creator"
-	"github.com/unidoc/unipdf/v3/model"
-	"github.com/unidoc/unipdf/v3/model/optimize"
+	"github.com/timdrysdale/unipdf/v3/annotator"
+	"github.com/timdrysdale/unipdf/v3/creator"
+	"github.com/timdrysdale/unipdf/v3/model"
+	"github.com/timdrysdale/unipdf/v3/model/optimize"
 )
 
 func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath string, pageNumber int, pdfOutputPath string) error {

@@ -12,10 +12,10 @@ import (
 
 	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
-	"github.com/unidoc/unipdf/v3/annotator"
-	"github.com/unidoc/unipdf/v3/creator"
-	"github.com/unidoc/unipdf/v3/model"
-	"github.com/unidoc/unipdf/v3/model/optimize"
+	"github.com/timdrysdale/unipdf/v3/annotator"
+	"github.com/timdrysdale/unipdf/v3/creator"
+	"github.com/timdrysdale/unipdf/v3/model"
+	"github.com/timdrysdale/unipdf/v3/model/optimize"
 )
 
 const testInkscapeSvg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
