@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -103,6 +104,11 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		svgfilename := fmt.Sprintf("%s.svg", layout.Filenames[svgname])
 		imgfilename := fmt.Sprintf("%s.jpg", layout.Filenames[svgname]) //TODO check again library is jpg-only?
 
+		if contents.TemplatePathsRelative {
+			svgfilename = filepath.Join(filepath.Dir(svgLayoutPath), svgfilename)
+			imgfilename = filepath.Join(filepath.Dir(svgLayoutPath), imgfilename)
+		}
+
 		svgBytes, err := ioutil.ReadFile(svgfilename)
 		if err != nil {
 			return errors.New(fmt.Sprintf("Entity %s: error opening svg file %s", svgname, svgfilename))
@@ -162,10 +168,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
+		if contents.TemplatePathsRelative {
+			imgfilename = filepath.Join(filepath.Dir(svgLayoutPath), imgfilename)
+		}
+
 		// overwrite filename with dynamically supplied one, if supplied
 		if filename, ok := prefillImagePaths[imgname]; ok {
 
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
+		}
+
+		if contents.PrefillImagePathsRelative {
+			imgfilename = filepath.Join(filepath.Dir(svgLayoutPath), imgfilename)
 		}
 
 		corner := layout.Anchor
