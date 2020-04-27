@@ -331,7 +331,7 @@ func ApplyDocumentUnits(svg *Csvg__svg, ladder *Ladder) error {
 	}
 
 	for idx, tp := range ladder.TextPrefills {
-		err := scaleTextPrefillUnits(&tp, sf)
+		err := scaleTextPrefillUnits(&tp, sf, ladder.Dim)
 		if err != nil {
 			return err
 		}
@@ -354,13 +354,13 @@ func scaleTextFieldUnits(tf *TextField, sf float64) error {
 	return nil
 }
 
-func scaleTextPrefillUnits(tf *TextPrefill, sf float64) error {
+func scaleTextPrefillUnits(tf *TextPrefill, sf float64, dim geo.Dim) error {
 	if tf == nil {
 		return errors.New("nil pointer to TextField")
 	}
 
 	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
-	tf.Rect.Corner.Y = sf * tf.Rect.Corner.Y
+	tf.Rect.Corner.Y = sf*tf.Rect.Corner.Y + dim.Height
 	tf.Rect.Dim.Width = sf * tf.Rect.Dim.Width
 	tf.Rect.Dim.Height = sf * tf.Rect.Dim.Height
 
