@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 
 	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
 	"github.com/timdrysdale/pdfcomment"
+	"github.com/timdrysdale/pdfpagedata"
 	"github.com/timdrysdale/unipdf/v3/annotator"
 	"github.com/timdrysdale/unipdf/v3/creator"
 	"github.com/timdrysdale/unipdf/v3/model"
@@ -162,7 +164,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		// overwrite filename with dynamically supplied one, if supplied
 		if filename, ok := prefillImagePaths[imgname]; ok {
-			//fmt.Printf("using %s for %s\n", filename, imgname)
+
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
@@ -239,6 +241,12 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		c.NewPage()
 
+	}
+
+	// put our pagedata in first
+
+	if !reflect.DeepEqual(contents.PageData, pdfpagedata.PageData{}) {
+		pdfpagedata.MarshalPageData(c, &contents.PageData)
 	}
 
 	for _, v := range spread.Images {

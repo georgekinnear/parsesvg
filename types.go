@@ -3,6 +3,7 @@ package parsesvg
 import (
 	"github.com/timdrysdale/geo"
 	"github.com/timdrysdale/pdfcomment"
+	"github.com/timdrysdale/pdfpagedata"
 )
 
 type SpreadContents struct {
@@ -15,7 +16,7 @@ type SpreadContents struct {
 	PdfOutputPath     string
 	Exam              string
 	Candidate         string
-	PageData          MetaData
+	PageData          pdfpagedata.PageData
 	Prefills          DocPrefills
 }
 
