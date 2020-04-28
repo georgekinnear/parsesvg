@@ -6,16 +6,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"reflect"
 	"strconv"
 	"strings"
 
 	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
 	"github.com/timdrysdale/pdfcomment"
-	"github.com/unidoc/unipdf/v3/annotator"
-	"github.com/unidoc/unipdf/v3/creator"
-	"github.com/unidoc/unipdf/v3/model"
-	"github.com/unidoc/unipdf/v3/model/optimize"
+	"github.com/timdrysdale/pdfpagedata"
+	"github.com/timdrysdale/unipdf/v3/annotator"
+	"github.com/timdrysdale/unipdf/v3/creator"
+	"github.com/timdrysdale/unipdf/v3/model"
+	"github.com/timdrysdale/unipdf/v3/model/optimize"
 )
 
 func RenderSpread(svgLayoutPath string, spreadName string, previousImagePath string, pageNumber int, pdfOutputPath string) error {
@@ -101,6 +104,11 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		svgfilename := fmt.Sprintf("%s.svg", layout.Filenames[svgname])
 		imgfilename := fmt.Sprintf("%s.jpg", layout.Filenames[svgname]) //TODO check again library is jpg-only?
 
+		if contents.TemplatePathsRelative {
+			svgfilename = filepath.Join(filepath.Dir(svgLayoutPath), svgfilename)
+			imgfilename = filepath.Join(filepath.Dir(svgLayoutPath), imgfilename)
+		}
+
 		svgBytes, err := ioutil.ReadFile(svgfilename)
 		if err != nil {
 			return errors.New(fmt.Sprintf("Entity %s: error opening svg file %s", svgname, svgfilename))
@@ -160,10 +168,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
 		}
 
+		if contents.TemplatePathsRelative {
+			imgfilename = filepath.Join(filepath.Dir(svgLayoutPath), imgfilename)
+		}
+
 		// overwrite filename with dynamically supplied one, if supplied
 		if filename, ok := prefillImagePaths[imgname]; ok {
-			fmt.Printf("using %s for %s\n", filename, imgname)
+
 			imgfilename = fmt.Sprintf("%s.jpg", filename)
+		}
+
+		if contents.PrefillImagePathsRelative {
+			imgfilename = filepath.Join(filepath.Dir(svgLayoutPath), imgfilename)
 		}
 
 		corner := layout.Anchor
@@ -241,6 +257,12 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	}
 
+	// put our pagedata in first
+
+	if !reflect.DeepEqual(contents.PageData, pdfpagedata.PageData{}) {
+		pdfpagedata.MarshalPageData(c, &contents.PageData)
+	}
+
 	for _, v := range spread.Images {
 		img, err := c.NewImageFromFile(v.Filename)
 
@@ -279,18 +301,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		}
 		// update our prefill text
 		p := c.NewParagraph(tp.Text.Text)
-		//fmt.Printf("Font size: %f", tp.Text.TextSize)
+
 		p.SetFontSize(tp.Text.TextSize)
-		p.SetPos(tp.Rect.Corner.X, tp.Rect.Corner.Y)
-		//fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
+
+		py := tp.Rect.Corner.Y - c.Height()
+
+		p.SetPos(tp.Rect.Corner.X, py)
+
 		c.Draw(p)
-		//fmt.Println(tp)
 
 	}
 
-	// This is the bit where we cross an internal boundary in the underlying library that has
-	// strong opinions about where it gets it bytes from
-	// So as to avoid making mods to the library, and for speed, we write to a memory file
+	// TODO - see if we can find creator functions to avoid this cludge ..
 
 	// write to memory
 	var buf bytes.Buffer

@@ -161,7 +161,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 					//fmt.Printf("Anchor %s local translates %f,%f\n", r.Title.String, ddx, ddy)
 					newX := x + dx + ddx
 					newY := y + dy + ddy
-					//fmt.Printf("X: %f, Y:%f\n", x, y)
+					//fmt.Printf("X: %f, Y:%f\n", ddx, ddy)
 					//fmt.Printf("tX: %f, tY:%f\n", newX, newY)
 					ladder.Anchor = geo.Point{X: newX, Y: newY}
 				}
@@ -360,7 +360,7 @@ func scaleTextPrefillUnits(tf *TextPrefill, sf float64) error {
 	}
 
 	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
-	tf.Rect.Corner.Y = sf * tf.Rect.Corner.Y
+	tf.Rect.Corner.Y = sf * (tf.Rect.Corner.Y + 30) //TODO why is this fudge factor needed?
 	tf.Rect.Dim.Width = sf * tf.Rect.Dim.Width
 	tf.Rect.Dim.Height = sf * tf.Rect.Dim.Height
 

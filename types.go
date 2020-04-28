@@ -3,20 +3,23 @@ package parsesvg
 import (
 	"github.com/timdrysdale/geo"
 	"github.com/timdrysdale/pdfcomment"
+	"github.com/timdrysdale/pdfpagedata"
 )
 
 type SpreadContents struct {
-	SvgLayoutPath     string
-	SpreadName        string
-	PreviousImagePath string
-	PrefillImagePaths map[string]string
-	Comments          pdfcomment.Comments
-	PageNumber        int
-	PdfOutputPath     string
-	Exam              string
-	Candidate         string
-	PageData          MetaData
-	Prefills          DocPrefills
+	SvgLayoutPath             string
+	SpreadName                string
+	PreviousImagePath         string
+	PrefillImagePaths         map[string]string
+	Comments                  pdfcomment.Comments
+	PageNumber                int
+	PdfOutputPath             string
+	Exam                      string
+	Candidate                 string
+	PageData                  pdfpagedata.PageData
+	Prefills                  DocPrefills
+	TemplatePathsRelative     bool
+	PrefillImagePathsRelative bool
 }
 
 type PagePrefills map[string]string
