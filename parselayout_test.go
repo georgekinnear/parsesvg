@@ -46,12 +46,20 @@ func TestRenderSpreadMarkPrefill(t *testing.T) {
 		PrettyPrintStruct(layout)
 	}
 
+	textprefills := DocPrefills{}
+
+	textprefills[0] = make(map[string]string)
+
+	textprefills[0]["top-box"] = "THERE"
+	textprefills[0]["top-box-00"] = "HELLO"
+
 	contents := SpreadContents{
 		SvgLayoutPath:     svgLayoutPath,
 		SpreadName:        spreadName,
 		PreviousImagePath: previousImagePath,
 		PageNumber:        pageNumber,
 		PdfOutputPath:     pdfOutputPath,
+		Prefills:          textprefills,
 	}
 
 	err = RenderSpreadExtra(contents)

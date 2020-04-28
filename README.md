@@ -356,6 +356,10 @@ There's a [commmand line tool](https://github.com/timdrysdale/gradex-overlay) un
 Missing boxes in Adobe Reader/Pro, but present in other Readers:
 check for a conflict in the box title inkscape - this becomes the form ID. Duplicate fields are not editable in Adobe Reader (this may well be what the spec says - PDF is notorious for having ambiguities / variance in implementation). Worth having a release approval process that includes ALL the editors you are supporting ... (standard, right!)
 
+No prefill text? You MUST include the textSize field in the description of the textprefill box in Inkscape. There is no "good" default text size - and someone who knows the default behaviour of undefined variables in golang might find it weird that an opinion is given here given that text prefilling is also useful for hidden information. Open to opinions on this as it had me chasing my tail for a day as it is!
+```
+{"text":"THIS IS A PREFILL TEXT AREA","textSize":20}
+```
 
 [anchor]: ./img/inkscape-anchor-alignment.png "circle on corner of page and snap settings bar"
 [compare-active-inactive]: ./img/compare-active-inactive-sidebar.png "green coloured active moderate bar and grey thin inactive moderate sidebar"
