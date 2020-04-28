@@ -31,10 +31,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="-24.285714"
+     inkscape:cx="-158.57143"
      inkscape:cy="-20"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1850"
      inkscape:window-height="1136"
@@ -137,7 +137,7 @@
        id="rect15981"
        style="opacity:0.98999999;fill:#df00f7;fill-opacity:0.99215686;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:9.44881821;stroke-opacity:1">
       <desc
-         id="desc16951">{&quot;text&quot;:&quot;THIS IS A PREFILL TEXT AREA&quot;}</desc>
+         id="desc16951">{&quot;text&quot;:&quot;HALLO&quot;,&quot;textSize&quot;:26}</desc>
       <title
          id="title16003">top-box</title>
     </rect>
