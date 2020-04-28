@@ -304,16 +304,10 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		//fmt.Printf("Font size: %f", tp.Text.TextSize)
 		p.SetFontSize(tp.Text.TextSize)
 
-		//
-		//func formRect(tf TextField, dim geo.Dim) []float64 {
-		//
-		//	return []float64{tf.Rect.Corner.X, dim.Height - tf.Rect.Corner.Y, (tf.Rect.Corner.X + tf.Rect.Dim.Width), dim.Height - (tf.Rect.Corner.Y + +tf.Rect.Dim.Height)}
-		//
-		//}
-		//
-		py := c.Height() - (tp.Rect.Corner.Y + tp.Rect.Dim.Height)
+		py := tp.Rect.Corner.Y - c.Height()
 
-		p.SetPos(tp.Rect.Corner.X, py) //tp.Rect.Corner.Y)
+		p.SetPos(tp.Rect.Corner.X, py)
+		//fmt.Printf("Rect.y: %f; py: %f\n", tp.Rect.Corner.Y, py)
 		//fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
 		c.Draw(p)
 		//fmt.Println(tp)

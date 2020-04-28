@@ -161,7 +161,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 					//fmt.Printf("Anchor %s local translates %f,%f\n", r.Title.String, ddx, ddy)
 					newX := x + dx + ddx
 					newY := y + dy + ddy
-					//fmt.Printf("X: %f, Y:%f\n", x, y)
+					//fmt.Printf("X: %f, Y:%f\n", ddx, ddy)
 					//fmt.Printf("tX: %f, tY:%f\n", newX, newY)
 					ladder.Anchor = geo.Point{X: newX, Y: newY}
 				}
@@ -331,7 +331,7 @@ func ApplyDocumentUnits(svg *Csvg__svg, ladder *Ladder) error {
 	}
 
 	for idx, tp := range ladder.TextPrefills {
-		err := scaleTextPrefillUnits(&tp, sf, ladder.Dim)
+		err := scaleTextPrefillUnits(&tp, sf)
 		if err != nil {
 			return err
 		}
@@ -354,13 +354,13 @@ func scaleTextFieldUnits(tf *TextField, sf float64) error {
 	return nil
 }
 
-func scaleTextPrefillUnits(tf *TextPrefill, sf float64, dim geo.Dim) error {
+func scaleTextPrefillUnits(tf *TextPrefill, sf float64) error {
 	if tf == nil {
 		return errors.New("nil pointer to TextField")
 	}
 
 	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
-	tf.Rect.Corner.Y = sf*tf.Rect.Corner.Y + dim.Height
+	tf.Rect.Corner.Y = sf * (tf.Rect.Corner.Y + 30) //TODO why is this fudge factor needed?
 	tf.Rect.Dim.Width = sf * tf.Rect.Dim.Width
 	tf.Rect.Dim.Height = sf * tf.Rect.Dim.Height
 
