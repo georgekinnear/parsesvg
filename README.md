@@ -361,6 +361,8 @@ No prefill text? You MUST include the textSize field in the description of the t
 {"text":"THIS IS A PREFILL TEXT AREA","textSize":20}
 ```
 
+![alt text][textprefill-example]
+
 [anchor]: ./img/inkscape-anchor-alignment.png "circle on corner of page and snap settings bar"
 [compare-active-inactive]: ./img/compare-active-inactive-sidebar.png "green coloured active moderate bar and grey thin inactive moderate sidebar"
 [dynamic-layout]: ./img/dynamic-layout-60pc.png "screen showing three side bars and the layers dialong"
@@ -378,3 +380,4 @@ No prefill text? You MUST include the textSize field in the description of the t
 [status]: https://img.shields.io/badge/build-passing-green "Build passing"
 [support-workflow]: ./img/supportWorkflow.png "three stages in the workflow, from marking to moderaing, to checking"
 [taborder]: ./img/taborder.png "object properties dialogue showing tab-02 appended to ID, setting tab order"
+[textprefill-example]: ./img/text-prefills-test-output.png "example of text prefills being positioned on page"
