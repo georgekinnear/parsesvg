@@ -1,17 +1,14 @@
 package parsesvg
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
 
-	"github.com/mattetti/filebuffer"
 	"github.com/timdrysdale/geo"
 	"github.com/timdrysdale/pdfcomment"
 	"github.com/timdrysdale/pdfpagedata"
@@ -219,7 +216,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	c := creator.New()
 	c.SetPageMargins(0, 0, 0, 0) // we're not printing so use the whole page
-
+	var page *model.PdfPage
 	if strings.Compare(previousImage.Filename, "") != 0 {
 
 		img, err := c.NewImageFromFile(previousImage.Filename)
@@ -247,13 +244,13 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		// we use GetWidth() so value includes fixed width plus extra width
 		c.SetPageSize(creator.PageSize{spread.GetWidth(), spread.Dim.Height})
 
-		c.NewPage()
+		page = c.NewPage()
 
 		c.Draw(img) //draw previous image
 	} else {
 		c.SetPageSize(creator.PageSize{spread.GetWidth(), spread.Dim.Height})
 
-		c.NewPage()
+		page = c.NewPage()
 
 	}
 
@@ -314,31 +311,31 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 	// TODO - see if we can find creator functions to avoid this cludge ..
 
-	// write to memory
-	var buf bytes.Buffer
-
-	err = c.Write(&buf)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error: %v\n", err))
-	}
-
-	// convert buffer to readseeker
-	var bufslice []byte
-	fbuf := filebuffer.New(bufslice)
-	fbuf.Write(buf.Bytes())
-
-	// read in from memory
-	pdfReader, err := model.NewPdfReader(fbuf)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error reading opening our internal page buffer %v\n", err))
-	}
-
-	pdfWriter := model.NewPdfWriter()
-
-	page, err := pdfReader.GetPage(1)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error reading page from our internal page buffer %v\n", err))
-	}
+	/// write to memory
+	//ar buf bytes.Buffer
+	//
+	//rr = c.Write(&buf)
+	//f err != nil {
+	//	return errors.New(fmt.Sprintf("Error: %v\n", err))
+	//
+	//
+	/// convert buffer to readseeker
+	//ar bufslice []byte
+	//buf := filebuffer.New(bufslice)
+	//buf.Write(buf.Bytes())
+	//
+	/// read in from memory
+	//dfReader, err := model.NewPdfReader(fbuf)
+	//f err != nil {
+	//	return errors.New(fmt.Sprintf("Error reading opening our internal page buffer %v\n", err))
+	//
+	//
+	//dfWriter := model.NewPdfWriter()
+	//
+	//age, err := pdfReader.GetPage(1)
+	//f err != nil {
+	//	return errors.New(fmt.Sprintf("Error reading page from our internal page buffer %v\n", err))
+	//
 
 	/*******************************************************************************
 	  Note that multipage acroforms are a wriggly issue!
@@ -368,24 +365,41 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		page.AddAnnotation(textf.Annotations[0].PdfAnnotation)
 	}
 
-	err = pdfWriter.SetForms(form)
+	//err = pdfWriter.SetForms(form)
+	//if err != nil {
+	//	return errors.New(fmt.Sprintf("Error: %v\n", err))
+	//}
+	//
+	//err = pdfWriter.AddPage(page)
+	//if err != nil {
+	//	return errors.New(fmt.Sprintf("Error: %v\n", err))
+	//}
+	//
+	//of, err := os.Create(pdfOutputPath)
+	//if err != nil {
+	//	return errors.New(fmt.Sprintf("Error: %v\n", err))
+	//}
+	//
+	//defer of.Close()
+	//
+	//pdfWriter.SetOptimizer(optimize.New(optimize.Options{
+	//	CombineDuplicateDirectObjects:   true,
+	//	CombineIdenticalIndirectObjects: true,
+	//	CombineDuplicateStreams:         true,
+	//	CompressStreams:                 true,
+	//	UseObjectStreams:                true,
+	//	ImageQuality:                    90,
+	//	ImageUpperPPI:                   150,
+	//}))
+	//
+	//pdfWriter.Write(of)
+
+	err = c.SetForms(form)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error: %v\n", err))
 	}
 
-	err = pdfWriter.AddPage(page)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error: %v\n", err))
-	}
-
-	of, err := os.Create(pdfOutputPath)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error: %v\n", err))
-	}
-
-	defer of.Close()
-
-	pdfWriter.SetOptimizer(optimize.New(optimize.Options{
+	c.SetOptimizer(optimize.New(optimize.Options{
 		CombineDuplicateDirectObjects:   true,
 		CombineIdenticalIndirectObjects: true,
 		CombineDuplicateStreams:         true,
@@ -395,7 +409,6 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		ImageUpperPPI:                   150,
 	}))
 
-	pdfWriter.Write(of)
-
+	c.WriteToFile(pdfOutputPath)
 	return nil
 }
