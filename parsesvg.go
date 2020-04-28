@@ -26,15 +26,12 @@ func ParseSvg(input []byte) *Csvg__svg {
 // return the translation applied to the SVG object
 // does not mangle the Y dimension
 func getTranslate(transform string) (float64, float64) {
-	fmt.Printf("[%s](%d)\n", transform, len(transform))
 
 	if len(transform) <= 0 {
-		fmt.Println("length of translate too short")
 		return 0.0, 0.0
 	}
 
 	if !strings.Contains(transform, geo.Translate) {
-		fmt.Println("did not find translate")
 		return 0.0, 0.0
 	}
 
@@ -43,23 +40,19 @@ func getTranslate(transform string) (float64, float64) {
 	closeBracket := strings.Index(transform, ")")
 
 	if openBracket < 0 || comma < 0 || closeBracket < 0 {
-		fmt.Println("%v %v %v\n", openBracket < 0, comma < 0, closeBracket < 0)
 		return 0.0, 0.0
 	}
 
 	if openBracket == comma || comma == closeBracket {
-		fmt.Println("missing a field")
 		return 0.0, 0.0
 	}
 
 	dx, err := strconv.ParseFloat(transform[openBracket+1:comma], 64)
 	if err != nil {
-		fmt.Printf("failed to parse float for x from [%s]\n", transform[openBracket+1:comma])
 		return 0.0, 0.0
 	}
 	dy, err := strconv.ParseFloat(transform[comma+1:closeBracket], 64)
 	if err != nil {
-		fmt.Printf("Failed to parse float for y from [%s]\n", transform[comma+1:closeBracket])
 		return 0.0, 0.0
 	}
 
@@ -119,8 +112,6 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 
 	err := xml.Unmarshal(input, &svg)
 
-	PrettyPrintStruct(svg)
-
 	if err != nil {
 		return nil, err
 	}
@@ -142,47 +133,41 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	}
 
 	ladder.Dim = ladderDim
-
-	var dx, dy float64
-	//fmt.Println("Looking for reference anchor")
+	// Note to future self - had a global dx, dy here
+	// but doing translate parsing properly should avoid need for that...
 	// look for reference anchor position
 	for _, g := range svg.Cg__svg {
-		// get transform applied to layer, if any
-		//fmt.Println(g.AttrInkscapeSpacelabel)
+
 		if g.AttrInkscapeSpacelabel == geo.AnchorsLayer {
-			dx, dy = getTranslate(g.Transform)
-			//fmt.Printf("Anchors layer global translates %f,%f\n", dx, dy)
 
-		}
-		for _, r := range g.Cpath__svg {
-			if r.Title != nil {
-				if r.Title.String == geo.AnchorReference { // was force true?
-					x, err := strconv.ParseFloat(r.Cx, 64)
-					if err != nil {
-						return nil, err
-					}
-					y, err := strconv.ParseFloat(r.Cy, 64)
-					if err != nil {
-						return nil, err
-					}
+			gdx, gdy := getTranslate(g.Transform)
 
-					ddx, ddy := getTranslate(r.Transform)
-					//fmt.Printf("Anchor %s local translates %f,%f\n", r.Title.String, ddx, ddy)
-					newX := x + dx + ddx
-					newY := y + dy + ddy
-					//fmt.Printf("X: %f, Y:%f\n", ddx, ddy)
-					//fmt.Printf("tX: %f, tY:%f\n", newX, newY)
-					ladder.Anchor = geo.Point{X: newX, Y: newY}
+			for _, r := range g.Cpath__svg {
+				if r.Title != nil {
+					if r.Title.String == geo.AnchorReference { // was force true?
+						x, err := strconv.ParseFloat(r.Cx, 64)
+						if err != nil {
+							return nil, err
+						}
+						y, err := strconv.ParseFloat(r.Cy, 64)
+						if err != nil {
+							return nil, err
+						}
+						rdx, rdy := getTranslate(r.Transform)
+						newX := x + gdx + rdx
+						newY := y + gdy + rdy
+						ladder.Anchor = geo.Point{X: newX, Y: newY}
+					}
 				}
-			} else {
-				//fmt.Println("un-named path")
 			}
 		}
+
 	}
 
 	// look for textFields
 	for _, g := range svg.Cg__svg {
 		if g.AttrInkscapeSpacelabel == geo.TextFieldsLayer {
+			gdx, gdy := getTranslate(g.Transform)
 			for _, r := range g.Crect__svg {
 				tf := TextField{}
 				if r.Title != nil { //avoid seg fault, obvs
@@ -206,9 +191,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				tf.Rect.Dim.Width = w
 				tf.Rect.Dim.Height = h
 				tf.Rect.Dim.DynamicWidth = false
-				dx, dy := getTranslate(r.Transform)
-				fmt.Printf("Txfield Translate %f %f\n", dx, dy)
-				//fmt.Printf("transform in play %f %f\n", dx, dy)
+				rdx, rdy := getTranslate(r.Transform)
 				x, err := strconv.ParseFloat(r.Rx, 64)
 				if err != nil {
 					return nil, err
@@ -217,9 +200,9 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				if err != nil {
 					return nil, err
 				}
-				tf.Rect.Corner.X = x + dx
-				tf.Rect.Corner.Y = y + dy
-				//fmt.Printf("textfield corner at %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
+				tf.Rect.Corner.X = x + rdx + gdx
+				tf.Rect.Corner.Y = y + rdy + gdy
+
 				ladder.TextFields = append(ladder.TextFields, tf)
 			}
 		}
@@ -234,7 +217,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 	// look for prefill textboxes (not editable in pdf)
 
 	for _, g := range svg.Cg__svg {
-		gdx, gdy := getTranslate(g.Transform) //check if rotate will cause box to be out of place
+		gdx, gdy := getTranslate(g.Transform)
 		if g.AttrInkscapeSpacelabel == geo.TextPrefillsLayer {
 
 			for _, r := range g.Crect__svg {
@@ -259,7 +242,6 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				tp.Rect.Dim.Height = h
 				tp.Rect.Dim.DynamicWidth = false
 
-				fmt.Printf("Prefill Translate %f %f\n", dx, dy)
 				x, err := strconv.ParseFloat(r.Rx, 64)
 				if err != nil {
 					return nil, err
@@ -268,7 +250,7 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				if err != nil {
 					return nil, err
 				}
-				rdx, rdy := getTranslate(r.Transform) //check if rotate will cause box to be out of place
+				rdx, rdy := getTranslate(r.Transform)
 				tp.Rect.Corner.X = x + rdx + gdx
 				tp.Rect.Corner.Y = y + rdy + gdy
 
