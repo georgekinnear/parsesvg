@@ -301,9 +301,7 @@ func RenderSpreadExtra(contents SpreadContents) error {
 
 		p.SetFontSize(tp.Text.TextSize)
 
-		py := tp.Rect.Corner.Y - c.Height()
-
-		p.SetPos(tp.Rect.Corner.X, py)
+		p.SetPos(tp.Rect.Corner.X, tp.Rect.Corner.Y)
 
 		c.Draw(p)
 

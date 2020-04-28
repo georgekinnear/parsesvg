@@ -207,7 +207,6 @@ func DefineLadderFromSVG(input []byte) (*Ladder, error) {
 				if err != nil {
 					return nil, err
 				}
-
 				tf.Rect.Corner.X = x + dx
 				tf.Rect.Corner.Y = y + dy
 				//fmt.Printf("textfield corner at %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
@@ -360,7 +359,7 @@ func scaleTextPrefillUnits(tf *TextPrefill, sf float64) error {
 	}
 
 	tf.Rect.Corner.X = sf * tf.Rect.Corner.X
-	tf.Rect.Corner.Y = sf * (tf.Rect.Corner.Y + 30) //TODO why is this fudge factor needed?
+	tf.Rect.Corner.Y = sf * (tf.Rect.Corner.Y)
 	tf.Rect.Dim.Width = sf * tf.Rect.Dim.Width
 	tf.Rect.Dim.Height = sf * tf.Rect.Dim.Height
 
