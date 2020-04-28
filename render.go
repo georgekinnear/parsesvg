@@ -301,22 +301,18 @@ func RenderSpreadExtra(contents SpreadContents) error {
 		}
 		// update our prefill text
 		p := c.NewParagraph(tp.Text.Text)
-		//fmt.Printf("Font size: %f", tp.Text.TextSize)
+
 		p.SetFontSize(tp.Text.TextSize)
 
 		py := tp.Rect.Corner.Y - c.Height()
 
 		p.SetPos(tp.Rect.Corner.X, py)
-		//fmt.Printf("Rect.y: %f; py: %f\n", tp.Rect.Corner.Y, py)
-		//fmt.Printf("prefill %f,%f\n", tp.Rect.Corner.X, tp.Rect.Corner.Y)
+
 		c.Draw(p)
-		//fmt.Println(tp)
 
 	}
 
-	// This is the bit where we cross an internal boundary in the underlying library that has
-	// strong opinions about where it gets it bytes from
-	// So as to avoid making mods to the library, and for speed, we write to a memory file
+	// TODO - see if we can find creator functions to avoid this cludge ..
 
 	// write to memory
 	var buf bytes.Buffer
