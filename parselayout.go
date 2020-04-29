@@ -41,12 +41,14 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 
 	layout.Dim = layoutDim
 
+	var dx, dy float64
+
 	// look for reference & header/ladder anchor positions
 	// these also contain the base filename in the description
 	for _, g := range svg.Cg__svg {
 		// get transform applied to layer, if any
 		if g.AttrInkscapeSpacelabel == geo.AnchorsLayer {
-			gdx, gdy := getTranslate(g.Transform)
+			dx, dy = getTranslate(g.Transform)
 
 			layout.Anchors = make(map[string]geo.Point)
 			layout.Filenames = make(map[string]string)
@@ -61,10 +63,10 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 					return nil, err
 				}
 
-				rdx, rdy := getTranslate(r.Transform)
+				ddx, ddy := getTranslate(r.Transform)
 
-				newX := x + gdx + rdx
-				newY := y + gdy + rdy
+				newX := x + dx + ddx
+				newY := y + dy + ddy
 
 				if r.Title != nil {
 					if r.Title.String == geo.AnchorReference {
@@ -88,7 +90,6 @@ func DefineLayoutFromSVG(input []byte) (*Layout, error) {
 	// look for pageDims
 	layout.PageDims = make(map[string]geo.Dim)
 	for _, g := range svg.Cg__svg {
-
 		if g.AttrInkscapeSpacelabel == geo.PagesLayer {
 			for _, r := range g.Crect__svg {
 				w, err := strconv.ParseFloat(r.Width, 64)
