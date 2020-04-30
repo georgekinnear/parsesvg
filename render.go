@@ -231,6 +231,16 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 						new_text_field := TextField{Rect: new_rect,
 													ID:         "qn-part-mark-"+strconv.Itoa(pnum)}
 						spread.TextFields = append(spread.TextFields, new_text_field)
+						
+						// append chrome image to the images list
+						image := ImageInsert{
+							Filename: "som/markbox.png",  // TODO - make this customisable, e.g. using JSON in the placeholder's description
+							Corner:   new_rect.Corner,
+							Dim:      new_rect.Dim,
+						}
+
+						spread.Images = append(spread.Images, image) //add chrome to list of images to include
+						
 						//fmt.Println(new_text_field)
 						//fmt.Println("size of textfields: ", len(spread.TextFields))
 						//fmt.Println("\n")
@@ -251,17 +261,6 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 	
 	}
 	
-/*
-	new_text_field := TextField{
-		Rect: spread.TextFields[0].Rect,
-		ID:         "george-hello",
-		Prefill:     "GK"}
-		
-	new_text_field.Rect.Dim.Height = new_text_field.Rect.Dim.Height * 2
-	new_text_field.Rect.Dim.Width = new_text_field.Rect.Dim.Width * 0.5
-	
-	spread.TextFields = append(spread.TextFields, new_text_field)
-*/	
 	
 	// get all the static images that decorate this page, but not the special script "previous-image"
 
@@ -464,10 +463,11 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 		//fmt.Printf("Textfie %f %f\n", tf.Rect.Corner.X, tf.Rect.Corner.Y)
 		//fmt.Printf("formRe %v\n", formRect(tf, layout.Dim))
 		
-		new_bb := formRect(tf, layout.Dim) // returns [bbox.Llx, bbox.Lly, bbox.Urx, bbox.Ury]
+	//	new_bb := formRect(tf, layout.Dim) // returns [bbox.Llx, bbox.Lly, bbox.Urx, bbox.Ury]
 		// Add chrome for mark boxes
 		if strings.HasPrefix(tf.ID, "qn-part-mark-") {
-			// Define a semi-transparent yellow rectangle with black borders at the specified location.
+				
+		/* Tried drawing this is a rectangle, but it caused problems as it was selectable in some viewers, and got in the way of the form field
 			rectDef := annotator.RectangleAnnotationDef{}
 			rectDef.X = new_bb[0]-1
 			rectDef.Y = new_bb[1]+1
@@ -487,6 +487,27 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 
 			// Add to the page annotations.
 			page.AddAnnotation(rectAnnotation)
+		*/
+		
+		/* A possible alternative way, not yet tried but do some code like this?
+			img, err := c.NewImageFromFile(v.Filename)
+
+			if err != nil {
+				return errors.New(fmt.Sprintf("Error opening image file %s: %s", v.Filename, err))
+			}
+			// all these images are static so we set dims directly
+			// user needs to spot if they did their artwork to the wrong spec
+			// or maybe they want it that way - we'd never know...
+			// TODO consider logging a warning here for GUI etc
+			img.SetWidth(v.Dim.Width)
+			img.SetHeight(v.Dim.Height)
+			if spread.Dim.DynamicWidth {
+				img.SetPos(v.Corner.X+spread.ExtraWidth, v.Corner.Y)
+			} else {
+				img.SetPos(v.Corner.X, v.Corner.Y) //TODO check this has correct sense for non-zero offsets
+			}
+			c.Draw(img)
+		*/
 		}
 		
 		textf, err := annotator.NewTextField(page, name, formRect(tf, layout.Dim), tfopt)
