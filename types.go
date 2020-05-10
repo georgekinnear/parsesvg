@@ -21,6 +21,7 @@ type SpreadContents struct {
 	Marker			  string
 	PageData          pdfpagedata.PageData
 	Prefills          DocPrefills
+	PreviousFields	  map[string]string
 }
 
 // Structure for the optional reading a csv of parts and marks

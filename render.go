@@ -42,7 +42,7 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 	comments := contents.Comments
 	pageNumber := contents.PageNumber
 	pdfOutputPath := contents.PdfOutputPath
-	
+		
 	svgBytes, err := ioutil.ReadFile(svgLayoutPath)
 
 	if err != nil {
@@ -153,7 +153,7 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 
 		
 		// Add the script info to the placeholders
-		if svgname == "svg-mark-header" {
+		if svgname == "svg-mark-header" || svgname == "svg-moderate-header" {
 		
 			for _, tp := range ladder.Placeholders {
 				new_rect := tp.Rect
@@ -180,7 +180,7 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 		}
 		
 		// Add the Marker ID to the placeholder
-		if contents.Marker != "" {
+		if spread.Name == "mark" && contents.Marker != "" {
 		
 			for _, tp := range ladder.Placeholders {
 				if tp.ID == "marker-id" {
@@ -193,6 +193,33 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 																	  Alignment: "center"}} // TODO - get alignment to work
 					spread.TextPrefills = append(spread.TextPrefills, new_text_field)
 				}
+			}
+		}
+		
+		// Write any existing fields into the file
+		if len(contents.PreviousFields) > 0 {
+			fmt.Println(contents.PreviousFields)
+			
+			base_rect := geo.Rect{}
+			for _, tp := range ladder.Placeholders {
+				if tp.ID == "prev-fields" {
+					base_rect = tp.Rect
+				}
+			}
+			
+			fcount := 0
+			for fname, fvalue := range contents.PreviousFields {
+				fmt.Println("Field",fcount,fname,fvalue)
+									
+				new_rect := base_rect
+				new_rect.Corner = TranslatePosition(corner, new_rect.Corner)
+				new_rect.Corner = TranslatePosition(geo.Point{X:0, Y:new_rect.Dim.Height * float64(fcount) * -1.2}, new_rect.Corner)
+				
+				new_text_field := TextField{Rect: new_rect,
+											ID:         "prevfield-"+fname,
+											Prefill:	fvalue}
+				spread.TextFields = append(spread.TextFields, new_text_field)
+				fcount++
 			}
 		}
 		
@@ -228,8 +255,10 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 													  Text:     Paragraph{Text:"/"+strconv.Itoa(part.Marks), TextSize: 12}}
 						spread.TextPrefills = append(spread.TextPrefills, new_text_field)
 					case "qn-part-mark":
+						fallthrough
+					case "qn-part-moderate":
 						new_text_field := TextField{Rect: new_rect,
-													ID:         "qn-part-mark-"+strconv.Itoa(pnum)}
+													ID:         box_type+"-"+strconv.Itoa(pnum)}
 						spread.TextFields = append(spread.TextFields, new_text_field)
 						
 						// append chrome image to the images list
