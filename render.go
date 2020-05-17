@@ -198,7 +198,7 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 		
 		// Write any existing fields into the file
 		if len(contents.PreviousFields) > 0 {
-			fmt.Println(contents.PreviousFields)
+			//fmt.Println(contents.PreviousFields)
 			
 			base_rect := geo.Rect{}
 			for _, tp := range ladder.Placeholders {
@@ -209,7 +209,7 @@ func RenderSpreadExtra(contents SpreadContents, parts_and_marks []*PaperStructur
 			
 			fcount := 0
 			for fname, fvalue := range contents.PreviousFields {
-				fmt.Println("Field",fcount,fname,fvalue)
+				//fmt.Println("Field",fcount,fname,fvalue)
 									
 				new_rect := base_rect
 				new_rect.Corner = TranslatePosition(corner, new_rect.Corner)
